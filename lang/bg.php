@@ -1,7 +1,7 @@
 <?php
 
 /** Bulgarian localization file for KCFinder
-  * author: Pavel Tzonkov <pavelc@users.sourceforge.net>
+  * author: Pavel Tzonkov <sunhater@sunhater.com>
   */
 
 $lang = array(
