@@ -141,7 +141,7 @@ class uploader {
             ini_set('session.cookie_domain', $_CONFIG['_sessionDomain']);
         switch ($this->cms) {
             case "drupal": break;
-            default: session_start(); break;
+            default: if (!session_id()) session_start(); break;
         }
 
         // RELOAD DEFAULT CONFIGURATION
