@@ -4,13 +4,15 @@
   *
   *      @desc GraphicsMagick image driver class
   *   @package KCFinder
-  *   @version 2.52
+  *   @version 3.0-dev
   *    @author Pavel Tzonkov <sunhater@sunhater.com>
   * @copyright 2010-2014 KCFinder Project
   *   @license http://www.opensource.org/licenses/gpl-2.0.php GPLv2
   *   @license http://www.opensource.org/licenses/lgpl-2.1.php LGPLv2
   *      @link http://kcfinder.sunhater.com
   */
+
+namespace kcfinder;
 
 class image_gmagick extends image {
 
@@ -56,7 +58,7 @@ class image_gmagick extends image {
                 $this->image->setImageBackgroundColor($background);
                 $x = round(($width - $w) / 2);
                 $y = round(($height - $h) / 2);
-                $img = new Gmagick();
+                $img = new \Gmagick();
                 $img->newImage($width, $height, $background);
                 $img->compositeImage($this->image, 1, $x, $y);
             } catch (Exception $e) {
@@ -152,7 +154,7 @@ class image_gmagick extends image {
 
     public function watermark($file, $left=false, $top=false) {
         try {
-            $wm = new Gmagick($file);
+            $wm = new \Gmagick($file);
             $w = $wm->getImageWidth();
             $h = $wm->getImageHeight();
         } catch (Exception $e) {
@@ -187,7 +189,7 @@ class image_gmagick extends image {
 
     protected function getBlankImage($width, $height) {
         try {
-            $img = new Gmagick();
+            $img = new \Gmagick();
             $img->newImage($width, $height, "none");
         } catch (Exception $e) {
             return false;
@@ -215,7 +217,7 @@ class image_gmagick extends image {
 
         } elseif (is_string($image)) {
             try {
-                $image = new Gmagick($image);
+                $image = new \Gmagick($image);
                 $w = $image->getImageWidth();
                 $h = $image->getImageHeight();
             } catch (Exception $e) {

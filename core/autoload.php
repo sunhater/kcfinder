@@ -4,7 +4,7 @@
   *
   *      @desc This file is included first, before each other
   *   @package KCFinder
-  *   @version 2.52
+  *   @version 3.0-dev
   *    @author Pavel Tzonkov <sunhater@sunhater.com>
   * @copyright 2010-2014 KCFinder Project
   *   @license http://www.opensource.org/licenses/gpl-2.0.php GPLv2
@@ -20,10 +20,8 @@
   *        It's recommended to use constants instead.
   */
 
-
-// PHP VERSION CHECK
-if (substr(PHP_VERSION, 0, strpos(PHP_VERSION, '.')) < 5)
-    die("You are using PHP " . PHP_VERSION . " when KCFinder require at least version 5! Some systems has an option to change the active PHP version. Please refer to your hosting provider or upgrade your PHP distribution.");
+if (!preg_match('/^(\d+\.\d+)/', PHP_VERSION, $ver) || ($ver[1] < 5.3))
+    die("You are using PHP " . PHP_VERSION . " when KCFinder require at least version 5.3.0! Some systems has an option to change the active PHP version. Please refer to your hosting provider or upgrade your PHP distribution.");
 
 
 // SAFE MODE CHECK
@@ -39,34 +37,32 @@ if (isset($_GET['cms'])) {
 }
 
 
-// MAGIC AUTOLOAD CLASSES FUNCTION
-function __autoload($class) {
-    if ($class == "uploader")
-        require "core/uploader.php";
-    elseif ($class == "browser")
-        require "core/browser.php";
-    elseif (file_exists("core/types/$class.php"))
-        require "core/types/$class.php";
-    elseif (file_exists("lib/class_$class.php"))
-        require "lib/class_$class.php";
-    elseif (file_exists("lib/helper_$class.php"))
-        require "lib/helper_$class.php";
-}
+// REGISTER AUTOLOAD FUNCTION
+spl_autoload_register(function($path) {
+    $path = explode("\\", $path);
+
+    if (count($path) == 1)
+        return;
+
+    list($ns, $class) = $path;
+
+    if ($ns == "kcfinder") {
+        if ($class == "uploader")
+            require "core/uploader.php";
+        elseif ($class == "browser")
+            require "core/browser.php";
+        elseif (file_exists("core/types/$class.php"))
+            require "core/types/$class.php";
+        elseif (file_exists("lib/class_$class.php"))
+            require "lib/class_$class.php";
+        elseif (file_exists("lib/helper_$class.php"))
+            require "lib/helper_$class.php";
+    }
+});
 
 
 // json_encode() IMPLEMENTATION IF JSON EXTENSION IS MISSING
 if (!function_exists("json_encode")) {
-
-    function kcfinder_json_string_encode($string) {
-        return '"' .
-            str_replace('/', "\\/",
-            str_replace("\t", "\\t",
-            str_replace("\r", "\\r",
-            str_replace("\n", "\\n",
-            str_replace('"', "\\\"",
-            str_replace("\\", "\\\\",
-        $string)))))) . '"';
-    }
 
     function json_encode($data) {
 
@@ -76,7 +72,7 @@ if (!function_exists("json_encode")) {
             // OBJECT
             if (array_keys($data) !== range(0, count($data) - 1)) {
                 foreach ($data as $key => $val)
-                    $ret[] = kcfinder_json_string_encode($key) . ':' . json_encode($val);
+                    $ret[] = json_encode((string) $key) . ':' . json_encode($val);
                 return "{" . implode(",", $ret) . "}";
 
             // ARRAY
@@ -101,7 +97,14 @@ if (!function_exists("json_encode")) {
             return $data;
 
         // STRING
-        return kcfinder_json_string_encode($data);
+        return '"' .
+            str_replace('/', "\\/",
+            str_replace("\t", "\\t",
+            str_replace("\r", "\\r",
+            str_replace("\n", "\\n",
+            str_replace('"', "\\\"",
+            str_replace("\\", "\\\\",
+        $data)))))) . '"';
     }
 }
 

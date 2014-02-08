@@ -4,7 +4,7 @@
   *
   *      @desc Uploader class
   *   @package KCFinder
-  *   @version 2.52
+  *   @version 3.0-dev
   *    @author Pavel Tzonkov <sunhater@sunhater.com>
   * @copyright 2010-2014 KCFinder Project
   *   @license http://www.opensource.org/licenses/gpl-2.0.php GPLv2
@@ -12,10 +12,12 @@
   *      @link http://kcfinder.sunhater.com
   */
 
+namespace kcfinder;
+
 class uploader {
 
 /** Release version */
-    const VERSION = "2.52";
+    const VERSION = "3.0-dev";
 
 /** Config session-overrided settings
   * @var array */
@@ -80,18 +82,6 @@ class uploader {
   * @var array */
     protected $labels = array();
 
-/** Contain unprocessed $_GET array. Please use this instead of $_GET
-  * @var array */
-    protected $get;
-
-/** Contain unprocessed $_POST array. Please use this instead of $_POST
-  * @var array */
-    protected $post;
-
-/** Contain unprocessed $_COOKIE array. Please use this instead of $_COOKIE
-  * @var array */
-    protected $cookie;
-
 /** Session array. Please use this property instead of $_SESSION
   * @var array */
     protected $session;
@@ -109,21 +99,11 @@ class uploader {
 
     public function __construct() {
 
-        // DISABLE MAGIC QUOTES
-        if (function_exists('set_magic_quotes_runtime'))
-            @set_magic_quotes_runtime(false);
-
-        // INPUT INIT
-        $input = new input();
-        $this->get = &$input->get;
-        $this->post = &$input->post;
-        $this->cookie = &$input->cookie;
-
         // SET CMS INTEGRATION ATTRIBUTE
-        if (isset($this->get['cms']) &&
-            in_array($this->get['cms'], array("drupal"))
+        if (isset($_GET['cms']) &&
+            in_array($_GET['cms'], array("drupal"))
         )
-            $this->cms = $this->get['cms'];
+            $this->cms = $_GET['cms'];
 
 		// LINKING UPLOADED FILE
         if (count($_FILES))
@@ -183,10 +163,10 @@ class uploader {
         $firstType = array_keys($this->types);
         $firstType = $firstType[0];
         $this->type = (
-            isset($this->get['type']) &&
-            isset($this->types[$this->get['type']])
+            isset($_GET['type']) &&
+            isset($this->types[$_GET['type']])
         )
-            ? $this->get['type'] : $firstType;
+            ? $_GET['type'] : $firstType;
 
         // LOAD TYPE DIRECTORY SPECIFIC CONFIGURATION IF EXISTS
         if (is_array($this->types[$this->type])) {
@@ -247,10 +227,10 @@ class uploader {
             @mkdir($this->config['uploadDir'], $this->config['dirPerms']);
 
         // HOST APPLICATIONS INIT
-        if (isset($this->get['CKEditorFuncNum']))
-            $this->opener['CKEditor']['funcNum'] = $this->get['CKEditorFuncNum'];
-        if (isset($this->get['opener']) &&
-            (strtolower($this->get['opener']) == "tinymce") &&
+        if (isset($_GET['CKEditorFuncNum']))
+            $this->opener['CKEditor']['funcNum'] = $_GET['CKEditorFuncNum'];
+        if (isset($_GET['opener']) &&
+            (strtolower($_GET['opener']) == "tinymce") &&
             isset($this->config['_tinyMCEPath']) &&
             strlen($this->config['_tinyMCEPath'])
         )
@@ -258,11 +238,11 @@ class uploader {
 
         // LOCALIZATION
         foreach ($this->langInputNames as $key)
-            if (isset($this->get[$key]) &&
-                preg_match('/^[a-z][a-z\._\-]*$/i', $this->get[$key]) &&
-                file_exists("lang/" . strtolower($this->get[$key]) . ".php")
+            if (isset($_GET[$key]) &&
+                preg_match('/^[a-z][a-z\._\-]*$/i', $_GET[$key]) &&
+                file_exists("lang/" . strtolower($_GET[$key]) . ".php")
             ) {
-                $this->lang = $this->get[$key];
+                $this->lang = $_GET[$key];
                 break;
             }
         $this->localize($this->lang);
@@ -304,8 +284,8 @@ class uploader {
             $message = "";
 
             $dir = "{$this->typeDir}/";
-            if (isset($this->get['dir']) &&
-                (false !== ($gdir = $this->checkInputDir($this->get['dir'])))
+            if (isset($_GET['dir']) &&
+                (false !== ($gdir = $this->checkInputDir($_GET['dir'])))
             ) {
                 $udir = path::normalize("$dir$gdir");
                 if (substr($udir, 0, strlen($dir)) !== $dir)
@@ -404,7 +384,7 @@ class uploader {
                         array('size' => ini_get('upload_max_filesize'))) : (
                 ($file['error'] == UPLOAD_ERR_FORM_SIZE) ?
                     $this->label("The uploaded file exceeds {size} bytes.",
-                        array('size' => $this->get['MAX_FILE_SIZE'])) : (
+                        array('size' => $_GET['MAX_FILE_SIZE'])) : (
                 ($file['error'] == UPLOAD_ERR_PARTIAL) ?
                     $this->label("The uploaded file was only partially uploaded.") : (
                 ($file['error'] == UPLOAD_ERR_NO_FILE) ?

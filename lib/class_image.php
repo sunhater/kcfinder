@@ -4,13 +4,15 @@
   *
   *      @desc Abstract image driver class
   *   @package KCFinder
-  *   @version 2.52
+  *   @version 3.0-dev
   *    @author Pavel Tzonkov <sunhater@sunhater.com>
   * @copyright 2010-2014 KCFinder Project
   *   @license http://www.opensource.org/licenses/gpl-2.0.php GPLv2
   *   @license http://www.opensource.org/licenses/lgpl-2.1.php LGPLv2
   *      @link http://kcfinder.sunhater.com
   */
+
+namespace kcfinder;
 
 abstract class image {
     const DEFAULT_JPEG_QUALITY = 75;
@@ -76,7 +78,7 @@ abstract class image {
   * @return object */
 
     final static function factory($driver, $image, array $options=array()) {
-        $class = "image_$driver";
+        $class = __NAMESPACE__ . "\\image_$driver";
         return new $class($image, $options);
     }
 
@@ -90,7 +92,7 @@ abstract class image {
         foreach ($drivers as $driver) {
             if (!preg_match('/^[a-z0-9\_]+$/i', $driver))
                 continue;
-            $class = "image_$driver";
+            $class = __NAMESPACE__ . "\\image_$driver";
             if (class_exists($class) && method_exists($class, "available")) {
                 eval("\$avail = $class::available();");
                 if ($avail) return $driver;

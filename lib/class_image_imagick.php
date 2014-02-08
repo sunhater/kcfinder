@@ -4,13 +4,15 @@
   *
   *      @desc ImageMagick image driver class
   *   @package KCFinder
-  *   @version 2.52
+  *   @version 3.0-dev
   *    @author Pavel Tzonkov <sunhater@sunhater.com>
   * @copyright 2010-2014 KCFinder Project
   *   @license http://www.opensource.org/licenses/gpl-2.0.php GPLv2
   *   @license http://www.opensource.org/licenses/lgpl-2.1.php LGPLv2
   *      @link http://kcfinder.sunhater.com
   */
+
+namespace kcfinder;
 
 class image_imagick extends image {
 
@@ -147,7 +149,7 @@ class image_imagick extends image {
 
     public function watermark($file, $left=false, $top=false) {
         try {
-            $wm = new Imagick($file);
+            $wm = new \Imagick($file);
             $size = $wm->getImageGeometry();
         } catch (Exception $e) {
             return false;
@@ -183,7 +185,7 @@ class image_imagick extends image {
 
     protected function getBlankImage($width, $height) {
         try {
-            $img = new Imagick();
+            $img = new \Imagick();
             $img->newImage($width, $height, "none");
             $img->setImageCompressionQuality(100);
         } catch (Exception $e) {
@@ -217,7 +219,7 @@ class image_imagick extends image {
 
         } elseif (is_string($image)) {
             try {
-                $image = new Imagick($image);
+                $image = new \Imagick($image);
                 $image->setImageCompressionQuality(100);
                 $size = $image->getImageGeometry();
             } catch (Exception $e) {
