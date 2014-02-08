@@ -407,8 +407,8 @@ class uploader {
         // SPECIAL DIRECTORY TYPES CHECK (e.g. *img)
         elseif (preg_match('/^\*([^ ]+)(.*)?$/s', $typePatt, $patt)) {
             list($typePatt, $type, $params) = $patt;
-            if (class_exists("type_$type")) {
-                $class = "type_$type";
+            $class = __NAMESPACE__ . "\\type_$type";
+            if (class_exists($class)) {
                 $type = new $class();
                 $cfg = $config;
                 $cfg['filename'] = $file['name'];
