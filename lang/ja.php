@@ -5,8 +5,8 @@
   * @desc Japanese localization
   * @package KCFinder
   * @author yama yamamoto@kyms.ne.jp
-  * @license http://www.opensource.org/licenses/gpl-2.0.php GPLv2
-  * @license http://www.opensource.org/licenses/lgpl-2.1.php LGPLv2
+  * @license http://opensource.org/licenses/GPL-3.0 GPLv3
+  * @license http://opensource.org/licenses/LGPL-3.0 LGPLv3
   */
 
 $lang = array(

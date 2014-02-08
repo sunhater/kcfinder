@@ -7,8 +7,8 @@
   *   @version 3.0-dev
   *    @author Pavel Tzonkov <sunhater@sunhater.com>
   * @copyright 2010-2014 KCFinder Project
-  *   @license http://www.opensource.org/licenses/gpl-2.0.php GPLv2
-  *   @license http://www.opensource.org/licenses/lgpl-2.1.php LGPLv2
+  *   @license http://opensource.org/licenses/GPL-3.0 GPLv3
+  *   @license http://opensource.org/licenses/LGPL-3.0 LGPLv3
   *      @link http://kcfinder.sunhater.com
   */
 
@@ -138,9 +138,7 @@ class file {
 
     static function getMimeType($filename, $magic=null) {
         if (class_exists("finfo")) {
-            $finfo = ($magic === null)
-                ? new finfo(FILEINFO_MIME)
-                : new finfo(FILEINFO_MIME, $magic);
+            $finfo = new \finfo(FILEINFO_MIME, $magic);
             if ($finfo) {
                 $mime = $finfo->file($filename);
                 $mime = substr($mime, 0, strrpos($mime, ";"));
