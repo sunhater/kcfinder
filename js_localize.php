@@ -14,14 +14,12 @@
 
 namespace kcfinder;
 require "core/autoload.php";
-if (function_exists('set_magic_quotes_runtime'))
-    @set_magic_quotes_runtime(false);
-$input = new input();
-if (!isset($input->get['lng']) || ($input->get['lng'] == 'en')) {
+
+if (!isset($_GET['lng']) || ($_GET['lng'] == 'en')) {
     header("Content-Type: text/javascript");
     die;
 }
-$file = "lang/" . $input->get['lng'] . ".php";
+$file = "lang/" . $_GET['lng'] . ".php";
 $files = dir::content("lang", array(
     'types' => "file",
     'pattern' => '/^.*\.php$/'

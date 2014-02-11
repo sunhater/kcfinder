@@ -84,7 +84,7 @@ $_CONFIG = array(
         )
     ),
 
-    'deniedExts' => "exe com msi bat php phps phtml php3 php4 cgi pl",
+    'deniedExts' => "exe com msi bat php phps phtml php3 php4 php5 php6 cgi pl",
 
 
 // MISC SETTINGS

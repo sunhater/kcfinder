@@ -12,9 +12,9 @@
   *      @link http://kcfinder.sunhater.com
   */
 
-namespace kcfinder;
 require "core/autoload.php";
-$browser = new browser();
+$browser = "kcfinder\\browser"; // To execute core/autoload.php on older
+$browser = new $browser();      // PHP versions (even PHP 4)
 $browser->action();
 
 ?>

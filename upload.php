@@ -12,9 +12,9 @@
   *      @link http://kcfinder.sunhater.com
   */
 
-namespace kcfinder;
 require "core/autoload.php";
-$uploader = new uploader();
+$uploader = "kcfinder\\uploader";  // To execute core/autoload.php on older
+$uploader = new $uploader();       // PHP versions (even PHP 4)
 $uploader->upload();
 
 ?>
