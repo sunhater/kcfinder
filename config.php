@@ -16,6 +16,7 @@
 // you are using session configuration.
 // See http://kcfinder.sunhater.com/install for setting descriptions
 
+
 $_CONFIG = array(
 
 
@@ -113,7 +114,7 @@ $_CONFIG = array(
     //'_jsMinCmd' => "java -jar /path/to/yuicompressor.jar --type js {file}",
     //'_tinyMCEPath' => "/tiny_mce",
 
-    '_sessionVar' => 'KCFINDER',
+    '_sessionVar' => "KCFINDER",
     //'_sessionLifetime' => 30,
     //'_sessionDir' => "/full/directory/path",
 

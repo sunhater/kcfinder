@@ -12,7 +12,7 @@
   *      @link http://kcfinder.sunhater.com
   */
 
-require "core/autoload.php";
+require "core/bootstrap.php";
 $uploader = "kcfinder\\uploader";  // To execute core/autoload.php on older
 $uploader = new $uploader();       // PHP versions (even PHP 4)
 $uploader->upload();

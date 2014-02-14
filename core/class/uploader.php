@@ -574,7 +574,7 @@ class uploader {
         if (($orientation >= 2) && ($orientation <= 8) && ($this->imageDriver == "imagick"))
             try {
                 $img->image->setImageProperty('exif:Orientation', "1");
-            } catch (Exception $e) {}
+            } catch (\Exception $e) {}
 
         // WATERMARK
         if (isset($this->config['watermark']['file']) &&
