@@ -1,11 +1,7 @@
 <?php
     NAMESPACE kcfinder;
 ?>
-<script src="js/jquery.js" type="text/javascript"></script>
-<script src="js/jquery.rightClick.js" type="text/javascript"></script>
-<script src="js/jquery.drag.js" type="text/javascript"></script>
-<script src="js/helper.js" type="text/javascript"></script>
-<script src="js/browser/joiner.php" type="text/javascript"></script>
+<script src="js/index.php" type="text/javascript"></script>
 <script src="js_localize.php?lng=<?php echo $this->lang ?>" type="text/javascript"></script>
 <?php
     IF (isset($this->opener['TinyMCE']) && $this->opener['TinyMCE']):

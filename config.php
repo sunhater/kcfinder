@@ -109,9 +109,11 @@ $_CONFIG = array(
 // THE FOLLOWING SETTINGS CANNOT BE OVERRIDED WITH SESSION SETTINGS
 
     '_check4htaccess' => true,
+    //'_cssMinCmd' => "java -jar /path/to/yuicompressor.jar --type css {file}",
+    //'_jsMinCmd' => "java -jar /path/to/yuicompressor.jar --type js {file}",
     //'_tinyMCEPath' => "/tiny_mce",
 
-    '_sessionVar' => &$_SESSION['KCFINDER'],
+    '_sessionVar' => 'KCFINDER',
     //'_sessionLifetime' => 30,
     //'_sessionDir' => "/full/directory/path",
 

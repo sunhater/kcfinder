@@ -113,31 +113,40 @@ class uploader {
         require "config.php";
 
         // SETTING UP SESSION
-        if (isset($_CONFIG['_sessionLifetime']))
-            ini_set('session.gc_maxlifetime', $_CONFIG['_sessionLifetime'] * 60);
-        if (isset($_CONFIG['_sessionDir']))
-            ini_set('session.save_path', $_CONFIG['_sessionDir']);
-        if (isset($_CONFIG['_sessionDomain']))
-            ini_set('session.cookie_domain', $_CONFIG['_sessionDomain']);
-        switch ($this->cms) {
-            case "drupal": break;
-            default: if (!session_id()) session_start(); break;
+        if (!session_id()) {
+            if (isset($_CONFIG['_sessionLifetime']))
+                ini_set('session.gc_maxlifetime', $_CONFIG['_sessionLifetime'] * 60);
+            if (isset($_CONFIG['_sessionDir']))
+                ini_set('session.save_path', $_CONFIG['_sessionDir']);
+            if (isset($_CONFIG['_sessionDomain']))
+                ini_set('session.cookie_domain', $_CONFIG['_sessionDomain']);
+            session_start();
         }
 
-        // RELOAD DEFAULT CONFIGURATION
-        require "config.php";
-        $this->config = $_CONFIG;
-
         // LOAD SESSION CONFIGURATION IF EXISTS
-        if (isset($_CONFIG['_sessionVar']) &&
-            is_array($_CONFIG['_sessionVar'])
-        ) {
-            foreach ($_CONFIG['_sessionVar'] as $key => $val)
+        $this->config = $_CONFIG;
+        $sessVar = "_sessionVar";
+        if (isset($_CONFIG[$sessVar])) {
+
+            $sessVar = $_CONFIG[$sessVar];
+
+            if (!isset($_SESSION[$sessVar]))
+                $_SESSION[$sessVar] = array();
+
+            $sessVar = &$_SESSION[$sessVar];
+
+            if (!is_array($sessVar))
+                $sessVar = array();
+
+            foreach ($sessVar as $key => $val)
                 if ((substr($key, 0, 1) != "_") && isset($_CONFIG[$key]))
                     $this->config[$key] = $val;
-            if (!isset($this->config['_sessionVar']['self']))
-                $this->config['_sessionVar']['self'] = array();
-            $this->session = &$this->config['_sessionVar']['self'];
+
+            if (!isset($sessVar['self']))
+                $sessVar['self'] = array();
+
+            $this->session = &$sessVar['self'];
+
         } else
             $this->session = &$_SESSION;
 

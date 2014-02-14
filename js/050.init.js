@@ -1,5 +1,3 @@
-<?php
-
 /** This file is part of KCFinder project
   *
   *      @desc Object initializations
@@ -10,7 +8,7 @@
   *   @license http://opensource.org/licenses/GPL-3.0 GPLv3
   *   @license http://opensource.org/licenses/LGPL-3.0 LGPLv3
   *      @link http://kcfinder.sunhater.com
-  */?>
+  */
 
 browser.init = function() {
     if (!this.checkAgent()) return;

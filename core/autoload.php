@@ -40,7 +40,7 @@ if (isset($_GET['cms']) &&
 
 
 // REGISTER AUTOLOAD FUNCTION
-spl_autoload_register(function($path) {
+function kcfinder_autoload($path) {
     $path = explode("\\", $path);
 
     if (count($path) == 1)
@@ -60,7 +60,8 @@ spl_autoload_register(function($path) {
         elseif (file_exists("lib/helper_$class.php"))
             require "lib/helper_$class.php";
     }
-});
+}
+spl_autoload_register("kcfinder_autoload");
 
 
 // json_encode() IMPLEMENTATION IF JSON EXTENSION IS MISSING
