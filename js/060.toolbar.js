@@ -15,10 +15,10 @@ browser.initToolbar = function() {
         browser.hideDialog();
     });
 
-    if (!_.kuki.isSet('displaySettings'))
-        _.kuki.set('displaySettings', 'off');
+    if (!$.$.kuki.isSet('displaySettings'))
+        $.$.kuki.set('displaySettings', 'off');
 
-    if (_.kuki.get('displaySettings') == 'on') {
+    if ($.$.kuki.get('displaySettings') == 'on') {
         $('#toolbar a[href="kcact:settings"]').addClass('selected');
         $('#settings').css('display', 'block');
         browser.resize();
@@ -27,12 +27,12 @@ browser.initToolbar = function() {
     $('#toolbar a[href="kcact:settings"]').click(function () {
         if ($('#settings').css('display') == 'none') {
             $(this).addClass('selected');
-            _.kuki.set('displaySettings', 'on');
+            $.$.kuki.set('displaySettings', 'on');
             $('#settings').css('display', 'block');
             browser.fixFilesHeight();
         } else {
             $(this).removeClass('selected');
-            _.kuki.set('displaySettings', 'off');
+            $.$.kuki.set('displaySettings', 'off');
             $('#settings').css('display', 'none');
             browser.fixFilesHeight();
         }
@@ -173,7 +173,7 @@ browser.maximize = function(button) {
         window.moveTo(0, 0);
         width = screen.availWidth;
         height = screen.availHeight;
-        if ($.browser.opera)
+        if ($.agent.opera)
             height -= 50;
         window.resizeTo(width, height);
 
@@ -204,12 +204,12 @@ browser.maximize = function(button) {
         } else {
             $(button).addClass('selected')
             browser.maximizeMCE = {
-                width: _.nopx(win.css('width')),
-                height: _.nopx(win.css('height')),
+                width: parseInt(win.css('width')),
+                height: parseInt(win.css('height')),
                 left: win.position().left,
                 top: win.position().top,
-                Hspace: _.nopx(win.css('width')) - _.nopx(ifr.css('width')),
-                Vspace: _.nopx(win.css('height')) - _.nopx(ifr.css('height'))
+                Hspace: parseInt(win.css('width')) - parseInt(ifr.css('width')),
+                Vspace: parseInt(win.css('height')) - parseInt(ifr.css('height'))
             };
             var width = $(window.parent).width();
             var height = $(window.parent).height();

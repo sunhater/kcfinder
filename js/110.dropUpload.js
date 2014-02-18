@@ -169,11 +169,11 @@ browser.initDropUpload = function() {
 
                 var postbody = '--' + boundary + '\r\nContent-Disposition: form-data; name="upload[]"';
                 if (evt.target.thisFileName)
-                    postbody += '; filename="' + _.utf8encode(evt.target.thisFileName) + '"';
+                    postbody += '; filename="' + $.$.utf8encode(evt.target.thisFileName) + '"';
                 postbody += '\r\n';
                 if (evt.target.thisFileSize)
                     postbody += 'Content-Length: ' + evt.target.thisFileSize + '\r\n';
-                postbody += 'Content-Type: ' + evt.target.thisFileType + '\r\n\r\n' + evt.target.result + '\r\n--' + boundary + '\r\nContent-Disposition: form-data; name="dir"\r\n\r\n' + _.utf8encode(evt.target.thisTargetDir) + '\r\n--' + boundary + '\r\n--' + boundary + '--\r\n';
+                postbody += 'Content-Type: ' + evt.target.thisFileType + '\r\n\r\n' + evt.target.result + '\r\n--' + boundary + '\r\nContent-Disposition: form-data; name="dir"\r\n\r\n' + $.$.utf8encode(evt.target.thisTargetDir) + '\r\n--' + boundary + '\r\n--' + boundary + '--\r\n';
 
                 var xhr = new XMLHttpRequest();
                 xhr.thisFileName = evt.target.thisFileName;

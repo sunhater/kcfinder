@@ -7,9 +7,6 @@
 <?php INCLUDE "tpl/tpl_javascript.php" ?>
 </head>
 <body>
-<script type="text/javascript">
-$('body').noContext();
-</script>
 <div id="resizer"></div>
 <div id="shadow"></div>
 <div id="dialog"></div>

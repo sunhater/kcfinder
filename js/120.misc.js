@@ -44,7 +44,8 @@ browser.showDialog = function(e) {
             browser.hideAlert();
         });
     }
-    $('#dialog').drag(browser.drag, {handle: '#dialog div.title'});
+    //$('#dialog').drag(browser.drag, {handle: '#dialog div.title'});
+
     $('#dialog').css('display', 'block');
 
     if (e) {
@@ -151,7 +152,7 @@ browser.alert = function(msg, shadow) {
     $('#alert div.title span.close').click(function() {
         browser.hideAlert(shadow);
     });
-    $('#alert').drag(browser.drag, {handle: "#alert div.title"});
+    //$('#alert').drag(browser.drag, {handle: "#alert div.title"});
     browser.showAlert(shadow);
 };
 
@@ -201,8 +202,8 @@ browser.fileNameDialog = function(e, post, inputName, inputValue, url, labels, c
         '<div class="box">' +
         '<input name="' + inputName + '" type="text" /><br />' +
         '<div style="text-align:right">' +
-        '<input type="submit" value="' + _.htmlValue(this.label("OK")) + '" /> ' +
-        '<input type="button" value="' + _.htmlValue(this.label("Cancel")) + '" onclick="browser.hideDialog(); browser.hideAlert(); return false" />' +
+        '<input type="submit" value="' + $.$.htmlValue(this.label("OK")) + '" /> ' +
+        '<input type="button" value="' + $.$.htmlValue(this.label("Cancel")) + '" onclick="browser.hideDialog(); browser.hideAlert(); return false" />' +
     '</div></div></form>';
     $('#dialog').html(html);
     $('#dialog').data('title', this.label(labels.title));
@@ -255,7 +256,7 @@ browser.fileNameDialog = function(e, post, inputName, inputValue, url, labels, c
     var value = field.attr('value');
     if (!selectAll && /^(.+)\.[^\.]+$/ .test(value)) {
         value = value.replace(/^(.+)\.[^\.]+$/, "$1");
-        _.selection(field.get(0), 0, value.length);
+        field.selection(0, value.length);
     } else {
         field.get(0).focus();
         field.get(0).select();
@@ -263,8 +264,8 @@ browser.fileNameDialog = function(e, post, inputName, inputValue, url, labels, c
 };
 
 browser.orderFiles = function(callBack, selected) {
-    var order = _.kuki.get('order');
-    var desc = (_.kuki.get('orderDesc') == 'on');
+    var order = $.$.kuki.get('order');
+    var desc = ($.$.kuki.get('orderDesc') == 'on');
 
     if (!browser.files || !browser.files.sort)
         browser.files = [];
@@ -277,8 +278,8 @@ browser.orderFiles = function(callBack, selected) {
             a1 = a.mtime;
             b1 = b.mtime;
         } else if (order == 'type') {
-            a1 = _.getFileExtension(a.name);
-            b1 = _.getFileExtension(b.name);
+            a1 = $.$.getFileExtension(a.name);
+            b1 = $.$.getFileExtension(b.name);
         } else if (order == 'size') {
             a1 = a.size;
             b1 = b.size;
@@ -362,10 +363,10 @@ browser.post = function(url, data) {
     $.each(data, function(key, val) {
         if ($.isArray(val))
             $.each(val, function(i, aval) {
-                html += '<input type="hidden" name="' + _.htmlValue(key) + '[]" value="' + _.htmlValue(aval) + '" />';
+                html += '<input type="hidden" name="' + $.$.htmlValue(key) + '[]" value="' + $.$.htmlValue(aval) + '" />';
             });
         else
-            html += '<input type="hidden" name="' + _.htmlValue(key) + '" value="' + _.htmlValue(val) + '" />';
+            html += '<input type="hidden" name="' + $.$.htmlValue(key) + '" value="' + $.$.htmlValue(val) + '" />';
     });
     html += '</form>';
     $('#dialog').html(html);
@@ -376,6 +377,6 @@ browser.post = function(url, data) {
 browser.fadeFiles = function() {
     $('#files > div').css({
         opacity: '0.4',
-        filter: 'alpha(opacity:40)'
+        filter: 'alpha(opacity=40)'
     });
 };

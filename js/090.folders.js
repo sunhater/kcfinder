@@ -28,14 +28,12 @@ browser.initFolders = function() {
     $('div.folder > a > span.folder').click(function() {
         browser.changeDir($(this).parent());
     });
-    $('div.folder > a > span.folder').rightClick(function(e) {
-        _.unselect();
-        browser.menuDir($(this).parent(), e);
+    $('div.folder > a > span.folder').rightClick(function(el, e) {
+        $.$.unselect();
+        browser.menuDir($(el).parent(), e);
     });
 
-    if ($.browser.msie && $.browser.version &&
-        (parseInt($.browser.version.substr(0, 1)) < 8)
-    ) {
+    if ($.agent.msie && !$.agent.opera && !$.agent.chromeframe && (parseInt($.agent.msie) < 8)) {
         var fls = $('div.folder').get();
         var body = $('body').get(0);
         var div;
@@ -57,7 +55,7 @@ browser.setTreeData = function(data, path) {
     else if (path.length && (path.substr(path.length - 1, 1) != '/'))
         path += '/';
     path += data.name;
-    var selector = '#folders a[href="kcdir:/' + _.escapeDirs(path) + '"]';
+    var selector = '#folders a[href="kcdir:/' + $.$.escapeDirs(path) + '"]';
     $(selector).data({
         name: data.name,
         path: path,
@@ -79,7 +77,7 @@ browser.setTreeData = function(data, path) {
 browser.buildTree = function(root, path) {
     if (!path) path = "";
     path += root.name;
-    var html = '<div class="folder"><a href="kcdir:/' + _.escapeDirs(path) + '"><span class="brace">&nbsp;</span><span class="folder">' + _.htmlData(root.name) + '</span></a>';
+    var html = '<div class="folder"><a href="kcdir:/' + $.$.escapeDirs(path) + '"><span class="brace">&nbsp;</span><span class="folder">' + $.$.htmlData(root.name) + '</span></a>';
     if (root.dirs) {
         html += '<div class="folders">';
         for (var i = 0; i < root.dirs.length; i++) {
@@ -125,7 +123,7 @@ browser.expandDir = function(dir) {
 
                         var html = '';
                         $.each(data.dirs, function(i, cdir) {
-                            html += '<div class="folder"><a href="kcdir:/' + _.escapeDirs(path + '/' + cdir.name) + '"><span class="brace">&nbsp;</span><span class="folder">' + _.htmlData(cdir.name) + '</span></a></div>';
+                            html += '<div class="folder"><a href="kcdir:/' + $.$.escapeDirs(path + '/' + cdir.name) + '"><span class="brace">&nbsp;</span><span class="folder">' + $.$.htmlData(cdir.name) + '</span></a></div>';
                         });
                         if (html.length) {
                             dir.parent().append('<div class="folders">' + html + '</div>');
@@ -299,9 +297,9 @@ browser.menuDir = function(dir, e) {
                     return;
                 }
                 var currentDir = (data.path == browser.dir);
-                dir.children('span.folder').html(_.htmlData(dt.name));
+                dir.children('span.folder').html($.$.htmlData(dt.name));
                 dir.data('name', dt.name);
-                dir.data('path', _.dirname(data.path) + '/' + dt.name);
+                dir.data('path', $.$.dirname(data.path) + '/' + dt.name);
                 if (currentDir)
                     browser.dir = dir.data('path');
                 browser.initDropUpload();

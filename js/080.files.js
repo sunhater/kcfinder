@@ -21,25 +21,26 @@ browser.initFiles = function() {
     });
     $('.file').unbind();
     $('.file').click(function(e) {
-        _.unselect();
+        $.$.unselect();
         browser.selectFile($(this), e);
+
     });
-    $('.file').rightClick(function(e) {
-        _.unselect();
-        browser.menuFile($(this), e);
+    $('#files .file').rightClick(function(el, e) {
+        $.$.unselect();
+        browser.menuFile($(el), e);
     });
     $('.file').dblclick(function() {
-        _.unselect();
+        $.$.unselect();
         browser.returnFile($(this));
     });
     $('.file').mouseup(function() {
-        _.unselect();
+        $.$.unselect();
     });
     $('.file').mouseout(function() {
-        _.unselect();
+        $.$.unselect();
     });
     $.each(this.shows, function(i, val) {
-        var display = (_.kuki.get('show' + val) == 'off')
+        var display = ($.$.kuki.get('show' + val) == 'off')
             ? 'none' : 'block';
         $('#files .file div.' + val).css('display', display);
     });
@@ -55,17 +56,17 @@ browser.showFiles = function(callBack, selected) {
             $.each(file, function(key, val) {
                 stamp[stamp.length] = key + "|" + val;
             });
-            stamp = _.md5(stamp.join('|'));
-            if (_.kuki.get('view') == 'list') {
+            stamp = $.$.md5(stamp.join('|'));
+            if ($.$.kuki.get('view') == 'list') {
                 if (!i) html += '<table summary="list">';
-                var icon = _.getFileExtension(file.name);
+                var icon = $.$.getFileExtension(file.name);
                 if (file.thumb)
                     icon = '.image';
                 else if (!icon.length || !file.smallIcon)
                     icon = '.';
                 icon = 'themes/' + browser.theme + '/img/files/small/' + icon + '.png';
                 html += '<tr class="file">' +
-                    '<td class="name" style="background-image:url(' + icon + ')">' + _.htmlData(file.name) + '</td>' +
+                    '<td class="name" style="background-image:url(' + icon + ')">' + $.$.htmlData(file.name) + '</td>' +
                     '<td class="time">' + file.date + '</td>' +
                     '<td class="size">' + browser.humanSize(file.size) + '</td>' +
                 '</tr>';
@@ -75,15 +76,15 @@ browser.showFiles = function(callBack, selected) {
                     var icon = browser.baseGetData('thumb') + '&file=' + encodeURIComponent(file.name) + '&dir=' + encodeURIComponent(browser.dir) + '&stamp=' + stamp;
                 else if (file.smallThumb) {
                     var icon = browser.uploadURL + '/' + browser.dir + '/' + file.name;
-                    icon = _.escapeDirs(icon).replace(/\'/g, "%27");
+                    icon = $.$.escapeDirs(icon).replace(/\'/g, "%27");
                 } else {
-                    var icon = file.bigIcon ? _.getFileExtension(file.name) : '.';
+                    var icon = file.bigIcon ? $.$.getFileExtension(file.name) : '.';
                     if (!icon.length) icon = '.';
                     icon = 'themes/' + browser.theme + '/img/files/big/' + icon + '.png';
                 }
                 html += '<div class="file">' +
                     '<div class="thumb" style="background-image:url(\'' + icon + '\')" ></div>' +
-                    '<div class="name">' + _.htmlData(file.name) + '</div>' +
+                    '<div class="name">' + $.$.htmlData(file.name) + '</div>' +
                     '<div class="time">' + file.date + '</div>' +
                     '<div class="size">' + browser.humanSize(file.size) + '</div>' +
                 '</div>';
@@ -93,7 +94,7 @@ browser.showFiles = function(callBack, selected) {
         $.each(browser.files, function(i, file) {
             var item = $('#files .file').get(i);
             $(item).data(file);
-            if (_.inArray(file.name, selected) ||
+            if ($.$.inArray(file.name, selected) ||
                 ((typeof selected != 'undefined') && !selected.push && (file.name == selected))
             )
                 $(item).addClass('selected');
@@ -155,7 +156,7 @@ browser.returnFile = function(file) {
 
     var fileURL = file.substr
         ? file : browser.uploadURL + '/' + browser.dir + '/' + file.data('name');
-    fileURL = _.escapeDirs(fileURL);
+    fileURL = $.$.escapeDirs(fileURL);
 
     if (this.opener.CKEditor) {
         this.opener.CKEditor.object.tools.callFunction(this.opener.CKEditor.funcNum, fileURL, '');
@@ -212,7 +213,7 @@ browser.returnFiles = function(files) {
         var rfiles = [];
         $.each(files, function(i, file) {
             rfiles[i] = browser.uploadURL + '/' + browser.dir + '/' + $(file).data('name');
-            rfiles[i] = _.escapeDirs(rfiles[i]);
+            rfiles[i] = $.$.escapeDirs(rfiles[i]);
         });
         this.opener.callBackMultiple(rfiles);
         if (window.opener) window.close()
@@ -226,7 +227,7 @@ browser.returnThumbnails = function(files) {
         $.each(files, function(i, file) {
             if ($(file).data('thumb')) {
                 rfiles[j] = browser.thumbsURL + '/' + browser.dir + '/' + $(file).data('name');
-                rfiles[j] = _.escapeDirs(rfiles[j++]);
+                rfiles[j] = $.$.escapeDirs(rfiles[j++]);
             }
         });
         this.opener.callBackMultiple(rfiles);
@@ -506,7 +507,7 @@ browser.menuFile = function(file, e) {
         browser.hideDialog();
         var ts = new Date().getTime();
         var showImage = function(data) {
-            url = _.escapeDirs(browser.uploadURL + '/' + browser.dir + '/' + data.name) + '?ts=' + ts,
+            url = $.$.escapeDirs(browser.uploadURL + '/' + browser.dir + '/' + data.name) + '?ts=' + ts,
             $('#loading').html(browser.label("Loading image..."));
             $('#loading').css('display', 'inline');
             var img = new Image();

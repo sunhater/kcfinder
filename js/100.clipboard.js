@@ -42,13 +42,13 @@ browser.openClipboard = function() {
     }
     var html = '<div class="menu"><div class="list">';
     $.each(this.clipboard, function(i, val) {
-        icon = _.getFileExtension(val.name);
+        icon = $.$.getFileExtension(val.name);
         if (val.thumb)
             icon = '.image';
         else if (!val.smallIcon || !icon.length)
             icon = '.';
         var icon = 'themes/' + browser.theme + '/img/files/small/' + icon + '.png';
-        html += '<a style="background-image:url(' + _.escapeDirs(icon) + ')" title="' + browser.label("Click to remove from the Clipboard") + '" onclick="browser.removeFromClipboard(' + i + ')">' + _.htmlData(_.basename(val.name)) + '</a>';
+        html += '<a style="background-image:url(' + $.$.escapeDirs(icon) + ')" title="' + browser.label("Click to remove from the Clipboard") + '" onclick="browser.removeFromClipboard(' + i + ')">' + $.$.htmlData($.$.basename(val.name)) + '</a>';
     });
     html += '</div><div class="delimiter"></div>';
     if (this.support.zip) html+=
@@ -105,7 +105,7 @@ browser.openClipboard = function() {
 
         var left = $(window).width() - $('#dialog').outerWidth();
         var top = $(window).height() - $('#dialog').outerHeight() - $('#clipboard').outerHeight();
-        var lheight = top + _.outerTopSpace('#dialog');
+        var lheight = top + $('#dialog').outerTopSpace();
         $('.menu .list').css('max-height', lheight + 'px');
         var top = $(window).height() - $('#dialog').outerHeight() - $('#clipboard').outerHeight();
         $('#dialog').css({
