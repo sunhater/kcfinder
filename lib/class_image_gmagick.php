@@ -28,7 +28,7 @@ class image_gmagick extends image {
         if (!$height) $height = 1;
         try {
             $this->image->scaleImage($width, $height);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return false;
         }
         $this->width = $width;
@@ -44,7 +44,7 @@ class image_gmagick extends image {
             $this->image->scaleImage($width, $height, true);
             $w = $this->image->getImageWidth();
             $h = $this->image->getImageHeight();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return false;
         }
 
@@ -61,7 +61,7 @@ class image_gmagick extends image {
                 $img = new \Gmagick();
                 $img->newImage($width, $height, $background);
                 $img->compositeImage($this->image, 1, $x, $y);
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 return false;
             }
             $this->image = $img;
@@ -112,7 +112,7 @@ class image_gmagick extends image {
         try {
             $this->image->scaleImage($w, $h);
             $this->image->cropImage($width, $height, -$x, -$y);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return false;
         }
 
@@ -126,7 +126,7 @@ class image_gmagick extends image {
             $this->image->rotateImage($background, $angle);
             $w = $this->image->getImageWidth();
             $h = $this->image->getImageHeight();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return false;
         }
         $this->width = $w;
@@ -137,7 +137,7 @@ class image_gmagick extends image {
     public function flipHorizontal() {
         try {
             $this->image->flopImage();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return false;
         }
         return true;
@@ -146,7 +146,7 @@ class image_gmagick extends image {
     public function flipVertical() {
         try {
             $this->image->flipImage();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return false;
         }
         return true;
@@ -157,7 +157,7 @@ class image_gmagick extends image {
             $wm = new \Gmagick($file);
             $w = $wm->getImageWidth();
             $h = $wm->getImageHeight();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return false;
         }
 
@@ -178,7 +178,7 @@ class image_gmagick extends image {
 
         try {
             $this->image->compositeImage($wm, 1, $x, $y);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return false;
         }
         return true;
@@ -191,7 +191,7 @@ class image_gmagick extends image {
         try {
             $img = new \Gmagick();
             $img->newImage($width, $height, "none");
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return false;
         }
         return $img;
@@ -204,11 +204,11 @@ class image_gmagick extends image {
             $height = $image->height;
             return $image->image;
 
-        } elseif (is_object($image) && ($image instanceof Gmagick)) {
+        } elseif (is_object($image) && ($image instanceof \Gmagick)) {
             try {
                 $w = $image->getImageWidth();
                 $h = $image->getImageHeight();
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 return false;
             }
             $width = $w;
@@ -220,7 +220,7 @@ class image_gmagick extends image {
                 $image = new \Gmagick($image);
                 $w = $image->getImageWidth();
                 $h = $image->getImageHeight();
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 return false;
             }
             $width = $w;
@@ -240,8 +240,8 @@ class image_gmagick extends image {
 
     static function checkImage($file) {
         try {
-            $img = new Gmagic($file);
-        } catch (Exception $e) {
+            $img = new \Gmagick($file);
+        } catch (\Exception $e) {
             return false;
         }
         return true;
@@ -254,7 +254,7 @@ class image_gmagick extends image {
         $type = strtolower($type);
         try {
             $this->image->setImageFormat($type);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return false;
         }
         $method = "optimize_$type";
@@ -272,7 +272,7 @@ class image_gmagick extends image {
             $file = $options['file'] . ".$type";
             try {
                 $this->image->writeImage($file);
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 @unlink($file);
                 return false;
             }
@@ -293,7 +293,7 @@ class image_gmagick extends image {
         $quality = isset($options['quality']) ? $options['quality'] : self::DEFAULT_JPEG_QUALITY;
         try {
             $this->image->setCompressionQuality($quality);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return false;
         }
         return true;

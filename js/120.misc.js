@@ -377,6 +377,6 @@ browser.post = function(url, data) {
 browser.fadeFiles = function() {
     $('#files > div').css({
         opacity: '0.4',
-        filter: 'alpha(opacity=40)'
+        filter: 'alpha(opacity=.40)'
     });
 };
