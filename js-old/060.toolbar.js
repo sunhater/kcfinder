@@ -44,7 +44,7 @@ browser.initToolbar = function() {
         return false;
     });
 
-    if (window.opener || (this.opener.name == "tinymce") || $('iframe[name]', window.parent.document).get(0))
+    if (window.opener || this.opener.TinyMCE || $('iframe', window.parent.document).get(0))
         $('#toolbar a[href="kcact:maximize"]').click(function() {
             browser.maximize(this);
             return false;
@@ -177,7 +177,7 @@ browser.maximize = function(button) {
             height -= 50;
         window.resizeTo(width, height);
 
-    } else if (browser.opener.name == "tinymce") {
+    } else if (browser.opener.TinyMCE) {
         var win, ifr, id;
 
         $('iframe', window.parent.document).each(function() {

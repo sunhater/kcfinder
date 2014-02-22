@@ -4,7 +4,7 @@
 <script src="js/index.php" type="text/javascript"></script>
 <script src="js_localize.php?lng=<?php echo $this->lang ?>" type="text/javascript"></script>
 <?php
-    IF (isset($this->opener['TinyMCE']) && $this->opener['TinyMCE']):
+    IF ($this->opener['name'] == "tinymce"):
 ?>
 <script src="<?php echo $this->config['_tinyMCEPath'] ?>/tiny_mce_popup.js" type="text/javascript"></script>
 <?php
@@ -27,26 +27,7 @@ browser.access = <?php echo json_encode($this->config['access']) ?>;
 browser.dir = "<?php echo text::jsValue($this->session['dir']) ?>";
 browser.uploadURL = "<?php echo text::jsValue($this->config['uploadURL']) ?>";
 browser.thumbsURL = browser.uploadURL + "/<?php echo text::jsValue($this->config['thumbsDir']) ?>";
-<?php
-    IF (isset($this->get['opener']) && strlen($this->get['opener'])):
-?>
-browser.opener.name = "<?php echo text::jsValue($this->get['opener']) ?>";
-<?php
-    ENDIF;
-
-    IF (isset($this->opener['CKEditor']['funcNum']) && preg_match('/^\d+$/', $this->opener['CKEditor']['funcNum'])):
-?>
-browser.opener.CKEditor = {};
-browser.opener.CKEditor.funcNum = <?php echo $this->opener['CKEditor']['funcNum'] ?>;
-<?php
-    ENDIF;
-
-    IF (isset($this->opener['TinyMCE']) && $this->opener['TinyMCE']):
-?>
-browser.opener.TinyMCE = true;
-<?php
-    ENDIF;
-?>
+browser.opener = <?php echo json_encode($this->opener) ?>;
 browser.cms = "<?php echo text::jsValue($this->cms) ?>";
 $.$.kuki.domain = "<?php echo text::jsValue($this->config['cookieDomain']) ?>";
 $.$.kuki.path = "<?php echo text::jsValue($this->config['cookiePath']) ?>";

@@ -87,7 +87,7 @@ class path {
     }
 
   /** Normalize the given path. On Windows servers backslash will be replaced
-    * with slash. Remobes unnecessary doble slashes and double dots. Removes
+    * with slash. Removes unnecessary double slashes and double dots. Removes
     * last slash if it exists. Examples:
     * path::normalize("C:\\any\\path\\") returns "C:/any/path"
     * path::normalize("/your/path/..//home/") returns "/your/home"
@@ -95,8 +95,10 @@ class path {
     * @return string */
 
     static function normalize($path) {
+
+        // Backslash to slash convert
         if (strtoupper(substr(PHP_OS, 0, 3)) == "WIN") {
-            $path = preg_replace('/([^\\\])\\\([^\\\])/', "$1/$2", $path);
+            $path = preg_replace('/([^\\\])\\\+([^\\\])/s', "$1/$2", $path);
             if (substr($path, -1) == "\\") $path = substr($path, 0, -1);
             if (substr($path, 0, 1) == "\\") $path = "/" . substr($path, 1);
         }

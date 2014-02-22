@@ -158,15 +158,15 @@ browser.returnFile = function(file) {
         ? file : browser.uploadURL + '/' + browser.dir + '/' + file.data('name');
     fileURL = $.$.escapeDirs(fileURL);
 
-    if (this.opener.name == "ckeditor") {
+    if (this.opener.CKEditor) {
         this.opener.CKEditor.object.tools.callFunction(this.opener.CKEditor.funcNum, fileURL, '');
         window.close();
 
-    } else if (this.opener.name == "fckeditor") {
+    } else if (this.opener.FCKeditor) {
         window.opener.SetUrl(fileURL) ;
         window.close() ;
 
-    } else if (this.opener.name == "tinymce") {
+    } else if (this.opener.TinyMCE) {
         var win = tinyMCEPopup.getWindowArg('window');
         win.document.getElementById(tinyMCEPopup.getWindowArg('input')).value = fileURL;
         if (win.getImageData) win.getImageData();
@@ -177,11 +177,6 @@ browser.returnFile = function(file) {
                 win.ImageDialog.showPreviewImage(fileURL);
         }
         tinyMCEPopup.close();
-
-    } else if (this.opener.name == "tinymce4") {
-        var win = (window.opener ? window.opener : window.parent);
-        $(win.document).find('#' + this.opener.TinyMCE.field).val(fileURL);
-        win.tinyMCE.activeEditor.windowManager.close();
 
     } else if (this.opener.callBack) {
 

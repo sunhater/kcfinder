@@ -177,7 +177,7 @@ browser.changeDir = function(dir) {
                 browser.dirWritable = data.dirWritable;
                 var title = "KCFinder: /" + browser.dir;
                 document.title = title;
-                if (browser.opener.name == "tinymce")
+                if (browser.opener.TinyMCE)
                     tinyMCEPopup.editor.windowManager.setTitle(window, title);
                 browser.statusDir();
             },

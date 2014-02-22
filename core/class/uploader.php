@@ -236,14 +236,26 @@ class uploader {
             @mkdir($this->config['uploadDir'], $this->config['dirPerms']);
 
         // HOST APPLICATIONS INIT
-        if (isset($_GET['CKEditorFuncNum']))
-            $this->opener['CKEditor']['funcNum'] = $_GET['CKEditorFuncNum'];
-        if (isset($_GET['opener']) &&
-            (strtolower($_GET['opener']) == "tinymce") &&
-            isset($this->config['_tinyMCEPath']) &&
-            strlen($this->config['_tinyMCEPath'])
-        )
-            $this->opener['TinyMCE'] = true;
+        if (isset($_GET['CKEditorFuncNum'])) {
+            $this->opener['name'] = "ckeditor";
+            $this->opener['CKEditor'] = array('funcNum' => $_GET['CKEditorFuncNum']);
+
+        } elseif (isset($_GET['opener'])) {
+            $this->opener['name'] = $_GET['opener'];
+
+            if ($_GET['opener'] == "tinymce") {
+                if (!isset($this->config['_tinyMCEPath']) || !strlen($this->config['_tinyMCEPath']))
+                    $this->opener['name'] = false;
+
+            } elseif ($_GET['opener'] == "tinymce4") {
+                if (!isset($_GET['field']))
+                    $this->opener['name'] = false;
+                else
+                    $this->opener['TinyMCE'] = array('field' => $_GET['field']);
+            }
+
+        } else
+            $this->opener['name'] = false;
 
         // LOCALIZATION
         foreach ($this->langInputNames as $key)

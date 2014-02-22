@@ -52,61 +52,51 @@ browser.checkAgent = function() {
 };
 
 browser.initOpeners = function() {
+    if (this.opener.TinyMCE && (typeof(tinyMCEPopup) == 'undefined'))
+        this.opener.TinyMCE = null;
 
-    try {
+    if (this.opener.TinyMCE)
+        this.opener.callBack = true;
 
-        // TinyMCE 3
-        if (this.opener.name == "tinymce") {
-            if (typeof tinyMCEPopup == 'undefined')
-                this.opener.name = null;
-            else
-                this.opener.callBack = true;
+    if ((!this.opener.name || (this.opener.name == 'fckeditor')) &&
+        window.opener && window.opener.SetUrl
+    ) {
+        this.opener.FCKeditor = true;
+        this.opener.callBack = true;
+    }
 
-        // TinyMCE 4
-        } else if (this.opener.name == "tinymce4")
+    if (this.opener.CKEditor) {
+        if (window.parent && window.parent.CKEDITOR)
+            this.opener.CKEditor.object = window.parent.CKEDITOR;
+        else if (window.opener && window.opener.CKEDITOR) {
+            this.opener.CKEditor.object = window.opener.CKEDITOR;
             this.opener.callBack = true;
+        } else
+            this.opener.CKEditor = null;
+    }
 
-        // CKEditor
-        else if (this.opener.name == "ckeditor") {
-            if (window.parent && window.parent.CKEDITOR)
-                this.opener.CKEditor.object = window.parent.CKEDITOR;
-            else if (window.opener && window.opener.CKEDITOR) {
-                this.opener.CKEditor.object = window.opener.CKEDITOR;
-                this.opener.callBack = true;
-            } else
-                this.opener.CKEditor = null;
+    if (!this.opener.CKEditor && !this.opener.FCKEditor && !this.TinyMCE) {
+        if ((window.opener && window.opener.KCFinder && window.opener.KCFinder.callBack) ||
+            (window.parent && window.parent.KCFinder && window.parent.KCFinder.callBack)
+        )
+            this.opener.callBack = window.opener
+                ? window.opener.KCFinder.callBack
+                : window.parent.KCFinder.callBack;
 
-        // FCKeditor
-        } else if ((!this.opener.name || (this.opener.name == 'fckeditor')) && window.opener && window.opener.SetUrl) {
-            this.opener.name = "fckeditor";
-            this.opener.callBack = true;
-        }
-
-        // Custom callback
-        if (!this.opener.callBack) {
-            if ((window.opener && window.opener.KCFinder && window.opener.KCFinder.callBack) ||
-                (window.parent && window.parent.KCFinder && window.parent.KCFinder.callBack)
+        if ((
+                window.opener &&
+                window.opener.KCFinder &&
+                window.opener.KCFinder.callBackMultiple
+            ) || (
+                window.parent &&
+                window.parent.KCFinder &&
+                window.parent.KCFinder.callBackMultiple
             )
-                this.opener.callBack = window.opener
-                    ? window.opener.KCFinder.callBack
-                    : window.parent.KCFinder.callBack;
-
-            if ((
-                    window.opener &&
-                    window.opener.KCFinder &&
-                    window.opener.KCFinder.callBackMultiple
-                ) || (
-                    window.parent &&
-                    window.parent.KCFinder &&
-                    window.parent.KCFinder.callBackMultiple
-                )
-            )
-                this.opener.callBackMultiple = window.opener
-                    ? window.opener.KCFinder.callBackMultiple
-                    : window.parent.KCFinder.callBackMultiple;
-        }
-
-    } catch(e) {}
+        )
+            this.opener.callBackMultiple = window.opener
+                ? window.opener.KCFinder.callBackMultiple
+                : window.parent.KCFinder.callBackMultiple;
+    }
 };
 
 browser.initContent = function() {
