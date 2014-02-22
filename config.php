@@ -4,7 +4,7 @@
   *
   *      @desc Base configuration file
   *   @package KCFinder
-  *   @version 2.52
+  *   @version 2.53
   *    @author Pavel Tzonkov <sunhater@sunhater.com>
   * @copyright 2010-2014 KCFinder Project
   *   @license http://www.opensource.org/licenses/gpl-2.0.php GPLv2
@@ -21,7 +21,7 @@ $_CONFIG = array(
 
 // GENERAL SETTINGS
 
-    'disabled' => false,
+    'disabled' => true,
     'theme' => "oxygen",
     'uploadURL' => "upload",
     'uploadDir' => "",

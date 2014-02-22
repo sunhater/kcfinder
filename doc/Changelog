@@ -1,3 +1,15 @@
+VERSION 2.53 - 2014-02-22
+-------------------------
+* Session start fix
+* TinyMCE 4 support
+
+
+VERSION 2.52 - 2014-01-20
+-------------------------
+* Various image drivers support (gd, imagemagick, graphicsmagic)
+* Auto-rotate images based on EXIF data
+* PNG watermark support
+
 
 VERSION 2.51 - 2010-08-25
 -------------------------
