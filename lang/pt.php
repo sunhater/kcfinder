@@ -62,7 +62,7 @@ $lang = array(
     "Não foi possível ler o ficheiro .htaccess",
 
     "Incorrect .htaccess file. Cannot rewrite it!" =>
-    "Ficheiro '.htaccess' incorrecto. Não foi poss�vel altera-lo.",
+    "Ficheiro '.htaccess' incorrecto. Não foi possível altera-lo.",
 
     "Cannot read upload folder." =>
     "Não foi possível ler a pasta de upload.",
