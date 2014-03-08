@@ -95,8 +95,9 @@ $lang = array(
     "Are you sure you want to delete this file?" =>
     "Наистина ли искате да изтриете този файл?",
 
+
     "Are you sure you want to delete this folder and all its content?" =>
-    "Наистина ли искате да изтриете тази папка и цялото й съдържание?",
+    "Наистина ли искате да изтриете тази папка и цялото ѝ съдържание?",
 
     "Non-existing directory type." =>
     "Несъществуващ специален тип на папка.",

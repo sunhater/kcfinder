@@ -1,1 +1,0 @@
-new Image().src="themes/oxygen/img/loading.gif";

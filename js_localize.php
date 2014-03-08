@@ -29,11 +29,18 @@ if (!in_array($file, $files)) {
     die;
 }
 $mtime = @filemtime($file);
-if ($mtime) httpCache::checkMTime($mtime);
+if ($mtime) httpCache::checkMTime($mtime, "Content-Type: text/javascript");
 require $file;
 header("Content-Type: text/javascript; charset={$lang['_charset']}");
-foreach ($lang as $english => $native)
-    if (substr($english, 0, 1) != "_")
-        echo "browser.labels['" . text::jsValue($english) . "']=\"" . text::jsValue($native) . "\";";
+echo "_.labels={";
+$i = 0;
+foreach ($lang as $english => $native) {
+    if (substr($english, 0, 1) != "_") {
+        echo "'" . text::jsValue($english) . "':\"" . text::jsValue($native) . "\"";
+        if (++$i < count($lang))
+            echo ",";
+    }
+}
+echo "}";
 
 ?>

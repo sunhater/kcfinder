@@ -10,176 +10,179 @@
   *      @link http://kcfinder.sunhater.com
   */
 
-browser.initClipboard = function() {
-    if (!this.clipboard || !this.clipboard.length) return;
+_.initClipboard = function() {
+    if (!_.clipboard || !_.clipboard.length) return;
     var size = 0;
-    $.each(this.clipboard, function(i, val) {
+    $.each(_.clipboard, function(i, val) {
         size += parseInt(val.size);
     });
-    size = this.humanSize(size);
-    $('#clipboard').html('<div title="' + this.label("Clipboard") + ' (' + this.clipboard.length + ' ' + this.label("files") + ', ' + size + ')" onclick="browser.openClipboard()"></div>');
+    size = _.humanSize(size);
+    $('#clipboard').html('<div title="' + _.label("Clipboard") + ' (' + _.clipboard.length + ' ' + _.label("files") + ', ' + size + ')" onclick="_.openClipboard()"></div>');
     var resize = function() {
         $('#clipboard').css({
-            left: $(window).width() - $('#clipboard').outerWidth() + 'px',
-            top: $(window).height() - $('#clipboard').outerHeight() + 'px'
+            left: $(window).width() - $('#clipboard').outerWidth(),
+            top: $(window).height() - $('#clipboard').outerHeight()
         });
     };
     resize();
-    $('#clipboard').css('display', 'block');
+    $('#clipboard').css('display', "block");
     $(window).unbind();
     $(window).resize(function() {
-        browser.resize();
+        _.resize();
         resize();
     });
 };
 
-browser.openClipboard = function() {
-    if (!this.clipboard || !this.clipboard.length) return;
-    if ($('.menu a[href="kcact:cpcbd"]').html()) {
+_.openClipboard = function() {
+    if (!_.clipboard || !_.clipboard.length) return;
+    if ($('#dialog a[href="kcact:cpcbd"]').html()) {
         $('#clipboard').removeClass('selected');
-        this.hideDialog();
+        _.hideDialog();
         return;
     }
-    var html = '<div class="menu"><div class="list">';
-    $.each(this.clipboard, function(i, val) {
-        icon = $.$.getFileExtension(val.name);
+    var html = '<ul><li class="list">';
+    $.each(_.clipboard, function(i, val) {
+        var icon = $.$.getFileExtension(val.name);
         if (val.thumb)
-            icon = '.image';
+            icon = ".image";
         else if (!val.smallIcon || !icon.length)
-            icon = '.';
-        var icon = 'themes/' + browser.theme + '/img/files/small/' + icon + '.png';
-        html += '<a style="background-image:url(' + $.$.escapeDirs(icon) + ')" title="' + browser.label("Click to remove from the Clipboard") + '" onclick="browser.removeFromClipboard(' + i + ')">' + $.$.htmlData($.$.basename(val.name)) + '</a>';
+            icon = ".";
+        icon = "themes/" + _.theme + "/img/files/small/" + icon + ".png";
+        html += '<a title="' + _.label("Click to remove from the Clipboard") + '" onclick="_.removeFromClipboard(' + i + ')"' + ((i == 0) ? ' class="first"' : "") + '><span style="background-image:url(' + $.$.escapeDirs(icon) + ')">' + $.$.htmlData($.$.basename(val.name)) + '</span></a>';
     });
-    html += '</div><div class="delimiter"></div>';
-    if (this.support.zip) html+=
-        '<a href="kcact:download">' + this.label("Download files") + '</a>';
-    if (this.access.files.copy || this.access.files.move || this.access.files['delete'])
-        html += '<div class="delimiter"></div>';
-    if (this.access.files.copy)
-        html += '<a href="kcact:cpcbd"' + (!browser.dirWritable ? ' class="denied"' : '') + '>' +
-            this.label("Copy files here") + '</a>';
-    if (this.access.files.move)
-        html += '<a href="kcact:mvcbd"' + (!browser.dirWritable ? ' class="denied"' : '') + '>' +
-            this.label("Move files here") + '</a>';
-    if (this.access.files['delete'])
-        html += '<a href="kcact:rmcbd">' + this.label("Delete files") + '</a>';
-    html += '<div class="delimiter"></div>' +
-        '<a href="kcact:clrcbd">' + this.label("Clear the Clipboard") + '</a>' + '</div>';
+    html += '</li><li class="div-files">-</li>';
+    if (_.support.zip) html +=
+        '<li><a href="kcact:download"><span>' + _.label("Download files") + '</span></a></li>';
+    if (_.access.files.copy || _.access.files.move || _.access.files['delete'])
+        html += '<li>-</li>';
+    if (_.access.files.copy)
+        html += '<li><a href="kcact:cpcbd"' + (!_.dirWritable ? ' class="denied"' : '') + '><span>' +
+            _.label("Copy files here") + '</span></a></li>';
+    if (_.access.files.move)
+        html += '<li><a href="kcact:mvcbd"' + (!_.dirWritable ? ' class="denied"' : '') + '><span>' +
+            _.label("Move files here") + '</span></a></li>';
+    if (_.access.files['delete'])
+        html += '<li><a href="kcact:rmcbd"><span>' + _.label("Delete files") + '</span></a></li>';
+    html += '<li>-</li>' +
+        '<li><a href="kcact:clrcbd"><span>' + _.label("Clear the Clipboard") + '</span></a></li></ul>';
 
     setTimeout(function() {
         $('#clipboard').addClass('selected');
-        $('#dialog').html(html);
-        $('.menu a[href="kcact:download"]').click(function() {
-            browser.hideDialog();
-            browser.downloadClipboard();
+        $('#dialog').html(html).find('ul').first().menu();
+        $('#dialog a[href="kcact:download"]').click(function() {
+            _.hideDialog();
+            _.downloadClipboard();
             return false;
         });
-        $('.menu a[href="kcact:cpcbd"]').click(function() {
-            if (!browser.dirWritable) return false;
-            browser.hideDialog();
-            browser.copyClipboard(browser.dir);
+        $('#dialog a[href="kcact:cpcbd"]').click(function() {
+            if (!_.dirWritable) return false;
+            _.hideDialog();
+            _.copyClipboard(_.dir);
             return false;
         });
-        $('.menu a[href="kcact:mvcbd"]').click(function() {
-            if (!browser.dirWritable) return false;
-            browser.hideDialog();
-            browser.moveClipboard(browser.dir);
+        $('#dialog a[href="kcact:mvcbd"]').click(function() {
+            if (!_.dirWritable) return false;
+            _.hideDialog();
+            _.moveClipboard(_.dir);
             return false;
         });
-        $('.menu a[href="kcact:rmcbd"]').click(function() {
-            browser.hideDialog();
-            browser.confirm(
-                browser.label("Are you sure you want to delete all files in the Clipboard?"),
+        $('#dialog a[href="kcact:rmcbd"]').click(function() {
+            _.hideDialog();
+            _.confirm(
+                _.label("Are you sure you want to delete all files in the Clipboard?"),
                 function(callBack) {
                     if (callBack) callBack();
-                    browser.deleteClipboard();
+                    _.deleteClipboard();
                 }
             );
             return false;
         });
-        $('.menu a[href="kcact:clrcbd"]').click(function() {
-            browser.hideDialog();
-            browser.clearClipboard();
+        $('#dialog a[href="kcact:clrcbd"]').click(function() {
+            _.hideDialog();
+            _.clearClipboard();
             return false;
         });
 
         var left = $(window).width() - $('#dialog').outerWidth();
-        var top = $(window).height() - $('#dialog').outerHeight() - $('#clipboard').outerHeight();
+        var top = $(window).height() - $('#dialog').outerHeight() - $('#status').outerHeight();
         var lheight = top + $('#dialog').outerTopSpace();
-        $('.menu .list').css('max-height', lheight + 'px');
-        var top = $(window).height() - $('#dialog').outerHeight() - $('#clipboard').outerHeight();
-        $('#dialog').css({
-            left: (left - 4) + 'px',
-            top: top + 'px'
+        $('#dialog .list').css({
+            'max-height': lheight,
+            'overflow-y': "auto",
+            'overflow-x': "hidden"
         });
-        $('#dialog').fadeIn();
+        top = $(window).height() - $('#dialog').outerHeight(true) - $('#status').outerHeight(true);
+        $('#dialog').css({
+            left: left - 5,
+            top: top
+        }).fadeIn("fast");
     }, 1);
 };
 
-browser.removeFromClipboard = function(i) {
-    if (!this.clipboard || !this.clipboard[i]) return false;
-    if (this.clipboard.length == 1) {
-        this.clearClipboard();
-        this.hideDialog();
+_.removeFromClipboard = function(i) {
+    if (!_.clipboard || !_.clipboard[i]) return false;
+    if (_.clipboard.length == 1) {
+        _.clearClipboard();
+        _.hideDialog();
         return;
     }
 
-    if (i < this.clipboard.length - 1) {
-        var last = this.clipboard.slice(i + 1);
-        this.clipboard = this.clipboard.slice(0, i);
-        this.clipboard = this.clipboard.concat(last);
+    if (i < _.clipboard.length - 1) {
+        var last = _.clipboard.slice(i + 1);
+        _.clipboard = _.clipboard.slice(0, i);
+        _.clipboard = _.clipboard.concat(last);
     } else
-        this.clipboard.pop();
+        _.clipboard.pop();
 
-    this.initClipboard();
-    this.hideDialog();
-    this.openClipboard();
+    _.initClipboard();
+    _.hideDialog();
+    _.openClipboard();
     return true;
 };
 
-browser.copyClipboard = function(dir) {
-    if (!this.clipboard || !this.clipboard.length) return;
-    var files = [];
-    var failed = 0;
-    for (i = 0; i < this.clipboard.length; i++)
-        if (this.clipboard[i].readable)
-            files[i] = this.clipboard[i].dir + '/' + this.clipboard[i].name;
+_.copyClipboard = function(dir) {
+    if (!_.clipboard || !_.clipboard.length) return;
+    var files = [],
+        failed = 0;
+    for (i = 0; i < _.clipboard.length; i++)
+        if (_.clipboard[i].readable)
+            files[i] = _.clipboard[i].dir + "/" + _.clipboard[i].name;
         else
             failed++;
-    if (this.clipboard.length == failed) {
-        browser.alert(this.label("The files in the Clipboard are not readable."));
+    if (_.clipboard.length == failed) {
+        _.alert(_.label("The files in the Clipboard are not readable."));
         return;
     }
     var go = function(callBack) {
-        if (dir == browser.dir)
-            browser.fadeFiles();
+        if (dir == _.dir)
+            _.fadeFiles();
         $.ajax({
-            type: 'POST',
-            dataType: 'json',
-            url: browser.baseGetData('cp_cbd'),
+            type: "post",
+            dataType: "json",
+            url: _.baseGetData("cp_cbd"),
             data: {dir: dir, files: files},
             async: false,
             success: function(data) {
                 if (callBack) callBack();
-                browser.check4errors(data);
-                browser.clearClipboard();
-                if (dir == browser.dir)
-                    browser.refresh();
+                _.check4errors(data);
+                _.clearClipboard();
+                if (dir == _.dir)
+                    _.refresh();
             },
             error: function() {
                 if (callBack) callBack();
                 $('#files > div').css({
-                    opacity: '',
-                    filter: ''
+                    opacity: "",
+                    filter: ""
                 });
-                browser.alert(browser.label("Unknown error."));
+                _.alert(_.label("Unknown error."));
             }
         });
     };
 
     if (failed)
-        browser.confirm(
-            browser.label("{count} files in the Clipboard are not readable. Do you want to copy the rest?", {count:failed}),
+        _.confirm(
+            _.label("{count} files in the Clipboard are not readable. Do you want to copy the rest?", {count:failed}),
             go
         )
     else
@@ -187,111 +190,111 @@ browser.copyClipboard = function(dir) {
 
 };
 
-browser.moveClipboard = function(dir) {
-    if (!this.clipboard || !this.clipboard.length) return;
-    var files = [];
-    var failed = 0;
-    for (i = 0; i < this.clipboard.length; i++)
-        if (this.clipboard[i].readable && this.clipboard[i].writable)
-            files[i] = this.clipboard[i].dir + "/" + this.clipboard[i].name;
+_.moveClipboard = function(dir) {
+    if (!_.clipboard || !_.clipboard.length) return;
+    var files = [],
+        failed = 0;
+    for (i = 0; i < _.clipboard.length; i++)
+        if (_.clipboard[i].readable && _.clipboard[i].writable)
+            files[i] = _.clipboard[i].dir + "/" + _.clipboard[i].name;
         else
             failed++;
-    if (this.clipboard.length == failed) {
-        browser.alert(this.label("The files in the Clipboard are not movable."))
+    if (_.clipboard.length == failed) {
+        _.alert(_.label("The files in the Clipboard are not movable."))
         return;
     }
 
     var go = function(callBack) {
-        browser.fadeFiles();
+        _.fadeFiles();
         $.ajax({
-            type: 'POST',
-            dataType: 'json',
-            url: browser.baseGetData('mv_cbd'),
+            type: "post",
+            dataType: "json",
+            url: _.baseGetData("mv_cbd"),
             data: {dir: dir, files: files},
             async: false,
             success: function(data) {
                 if (callBack) callBack();
-                browser.check4errors(data);
-                browser.clearClipboard();
-                browser.refresh();
+                _.check4errors(data);
+                _.clearClipboard();
+                _.refresh();
             },
             error: function() {
                 if (callBack) callBack();
                 $('#files > div').css({
-                    opacity: '',
-                    filter: ''
+                    opacity: "",
+                    filter: ""
                 });
-                browser.alert(browser.label("Unknown error."));
+                _.alert(_.label("Unknown error."));
             }
         });
     };
 
     if (failed)
-        browser.confirm(
-            browser.label("{count} files in the Clipboard are not movable. Do you want to move the rest?", {count: failed}),
+        _.confirm(
+            _.label("{count} files in the Clipboard are not movable. Do you want to move the rest?", {count: failed}),
             go
         );
     else
         go();
 };
 
-browser.deleteClipboard = function() {
-    if (!this.clipboard || !this.clipboard.length) return;
-    var files = [];
-    var failed = 0;
-    for (i = 0; i < this.clipboard.length; i++)
-        if (this.clipboard[i].readable && this.clipboard[i].writable)
-            files[i] = this.clipboard[i].dir + '/' + this.clipboard[i].name;
+_.deleteClipboard = function() {
+    if (!_.clipboard || !_.clipboard.length) return;
+    var files = [],
+        failed = 0;
+    for (i = 0; i < _.clipboard.length; i++)
+        if (_.clipboard[i].readable && _.clipboard[i].writable)
+            files[i] = _.clipboard[i].dir + "/" + _.clipboard[i].name;
         else
             failed++;
-    if (this.clipboard.length == failed) {
-        browser.alert(this.label("The files in the Clipboard are not removable."))
+    if (_.clipboard.length == failed) {
+        _.alert(_.label("The files in the Clipboard are not removable."))
         return;
     }
     var go = function(callBack) {
-        browser.fadeFiles();
+        _.fadeFiles();
         $.ajax({
-            type: 'POST',
-            dataType: 'json',
-            url: browser.baseGetData('rm_cbd'),
+            type: "post",
+            dataType: "json",
+            url: _.baseGetData("rm_cbd"),
             data: {files:files},
             async: false,
             success: function(data) {
                 if (callBack) callBack();
-                browser.check4errors(data);
-                browser.clearClipboard();
-                browser.refresh();
+                _.check4errors(data);
+                _.clearClipboard();
+                _.refresh();
             },
             error: function() {
                 if (callBack) callBack();
                 $('#files > div').css({
-                    opacity: '',
-                    filter:''
+                    opacity: "",
+                    filter: ""
                 });
-                browser.alert(browser.label("Unknown error."));
+                _.alert(_.label("Unknown error."));
             }
         });
     };
     if (failed)
-        browser.confirm(
-            browser.label("{count} files in the Clipboard are not removable. Do you want to delete the rest?", {count: failed}),
+        _.confirm(
+            _.label("{count} files in the Clipboard are not removable. Do you want to delete the rest?", {count: failed}),
             go
         );
     else
         go();
 };
 
-browser.downloadClipboard = function() {
-    if (!this.clipboard || !this.clipboard.length) return;
+_.downloadClipboard = function() {
+    if (!_.clipboard || !_.clipboard.length) return;
     var files = [];
-    for (i = 0; i < this.clipboard.length; i++)
-        if (this.clipboard[i].readable)
-            files[i] = this.clipboard[i].dir + '/' + this.clipboard[i].name;
+    for (i = 0; i < _.clipboard.length; i++)
+        if (_.clipboard[i].readable)
+            files[i] = _.clipboard[i].dir + "/" + _.clipboard[i].name;
     if (files.length)
-        this.post(this.baseGetData('downloadClipboard'), {files:files});
+        _.post(_.baseGetData('downloadClipboard'), {files:files});
 };
 
-browser.clearClipboard = function() {
-    $('#clipboard').html('');
-    this.clipboard = [];
+_.clearClipboard = function() {
+    $('#clipboard').html("");
+    _.clipboard = [];
 };

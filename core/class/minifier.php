@@ -43,11 +43,13 @@ class minifier {
                 $mtime = $fmtime;
         }
 
+        $header = "Content-Type: text/{$this->type}; charset=utf-8";
+
         // GET SOURCE CODE FROM CLIENT HTTP CACHE IF EXISTS
-        httpCache::checkMTime($mtime);
+        httpCache::checkMTime($mtime, $header);
 
         // OUTPUT SOURCE CODE
-        header("Content-Type: text/{$this->type}; charset=utf-8");
+        header($header);
 
         // GET SOURCE CODE FROM SERVER-SIDE CACHE
         if (($cacheFile !== null) &&

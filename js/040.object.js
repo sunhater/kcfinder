@@ -10,7 +10,7 @@
   *      @link http://kcfinder.sunhater.com
   */
 
-var browser = {
+var _ = {
     opener: {},
     support: {},
     files: [],

@@ -10,7 +10,7 @@
   *      @link http://kcfinder.sunhater.com
   */
 
-browser.drag = function(ev, dd) {
+_.drag = function(ev, dd) {
     var top = dd.offsetY,
         left = dd.offsetX;
     if (top < 0) top = 0;
@@ -25,28 +25,10 @@ browser.drag = function(ev, dd) {
     });
 };
 
-browser.showDialog = function(e) {
+_.showDialog = function(e) {
     $('#dialog').css({left: 0, top: 0});
-    this.shadow();
-    if ($('#dialog div.box') && !$('#dialog div.title').get(0)) {
-        var html = $('#dialog div.box').html();
-        var title = $('#dialog').data('title') ? $('#dialog').data('title') : "";
-        html = '<div class="title"><span class="close"></span>' + title + '</div>' + html;
-        $('#dialog div.box').html(html);
-        $('#dialog div.title span.close').mousedown(function() {
-            $(this).addClass('clicked');
-        });
-        $('#dialog div.title span.close').mouseup(function() {
-            $(this).removeClass('clicked');
-        });
-        $('#dialog div.title span.close').click(function() {
-            browser.hideDialog();
-            browser.hideAlert();
-        });
-    }
-    //$('#dialog').drag(browser.drag, {handle: '#dialog div.title'});
-
-    $('#dialog').css('display', 'block');
+    _.shadow();
+    $('#dialog').css('display', "block");
 
     if (e) {
         var left = e.pageX - parseInt($('#dialog').outerWidth() / 2);
@@ -58,131 +40,42 @@ browser.showDialog = function(e) {
         if (($('#dialog').outerHeight() + top) > $(window).height())
             top = $(window).height() - $('#dialog').outerHeight();
         $('#dialog').css({
-            left: left + 'px',
-            top: top + 'px'
+            left: left,
+            top: top
         });
     } else
         $('#dialog').css({
-            left: parseInt(($(window).width() - $('#dialog').outerWidth()) / 2) + 'px',
-            top: parseInt(($(window).height() - $('#dialog').outerHeight()) / 2) + 'px'
+            left: parseInt(($(window).width() - $('#dialog').outerWidth()) / 2),
+            top: parseInt(($(window).height() - $('#dialog').outerHeight()) / 2)
         });
-    $(document).unbind('keydown');
-    $(document).keydown(function(e) {
+    $(document).unbind('keydown').keydown(function(e) {
         if (e.keyCode == 27)
-            browser.hideDialog();
+            _.hideDialog();
     });
 };
 
-browser.hideDialog = function() {
-    this.unshadow();
+_.hideDialog = function() {
+    _.unshadow();
     if ($('#clipboard').hasClass('selected'))
         $('#clipboard').removeClass('selected');
-    $('#dialog').css('display', 'none');
     $('div.folder > a > span.folder').removeClass('context');
-    $('#dialog').html('');
-    $('#dialog').data('title', null);
-    $('#dialog').unbind();
-    $('#dialog').click(function() {
+    $('#dialog').css('display', "none").html("").data('title', null).unbind().click(function() {
         return false;
     });
-    $(document).unbind('keydown');
-    $(document).keydown(function(e) {
-        return !browser.selectAll(e);
-    });
-    browser.hideAlert();
-};
-
-browser.showAlert = function(shadow) {
-    $('#alert').css({left: 0, top: 0});
-    if (typeof shadow == 'undefined')
-        shadow = true;
-    if (shadow)
-        this.shadow();
-    var left = parseInt(($(window).width() - $('#alert').outerWidth()) / 2),
-        top = parseInt(($(window).height() - $('#alert').outerHeight()) / 2);
-    var wheight = $(window).height();
-    if (top < 0)
-        top = 0;
-    $('#alert').css({
-        left: left + 'px',
-        top: top + 'px',
-        display: 'block'
-    });
-    if ($('#alert').outerHeight() > wheight) {
-        $('#alert div.message').css({
-            height: wheight - $('#alert div.title').outerHeight() - $('#alert div.ok').outerHeight() - 20 + 'px'
-        });
-    }
-    $(document).unbind('keydown');
-    $(document).keydown(function(e) {
-        if (e.keyCode == 27) {
-            browser.hideDialog();
-            browser.hideAlert();
-            $(document).unbind('keydown');
-            $(document).keydown(function(e) {
-                return !browser.selectAll(e);
-            });
-        }
+    $(document).unbind('keydown').keydown(function(e) {
+        return !_.selectAll(e);
     });
 };
 
-browser.hideAlert = function(shadow) {
-    if (typeof shadow == 'undefined')
-        shadow = true;
-    if (shadow)
-        this.unshadow();
-    $('#alert').css('display', 'none');
-    $('#alert').html('');
-    $('#alert').data('title', null);
+_.shadow = function() {
+    $('#shadow').css('display', "block");
 };
 
-browser.alert = function(msg, shadow) {
-    msg = msg.replace(/\r?\n/g, "<br />");
-    var title = $('#alert').data('title') ? $('#alert').data('title') : browser.label("Attention");
-    $('#alert').html('<div class="title"><span class="close"></span>' + title + '</div><div class="message">' + msg + '</div><div class="ok"><button>' + browser.label("OK") + '</button></div>');
-    $('#alert div.ok button').click(function() {
-        browser.hideAlert(shadow);
-    });
-    $('#alert div.title span.close').mousedown(function() {
-        $(this).addClass('clicked');
-    });
-    $('#alert div.title span.close').mouseup(function() {
-        $(this).removeClass('clicked');
-    });
-    $('#alert div.title span.close').click(function() {
-        browser.hideAlert(shadow);
-    });
-    //$('#alert').drag(browser.drag, {handle: "#alert div.title"});
-    browser.showAlert(shadow);
+_.unshadow = function() {
+    $('#shadow').css('display', "none");
 };
 
-browser.confirm = function(question, callBack) {
-    $('#dialog').data('title', browser.label("Question"));
-    $('#dialog').html('<div class="box"><div class="question">' + browser.label(question) + '<div class="buttons"><button>' + browser.label("No") + '</button> <button>' + browser.label("Yes") + '</button></div></div></div>');
-    browser.showDialog();
-    $('#dialog div.buttons button').first().click(function() {
-        browser.hideDialog();
-    });
-    $('#dialog div.buttons button').last().click(function() {
-        if (callBack)
-            callBack(function() {
-                browser.hideDialog();
-            });
-        else
-            browser.hideDialog();
-    });
-    $('#dialog div.buttons button').get(1).focus();
-};
-
-browser.shadow = function() {
-    $('#shadow').css('display', 'block');
-};
-
-browser.unshadow = function() {
-    $('#shadow').css('display', 'none');
-};
-
-browser.showMenu = function(e) {
+_.showMenu = function(e) {
     var left = e.pageX;
     var top = e.pageY;
     if (($('#dialog').outerWidth() + left) > $(window).width())
@@ -190,103 +83,110 @@ browser.showMenu = function(e) {
     if (($('#dialog').outerHeight() + top) > $(window).height())
         top = $(window).height() - $('#dialog').outerHeight();
     $('#dialog').css({
-        left: left + 'px',
-        top: top + 'px',
-        display: 'none'
-    });
-    $('#dialog').fadeIn();
+        left: left,
+        top: top,
+        display: "none"
+    }).fadeIn('fast');
 };
 
-browser.fileNameDialog = function(e, post, inputName, inputValue, url, labels, callBack, selectAll) {
-    var html = '<form method="post" action="javascript:;">' +
-        '<div class="box">' +
-        '<input name="' + inputName + '" type="text" /><br />' +
-        '<div style="text-align:right">' +
-        '<input type="submit" value="' + $.$.htmlValue(this.label("OK")) + '" /> ' +
-        '<input type="button" value="' + $.$.htmlValue(this.label("Cancel")) + '" onclick="browser.hideDialog(); browser.hideAlert(); return false" />' +
-    '</div></div></form>';
-    $('#dialog').html(html);
-    $('#dialog').data('title', this.label(labels.title));
-    $('#dialog input[name="' + inputName + '"]').attr('value', inputValue);
-    $('#dialog').unbind();
-    $('#dialog').click(function() {
-        return false;
-    });
-    $('#dialog form').submit(function() {
-        var name = this.elements[0];
-        name.value = $.trim(name.value);
-        if (name.value == '') {
-            browser.alert(browser.label(labels.errEmpty), false);
-            name.focus();
-            return;
-        } else if (/[\/\\]/g.test(name.value)) {
-            browser.alert(browser.label(labels.errSlash), false);
-            name.focus();
-            return;
-        } else if (name.value.substr(0, 1) == ".") {
-            browser.alert(browser.label(labels.errDot), false);
-            name.focus();
-            return;
-        }
-        eval('post.' + inputName + ' = name.value;');
-        $.ajax({
-            type: 'POST',
-            dataType: 'json',
-            url: url,
-            data: post,
-            async: false,
-            success: function(data) {
-                if (browser.check4errors(data, false))
-                    return;
-                if (callBack) callBack(data);
-                browser.hideDialog();
-            },
-            error: function() {
-                browser.alert(browser.label("Unknown error."), false);
+_.fileNameDialog = function(e, post, inputName, inputValue, url, labels, callBack, selectAll) {
+    _.hideDialog();
+    var html = '<form method="post" action="javascript:;"><input name="' + inputName + '" type="text" /></form>',
+        submit = function() {
+            var name = dlg.find('[type="text"]').get(0);
+            name.value = $.trim(name.value);
+            if (name.value == "") {
+                _.alert(_.label(labels.errEmpty), function() {
+                    name.focus();
+                });
+                return false;
+            } else if (/[\/\\]/g.test(name.value)) {
+                _.alert(_.label(labels.errSlash), function() {
+                    name.focus();
+                });
+                return false;
+            } else if (name.value.substr(0, 1) == ".") {
+                _.alert(_.label(labels.errDot), function() {
+                    name.focus();
+                });
+                return false;
             }
-        });
-        return false;
-    });
-    browser.showDialog(e);
-    $('#dialog').css('display', 'block');
-    $('#dialog input[type="submit"]').click(function() {
-        return $('#dialog form').submit();
-    });
-    var field = $('#dialog input[type="text"]');
-    var value = field.attr('value');
-    if (!selectAll && /^(.+)\.[^\.]+$/ .test(value)) {
-        value = value.replace(/^(.+)\.[^\.]+$/, "$1");
-        field.selection(0, value.length);
-    } else {
+            post[inputName] = name.value;
+            $.ajax({
+                type: "post",
+                dataType: "json",
+                url: url,
+                data: post,
+                async: false,
+                success: function(data) {
+                    if (_.check4errors(data, false))
+                        return;
+                    if (callBack) callBack(data);
+                    dlg.dialog("destroy").detach();
+                },
+                error: function() {
+                    _.alert(_.label("Unknown error."));
+                }
+            });
+            return false;
+        },
+        dlg = _.dialog(_.label(labels.title), html, {
+            width: 351,
+            buttons: [
+                {
+                    text: _.label("OK"),
+                    click: function() {
+                        submit();
+                    }
+                },
+                {
+                    text: _.label("Cancel"),
+                    click: function() {
+                        $(this).dialog('destroy').detach();
+                    }
+                }
+            ]
+        }),
+
+        field = dlg.find('[type="text"]');
+
+    field.uniform().attr('value', inputValue).css('width', 310);
+    dlg.find('form').submit(submit);
+
+    if (!selectAll && /^(.+)\.[^\.]+$/ .test(inputValue))
+        field.selection(0, inputValue.replace(/^(.+)\.[^\.]+$/, "$1").length);
+    else {
         field.get(0).focus();
         field.get(0).select();
     }
 };
 
-browser.orderFiles = function(callBack, selected) {
+_.orderFiles = function(callBack, selected) {
     var order = $.$.kuki.get('order');
-    var desc = ($.$.kuki.get('orderDesc') == 'on');
+    var desc = ($.$.kuki.get('orderDesc') == "on");
 
-    if (!browser.files || !browser.files.sort)
-        browser.files = [];
+    if (!_.files || !_.files.sort)
+        _.files = [];
 
-    browser.files = browser.files.sort(function(a, b) {
+    _.files = _.files.sort(function(a, b) {
         var a1, b1, arr;
-        if (!order) order = 'name';
+        if (!order) order = "name";
 
-        if (order == 'date') {
+        if (order == "date") {
             a1 = a.mtime;
             b1 = b.mtime;
-        } else if (order == 'type') {
+        } else if (order == "type") {
             a1 = $.$.getFileExtension(a.name);
             b1 = $.$.getFileExtension(b.name);
-        } else if (order == 'size') {
+        } else if (order == "size") {
             a1 = a.size;
             b1 = b.size;
-        } else
-            eval('a1 = a.' + order + '.toLowerCase(); b1 = b.' + order + '.toLowerCase();');
+        } else {
+            a1 = a[order].toLowerCase();
+            b1 = b[order].toLowerCase();
+        }
 
-        if ((order == 'size') || (order == 'date')) {
+        if ((order == "size") || (order == "date")) {
             if (a1 < b1) return desc ? 1 : -1;
             if (a1 > b1) return desc ? -1 : 1;
         }
@@ -305,48 +205,48 @@ browser.orderFiles = function(callBack, selected) {
         return desc ? -1 : 1;
     });
 
-    browser.showFiles(callBack, selected);
-    browser.initFiles();
+    _.showFiles(callBack, selected);
+    _.initFiles();
 };
 
-browser.humanSize = function(size) {
+_.humanSize = function(size) {
     if (size < 1024) {
-        size = size.toString() + ' B';
+        size = size.toString() + " B";
     } else if (size < 1048576) {
         size /= 1024;
-        size = parseInt(size).toString() + ' KB';
+        size = parseInt(size).toString() + " KB";
     } else if (size < 1073741824) {
         size /= 1048576;
-        size = parseInt(size).toString() + ' MB';
+        size = parseInt(size).toString() + " MB";
     } else if (size < 1099511627776) {
         size /= 1073741824;
-        size = parseInt(size).toString() + ' GB';
+        size = parseInt(size).toString() + " GB";
     } else {
         size /= 1099511627776;
-        size = parseInt(size).toString() + ' TB';
+        size = parseInt(size).toString() + " TB";
     }
     return size;
 };
 
-browser.baseGetData = function(act) {
-    var data = 'browse.php?type=' + encodeURIComponent(this.type) + '&lng=' + this.lang;
+_.baseGetData = function(act) {
+    var data = "browse.php?type=" + encodeURIComponent(_.type) + "&lng=" + _.lang;
     if (act)
         data += "&act=" + act;
-    if (this.cms)
-        data += "&cms=" + this.cms;
+    if (_.cms)
+        data += "&cms=" + _.cms;
     return data;
 };
 
-browser.label = function(index, data) {
-    var label = this.labels[index] ? this.labels[index] : index;
+_.label = function(index, data) {
+    var label = _.labels[index] ? _.labels[index] : index;
     if (data)
         $.each(data, function(key, val) {
-            label = label.replace('{' + key + '}', val);
+            label = label.replace("{" + key + "}", val);
         });
     return label;
 };
 
-browser.check4errors = function(data, shadow) {
+_.check4errors = function(data, shadow) {
     if (!data.error)
         return false;
     var msg;
@@ -354,12 +254,12 @@ browser.check4errors = function(data, shadow) {
         msg = data.error.join("\n");
     else
         msg = data.error;
-    browser.alert(msg, shadow);
+    _.alert(msg);
     return true;
 };
 
-browser.post = function(url, data) {
-    var html = '<form id="postForm" method="POST" action="' + url + '">';
+_.post = function(url, data) {
+    var html = '<form id="postForm" method="post" action="' + url + '">';
     $.each(data, function(key, val) {
         if ($.isArray(val))
             $.each(val, function(i, aval) {
@@ -369,14 +269,13 @@ browser.post = function(url, data) {
             html += '<input type="hidden" name="' + $.$.htmlValue(key) + '" value="' + $.$.htmlValue(val) + '" />';
     });
     html += '</form>';
-    $('#dialog').html(html);
-    $('#dialog').css('display', 'block');
+    $('#dialog').html(html).css('display', "block");
     $('#postForm').get(0).submit();
 };
 
-browser.fadeFiles = function() {
+_.fadeFiles = function() {
     $('#files > div').css({
-        opacity: '0.4',
-        filter: 'alpha(opacity=40)'
+        opacity: "0.4",
+        filter: "alpha(opacity=40)"
     });
 };

@@ -10,11 +10,11 @@
   *      @link http://kcfinder.sunhater.com
   */
 
-browser.initDropUpload = function() {
-    if ((typeof(XMLHttpRequest) == 'undefined') ||
-        (typeof(document.addEventListener) == 'undefined') ||
-        (typeof(File) == 'undefined') ||
-        (typeof(FileReader) == 'undefined')
+_.initDropUpload = function() {
+    if ((typeof(XMLHttpRequest) == "undefined") ||
+        (typeof(document.addEventListener) == "undefined") ||
+        (typeof(File) == "undefined") ||
+        (typeof(FileReader) == "undefined")
     )
         return;
 
@@ -22,8 +22,8 @@ browser.initDropUpload = function() {
         XMLHttpRequest.prototype.sendAsBinary = function(datastr) {
             var ords = Array.prototype.map.call(datastr, function(x) {
                 return x.charCodeAt(0) & 0xff;
-            });
-            var ui8a = new Uint8Array(ords);
+            }),
+                ui8a = new Uint8Array(ords);
             this.send(ui8a.buffer);
         }
     }
@@ -34,7 +34,7 @@ browser.initDropUpload = function() {
         errors = [],
         files = $('#files'),
         folders = $('div.folder > a'),
-        boundary = '------multipartdropuploadboundary' + (new Date).getTime(),
+        boundary = "------multipartdropuploadboundary" + (new Date).getTime(),
         currentFile,
 
     filesDragOver = function(e) {
@@ -59,13 +59,13 @@ browser.initDropUpload = function() {
         if (e.stopPropagation) e.stopPropagation();
         $('#files').removeClass('drag');
         if (!$('#folders span.current').first().parent().data('writable')) {
-            browser.alert("Cannot write to upload folder.");
+            _.alert("Cannot write to upload folder.");
             return false;
         }
         filesCount += e.dataTransfer.files.length
         for (var i = 0; i < e.dataTransfer.files.length; i++) {
             var file = e.dataTransfer.files[i];
-            file.thisTargetDir = browser.dir;
+            file.thisTargetDir = _.dir;
             uploadQueue.push(file);
         }
         processUploadQueue();
@@ -81,7 +81,7 @@ browser.initDropUpload = function() {
         if (e.preventDefault) e.preventDefault();
         if (e.stopPropagation) e.stopPropagation();
         if (!$(dir).data('writable')) {
-            browser.alert("Cannot write to upload folder.");
+            _.alert(_.label("Cannot write to upload folder."));
             return false;
         }
         filesCount += e.dataTransfer.files.length
@@ -137,7 +137,7 @@ browser.initDropUpload = function() {
         var progress = evt.lengthComputable
             ? Math.round((evt.loaded * 100) / evt.total) + '%'
             : Math.round(evt.loaded / 1024) + " KB";
-        $('#loading').html(browser.label("Uploading file {number} of {count}... {progress}", {
+        $('#loading').html(_.label("Uploading file {number} of {count}... {progress}", {
             number: filesCount - uploadQueue.length,
             count: filesCount,
             progress: progress
@@ -151,12 +151,12 @@ browser.initDropUpload = function() {
         if (uploadQueue && uploadQueue.length) {
             var file = uploadQueue.shift();
             currentFile = file;
-            $('#loading').html(browser.label("Uploading file {number} of {count}... {progress}", {
+            $('#loading').html(_.label("Uploading file {number} of {count}... {progress}", {
                 number: filesCount - uploadQueue.length,
                 count: filesCount,
                 progress: ""
             }));
-            $('#loading').css('display', 'inline');
+            $('#loading').css('display', "inline");
 
             var reader = new FileReader();
             reader.thisFileName = file.name;
@@ -172,8 +172,8 @@ browser.initDropUpload = function() {
                     postbody += '; filename="' + $.$.utf8encode(evt.target.thisFileName) + '"';
                 postbody += '\r\n';
                 if (evt.target.thisFileSize)
-                    postbody += 'Content-Length: ' + evt.target.thisFileSize + '\r\n';
-                postbody += 'Content-Type: ' + evt.target.thisFileType + '\r\n\r\n' + evt.target.result + '\r\n--' + boundary + '\r\nContent-Disposition: form-data; name="dir"\r\n\r\n' + $.$.utf8encode(evt.target.thisTargetDir) + '\r\n--' + boundary + '\r\n--' + boundary + '--\r\n';
+                    postbody += "Content-Length: " + evt.target.thisFileSize + "\r\n";
+                postbody += "Content-Type: " + evt.target.thisFileType + "\r\n\r\n" + evt.target.result + "\r\n--" + boundary + '\r\nContent-Disposition: form-data; name="dir"\r\n\r\n' + $.$.utf8encode(evt.target.thisTargetDir) + "\r\n--" + boundary + "\r\n--" + boundary + "--\r\n";
 
                 var xhr = new XMLHttpRequest();
                 xhr.thisFileName = evt.target.thisFileName;
@@ -182,17 +182,17 @@ browser.initDropUpload = function() {
                     xhr.upload.thisFileName = evt.target.thisFileName;
                     xhr.upload.addEventListener("progress", updateProgress, false);
                 }
-                xhr.open('POST', browser.baseGetData('upload'), true);
-                xhr.setRequestHeader('Content-Type', 'multipart/form-data; boundary=' + boundary);
+                xhr.open('post', _.baseGetData('upload'), true);
+                xhr.setRequestHeader('Content-Type', "multipart/form-data; boundary=" + boundary);
                 xhr.setRequestHeader('Content-Length', postbody.length);
 
                 xhr.onload = function(e) {
-                    $('#loading').css('display', 'none');
-                    if (browser.dir == reader.thisTargetDir)
-                        browser.fadeFiles();
+                    $('#loading').css('display', "none");
+                    if (_.dir == reader.thisTargetDir)
+                        _.fadeFiles();
                     uploadInProgress = false;
                     processUploadQueue();
-                    if (xhr.responseText.substr(0, 1) != '/')
+                    if (xhr.responseText.substr(0, 1) != "/")
                         errors[errors.length] = xhr.responseText;
                 }
 
@@ -200,10 +200,10 @@ browser.initDropUpload = function() {
             };
 
             reader.onerror = function(evt) {
-                $('#loading').css('display', 'none');
+                $('#loading').css('display', "none");
                 uploadInProgress = false;
                 processUploadQueue();
-                errors[errors.length] = browser.label("Failed to upload {filename}!", {
+                errors[errors.length] = _.label("Failed to upload {filename}!", {
                     filename: evt.target.thisFileName
                 });
             };
@@ -214,13 +214,13 @@ browser.initDropUpload = function() {
             filesCount = 0;
             var loop = setInterval(function() {
                 if (uploadInProgress) return;
-                boundary = '------multipartdropuploadboundary' + (new Date).getTime();
+                boundary = "------multipartdropuploadboundary" + (new Date).getTime();
                 uploadQueue = [];
                 clearInterval(loop);
-                if (currentFile.thisTargetDir == browser.dir)
-                    browser.refresh();
+                if (currentFile.thisTargetDir == _.dir)
+                    _.refresh();
                 if (errors.length) {
-                    browser.alert(errors.join('\n'));
+                    _.alert(errors.join("\n"));
                     errors = [];
                 }
             }, 333);

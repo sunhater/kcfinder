@@ -709,16 +709,28 @@ class browser extends uploader {
         if ($files === false)
             return $return;
 
+        $thumbsFor =  array(
+            IMAGETYPE_GIF,
+            IMAGETYPE_JPEG,
+            IMAGETYPE_PNG
+        );
+
         foreach ($files as $file) {
-            $size = @getimagesize($file);
-            if (is_array($size) && count($size)) {
-                $thumb_file = "$thumbDir/" . basename($file);
-                if (!is_file($thumb_file))
-                    $this->makeThumb($file, false);
-                $smallThumb =
-                    ($size[0] <= $this->config['thumbWidth']) &&
-                    ($size[1] <= $this->config['thumbHeight']) &&
-                    in_array($size[2], array(IMAGETYPE_GIF, IMAGETYPE_PNG, IMAGETYPE_JPEG));
+
+            if (!function_exists("exif_imagetype") ||
+                in_array(@exif_imagetype($file), $thumbsFor)
+            ) {
+                $size = @getimagesize($file);
+                if (is_array($size) && count($size)) {
+                    $thumb_file = "$thumbDir/" . basename($file);
+                    if (!is_file($thumb_file))
+                        $this->makeThumb($file, false);
+                    $smallThumb =
+                        ($size[0] <= $this->config['thumbWidth']) &&
+                        ($size[1] <= $this->config['thumbHeight']) &&
+                        in_array($size[2], $thumbsFor);
+                } else
+                    $smallThumb = false;
             } else
                 $smallThumb = false;
 
