@@ -7,12 +7,16 @@ class minifier {
     protected $config;
     protected $type = "js";
     protected $minCmd = "";
+    protected $mime = array(
+        'js' => "text/javascript",
+        'css' => "text/css"
+    );
 
     public function __construct($type=null) {
         require "config.php";
         $this->config = $_CONFIG;
         $type = strtolower($type);
-        if (in_array($type, array("js", "css")))
+        if (isset($this->mime[$type]))
             $this->type = $type;
         if (isset($_CONFIG["_{$this->type}MinCmd"]))
             $this->minCmd = $_CONFIG["_{$this->type}MinCmd"];
@@ -43,7 +47,7 @@ class minifier {
                 $mtime = $fmtime;
         }
 
-        $header = "Content-Type: text/{$this->type}; charset=utf-8";
+        $header = "Content-Type: {$this->mime[$this->type]}; charset=utf-8";
 
         // GET SOURCE CODE FROM CLIENT HTTP CACHE IF EXISTS
         httpCache::checkMTime($mtime, $header);
