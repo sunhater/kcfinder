@@ -47,7 +47,7 @@ class minifier {
                 $mtime = $fmtime;
         }
 
-        $header = "Content-Type: {$this->mime[$this->type]}; charset=utf-8";
+        $header = "Content-Type: {$this->mime[$this->type]}";
 
         // GET SOURCE CODE FROM CLIENT HTTP CACHE IF EXISTS
         httpCache::checkMTime($mtime, $header);

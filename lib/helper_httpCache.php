@@ -68,7 +68,9 @@ class httpCache {
     * the method will tell the client to get the content from its own cache.
     * Afterwards the script process will be terminated. This feature requires
     * the PHP to be configured as Apache module.
-    * @param integer $mtime */
+    * @param integer $mtime
+    * @param mixed $sendHeaders
+    */
 
     static function checkMTime($mtime, $sendHeaders=null) {
         header("Last-Modified: " . gmdate("D, d M Y H:i:s", $mtime) . " GMT");
@@ -89,7 +91,6 @@ class httpCache {
                         header($header);
                 elseif ($sendHeaders !== null)
                     header($sendHeaders);
-
                 die;
             }
         }

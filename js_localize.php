@@ -15,24 +15,25 @@
 namespace kcfinder;
 require "core/autoload.php";
 
-if (!isset($_GET['lng']) || ($_GET['lng'] == 'en')) {
+if (!isset($_GET['lng']) || ($_GET['lng'] == 'en') ||
+    ($_GET['lng'] != basename($_GET['lng'])) ||
+    !is_file("lang/" . $_GET['lng'] . ".php")
+) {
     header("Content-Type: text/javascript");
     die;
 }
+
 $file = "lang/" . $_GET['lng'] . ".php";
-$files = dir::content("lang", array(
-    'types' => "file",
-    'pattern' => '/^.*\.php$/'
-));
-if (!in_array($file, $files)) {
-    header("Content-Type: text/javascript");
-    die;
-}
 $mtime = @filemtime($file);
-if ($mtime) httpCache::checkMTime($mtime, "Content-Type: text/javascript");
+
+if ($mtime)
+    httpCache::checkMTime($mtime, "Content-Type: text/javascript");
+
 require $file;
-header("Content-Type: text/javascript; charset={$lang['_charset']}");
+header("Content-Type: text/javascript");
+
 echo "_.labels={";
+
 $i = 0;
 foreach ($lang as $english => $native) {
     if (substr($english, 0, 1) != "_") {
@@ -41,6 +42,7 @@ foreach ($lang as $english => $native) {
             echo ",";
     }
 }
+
 echo "}";
 
 ?>

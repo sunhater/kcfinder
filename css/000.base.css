@@ -8,7 +8,7 @@ body, form, th, td {
 }
 
 a {
-    cursor:pointer;
+    cursor: pointer;
 }
 
 * {
@@ -133,13 +133,8 @@ tr.file > td.size {
     opacity: 0;
     filter: alpha(opacity=0);
 }
-
-#upload input {
+#upload input, #upload input::-webkit-file-upload-button {
     cursor: pointer;
-}
-
-#uploadResponse {
-    display: none;
 }
 
 span.brace {
@@ -156,13 +151,13 @@ span.brace.opened, span.brace.closed {
     top: 0;
     left: 0;
     display: none;
-    background: #000;
+    background: #fff;
     z-index: 100;
-    opacity: 0.7;
-    filter: alpha(opacity=70);
+    opacity: 0.5;
+    filter: alpha(opacity=50);
 }
 
-#dialog, #clipboard, #alert {
+#dialog, #clipboard {
     position: absolute;
     display: none;
     z-index: 101;
@@ -171,15 +166,6 @@ span.brace.opened, span.brace.closed {
 
 #dialog .box, #alert {
     max-width: 350px;
-}
-
-#alert {
-    z-index: 102;
-}
-
-#alert div.message {
-    overflow-y: auto;
-    overflow-x: hidden;
 }
 
 #clipboard {
@@ -207,7 +193,9 @@ span.brace.opened, span.brace.closed {
     white-space: nowrap;
 }
 
-.file .access, .file .hasThumb {
+#uploadResponse,
+.file .access,
+.file .hasThumb {
     display: none;
 }
 

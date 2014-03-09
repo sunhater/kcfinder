@@ -448,9 +448,3 @@ a.denied:hover {
 #loadingDirs {
     padding: 5px 0 1px 24px;
 }
-
-#shadow {
-    background: #fff;
-    opacity: .5;
-    filter: alpha(opacity=50);
-}
