@@ -125,4 +125,4 @@ $lang = array(
     "Failed to upload {filename}!" => "Échec du téléchargement du fichier {filename} !",
 );
 
- ?>
+?>

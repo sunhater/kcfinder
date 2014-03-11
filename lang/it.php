@@ -124,4 +124,4 @@ $lang = array(
     "Failed to upload {filename}!" => "Il caricamento del file {filename} è fallito ",
 );
 
- ?>
+?>

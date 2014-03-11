@@ -127,4 +127,4 @@ $lang = array(
     "Failed to upload {filename}!" => "上传失败{filename}！",
 );
 
- ?>
+?>

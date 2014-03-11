@@ -124,4 +124,4 @@ $lang = array(
     "Failed to upload {filename}!" => "Tải lên thất bại {filename}!",
 );
 
- ?>
+?>

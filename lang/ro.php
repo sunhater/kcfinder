@@ -123,4 +123,4 @@ $lang = array(
     "Failed to upload {filename}!" => "Încărcare {filename} eșuată!",
 );
 
- ?>
+?>
