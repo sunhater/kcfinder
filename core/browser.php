@@ -4,7 +4,7 @@
   *
   *      @desc Browser actions class
   *   @package KCFinder
-  *   @version 2.53
+  *   @version 2.54
   *    @author Pavel Tzonkov <sunhater@sunhater.com>
   * @copyright 2010-2014 KCFinder Project
   *   @license http://www.opensource.org/licenses/gpl-2.0.php GPLv2
@@ -708,17 +708,26 @@ class browser extends uploader {
             return $return;
 
         foreach ($files as $file) {
-            $size = @getimagesize($file);
-            if (is_array($size) && count($size)) {
-                $thumb_file = "$thumbDir/" . basename($file);
-                if (!is_file($thumb_file))
-                    $this->makeThumb($file, false);
-                $smallThumb =
-                    ($size[0] <= $this->config['thumbWidth']) &&
-                    ($size[1] <= $this->config['thumbHeight']) &&
-                    in_array($size[2], array(IMAGETYPE_GIF, IMAGETYPE_PNG, IMAGETYPE_JPEG));
+            $img = new fastImage($file);
+            $type = $img->getType();
+
+            if ($type !== false) {
+                $size = $img->getSize($file);
+
+                if (is_array($size) && count($size)) {
+                    $thumb_file = "$thumbDir/" . basename($file);
+                    if (!is_file($thumb_file))
+                        $this->makeThumb($file, false);
+                    $smallThumb =
+                        ($size[0] <= $this->config['thumbWidth']) &&
+                        ($size[1] <= $this->config['thumbHeight']) &&
+                        in_array($type, array("gif", "jpeg", "png"));
+                } else
+                    $smallThumb = false;
             } else
                 $smallThumb = false;
+
+            $img->close();
 
             $stat = stat($file);
             if ($stat === false) continue;
