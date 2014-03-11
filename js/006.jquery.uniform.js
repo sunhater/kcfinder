@@ -25,6 +25,7 @@ MIT License - http://www.opensource.org/licenses/mit-license.php
 Enjoy!
 
 */
+
 /*global jQuery, document, navigator*/
 
 (function (wind, $, undef) {

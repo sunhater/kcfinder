@@ -1,5 +1,17 @@
 <?php
 
+/** This file is part of KCFinder project
+  *
+  *      @desc Autoload Classes
+  *   @package KCFinder
+  *   @version 3.0-dev1
+  *    @author Pavel Tzonkov <sunhater@sunhater.com>
+  * @copyright 2010-2014 KCFinder Project
+  *   @license http://opensource.org/licenses/GPL-3.0 GPLv3
+  *   @license http://opensource.org/licenses/LGPL-3.0 LGPLv3
+  *      @link http://kcfinder.sunhater.com
+  */
+
 function kcfinder_autoload($path) {
     $path = explode("\\", $path);
 

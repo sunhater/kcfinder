@@ -4,7 +4,7 @@
   *
   *      @desc CMS integration code: Drupal
   *   @package KCFinder
-  *   @version 3.0-dev
+  *   @version 3.0-dev1
   *    @author Dany Alejandro Cabrera <otello2040@gmail.com>
   * @copyright 2010-2014 KCFinder Project
   *   @license http://opensource.org/licenses/GPL-3.0 GPLv3
