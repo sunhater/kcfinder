@@ -124,4 +124,4 @@ $lang = array(
     "Failed to upload {filename}!" => "Nem sikerült feltölteni a '{filename}' fájlt.",
 );
 
-?>
+ ?>

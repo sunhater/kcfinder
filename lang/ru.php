@@ -125,4 +125,4 @@ $lang = array(
     "Failed to upload {filename}!" => "Неудачная попытка загрузки {filename}!",
 );
 
-?>
+ ?>

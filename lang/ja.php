@@ -129,4 +129,4 @@ $lang = array(
     "Failed to upload {filename}!" => "{filename}のアップロードに失敗しました！",
 );
 
-?>
+ ?>
