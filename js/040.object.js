@@ -18,5 +18,6 @@ var _ = {
     labels: [],
     shows: [],
     orders: [],
-    cms: ""
+    cms: "",
+    scrollbarWidth: 20
 };

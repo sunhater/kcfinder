@@ -28,6 +28,22 @@ _.init = function() {
     _.initToolbar();
     _.initResizer();
     _.initDropUpload();
+
+    var div = $('<div></div>')
+        .css({width: 100, height: 100, overflow: 'auto', position: 'absolute', top: -1000, left: -1000})
+        .prependTo('body').append('<div></div>').find('div').css({width: '100%', height: 200});
+    _.scrollbarWidth = 100 - div.width();
+    div.parent().remove();
+
+    $.each($.agent, function(i) {
+        if (i != "platform")
+            $('body').addClass(i)
+    });
+
+    if ($.agent.platform)
+        $.each($.agent.platform, function(i) {
+            $('body').addClass(i)
+        });
 };
 
 _.checkAgent = function() {

@@ -20,6 +20,10 @@
                 expr: / [a-z]+\/[0-9a-z\.]+/ig,
                 delim: "/"
             }, {
+                expr: / [a-z]+\:[0-9a-z\.]+/ig,
+                delim: ":",
+                keys: ["rv", "version"]
+            }, {
                 expr: / [a-z]+\s+[0-9a-z\.]+/ig,
                 delim: /\s+/,
                 keys: ["opera", "msie", "firefox", "android"]

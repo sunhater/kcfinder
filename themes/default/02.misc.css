@@ -32,7 +32,7 @@ div.file:hover,
 #files div.selected:hover,
 tr.selected > td,
 tr.selected:hover > td,
-#dialog .list a.ui-state-focus:hover {
+#dialog .list div a:hover {
     color: #fff;
     text-shadow:
         1px 0 rgba(0,0,0,.2),
@@ -123,7 +123,6 @@ tr.selected:hover > td,
     margin-right:5px;
     margin-bottom: 6px;
     margin-top:-5px;
-    transition: .3s;
     padding:6px;
 }
 #settings fieldset:hover {
@@ -135,7 +134,6 @@ tr.selected:hover > td,
     background: -ms-linear-gradient(top, #dfeef8, #fff);
     background: -o-linear-gradient(top, #dfeef8, #fff);
     background: linear-gradient(to bottom, #dfeef8, #fff);
-    transition: .3s;
 }
 #settings fieldset:hover legend,
 #settings fieldset:hover label {
@@ -235,7 +233,6 @@ div.file .size {
 
 #files div.selected,
 #files div.selected:hover {
-    transition: .3s;
     border-color: #3b98d6;
     background: #3b98d6;
     background: -webkit-linear-gradient(top, #7dc2f2, #3b98d6);
@@ -252,7 +249,7 @@ tr.file > td {
 
 tr.file:hover > td {
     background-color: #ddebf8;
-    transition: 0;
+    transition: none;
 }
 
 tr.selected > td,
@@ -447,4 +444,11 @@ a.denied:hover {
 
 #loadingDirs {
     padding: 5px 0 1px 24px;
+}
+
+
+/* FIX FIELDSET BORDER RADIUS BUG ON IE */
+body.msie fieldset,
+body.trident.rv fieldset {
+    border-radius: 0;
 }

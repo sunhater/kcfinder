@@ -26,7 +26,7 @@ _.drag = function(ev, dd) {
 };
 
 _.showDialog = function(e) {
-    $('#dialog').css({left: 0, top: 0});
+    $('#dialog').css({left: 0, top: 0, width: ""});
     _.shadow();
     $('#dialog').css('display', "block");
 
@@ -59,7 +59,7 @@ _.hideDialog = function() {
     if ($('#clipboard').hasClass('selected'))
         $('#clipboard').removeClass('selected');
     $('div.folder > a > span.folder').removeClass('context');
-    $('#dialog').css('display', "none").html("").data('title', null).unbind().click(function() {
+    $('#dialog').css({display: "none", width: ""}).html("").data('title', null).unbind().click(function() {
         return false;
     });
     $(document).unbind('keydown').keydown(function(e) {
@@ -85,7 +85,8 @@ _.showMenu = function(e) {
     $('#dialog').css({
         left: left,
         top: top,
-        display: "none"
+        display: "none",
+        width: ""
     }).fadeIn('fast');
 };
 

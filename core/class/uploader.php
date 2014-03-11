@@ -86,7 +86,7 @@ class uploader {
   * @var array */
     protected $session;
 
-/** CMS integration attribute (got from $_GET['cms'])
+/** CMS integration property (got from $_GET['cms'])
   * @var string */
     protected $cms = "";
 
@@ -99,9 +99,10 @@ class uploader {
 
     public function __construct() {
 
-        // SET CMS INTEGRATION ATTRIBUTE
+        // SET CMS INTEGRATION PROPERTY
         if (isset($_GET['cms']) &&
-            in_array($_GET['cms'], array("drupal"))
+            (basename($_GET['cms']) == $_GET['cms']) &&
+            is_file("integration/{$_GET['cms']}.php")
         )
             $this->cms = $_GET['cms'];
 

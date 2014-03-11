@@ -40,7 +40,7 @@ _.openClipboard = function() {
         _.hideDialog();
         return;
     }
-    var html = '<ul><li class="list">';
+    var html = '<ul><li class="list"><div>';
     $.each(_.clipboard, function(i, val) {
         var icon = $.$.getFileExtension(val.name);
         if (val.thumb)
@@ -50,7 +50,7 @@ _.openClipboard = function() {
         icon = "themes/" + _.theme + "/img/files/small/" + icon + ".png";
         html += '<a title="' + _.label("Click to remove from the Clipboard") + '" onclick="_.removeFromClipboard(' + i + ')"' + ((i == 0) ? ' class="first"' : "") + '><span style="background-image:url(' + $.$.escapeDirs(icon) + ')">' + $.$.htmlData($.$.basename(val.name)) + '</span></a>';
     });
-    html += '</li><li class="div-files">-</li>';
+    html += '</div></li><li class="div-files">-</li>';
     if (_.support.zip) html +=
         '<li><a href="kcact:download"><span>' + _.label("Download files") + '</span></a></li>';
     if (_.access.files.copy || _.access.files.move || _.access.files['delete'])
@@ -103,19 +103,28 @@ _.openClipboard = function() {
             return false;
         });
 
-        var left = $(window).width() - $('#dialog').outerWidth();
+        var left = $(window).width() - $('#dialog').css({width: ""}).outerWidth();
         var top = $(window).height() - $('#dialog').outerHeight() - $('#status').outerHeight();
         var lheight = top + $('#dialog').outerTopSpace();
         $('#dialog .list').css({
             'max-height': lheight,
             'overflow-y': "auto",
-            'overflow-x': "hidden"
+            'overflow-x': "hidden",
+            width: ""
         });
         top = $(window).height() - $('#dialog').outerHeight(true) - $('#status').outerHeight(true);
         $('#dialog').css({
             left: left - 5,
             top: top
         }).fadeIn("fast");
+        var a = $('#dialog .list').outerHeight(),
+            b = $('#dialog .list div').outerHeight();
+        if (b - a > 10) {
+            $('#dialog').css({
+                left: parseInt($('#dialog').css('left')) - _.scrollbarWidth,
+            }).width($('#dialog').width() + _.scrollbarWidth);
+        }
+        console.log(_.scrollbarWidth);
     }, 1);
 };
 
