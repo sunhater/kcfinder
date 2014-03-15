@@ -10,21 +10,24 @@
   *      @link http://kcfinder.sunhater.com
   */
 
-_.alert = function(text, field) {
+_.alert = function(text, field, options) {
     var close = !field
         ? function() {}
         : ($.isFunction(field)
             ? field
             : function() { setTimeout(function() {field.focus(); }, 1); }
-        );
+        ),
+        o = {
+            close: function() {
+                close();
+                if ($(this).hasClass('ui-dialog-content'))
+                    $(this).dialog('destroy').detach();
+            }
+        };
 
-    return _.dialog(_.label("Warning"), text.replace("\n", "<br />\n"), {
-        close: function() {
-            close();
-            if ($(this).hasClass('ui-dialog-content'))
-                $(this).dialog('destroy').detach();
-        }
-    });
+    $.extend(o, options);
+
+    return _.dialog(_.label("Warning"), text.replace("\n", "<br />\n"), o);
 };
 
 _.confirm = function(text, callback, options) {
@@ -47,15 +50,8 @@ _.confirm = function(text, callback, options) {
         ]
     };
 
-    if (options)
-        $.each(o, function(key, val) {
-            if (typeof options[key] == "undefined")
-                options[key] = val;
-        });
-    else
-        options = o;
-
-    return _.dialog(_.label("Question"), text, options);
+    $.extend(o, options);
+    return _.dialog(_.label("Question"), text, o);
 };
 
 _.dialog = function(title, content, options) {
@@ -66,7 +62,7 @@ _.dialog = function(title, content, options) {
     if (dlg.find('form').get(0) && !dlg.find('form [type="submit"]').get(0))
         dlg.find('form').append('<button type="submit" style="width:0;height:0;padding:0;margin:0;border:0;visibility:hidden">Submit</button>');
 
-    var defaultOptions = {
+    var o = {
         resizable: false,
         minHeight: false,
         modal: true,
@@ -95,22 +91,19 @@ _.dialog = function(title, content, options) {
 
     var padding = options.nopadding ? false : true;
 
-    $.each(defaultOptions, function(key, val) {
-        if (typeof options[key] == "undefined") options[key] = val;
-    });
+    $.extend(o, options);
 
-    if (options.alone) {
+    if (o.alone)
         $('.ui-dialog .ui-dialog-content').dialog('destroy').detach();
-    }
 
-    dlg.dialog(options);
+    dlg.dialog(o);
     if (!padding)
         $('.ui-dialog').last().find('.ui-dialog-content').css({
             padding: 0,
             overflow: "hidden"
         });
-    if (options.legend)
-        dlg.parent().find('.ui-dialog-buttonpane').prepend('<div style="float:left;padding:10px 0 0 10px">' + options.legend + '</div>');
+    if (o.legend)
+        dlg.parent().find('.ui-dialog-buttonpane').prepend('<div style="float:left;padding:10px 0 0 10px">' + o.legend + '</div>');
     if ($.agent && $.agent.mozilla)
         dlg.css('overflow', "hidden");
     return dlg;

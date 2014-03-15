@@ -11,43 +11,58 @@
   */
 
 _.drag = function(ev, dd) {
+
     var top = dd.offsetY,
-        left = dd.offsetX;
+        left = dd.offsetX,
+        t = $(this),
+        win = $(window);
+
     if (top < 0) top = 0;
     if (left < 0) left = 0;
-    if (top + $(this).outerHeight() > $(window).height())
-        top = $(window).height() - $(this).outerHeight();
-    if (left + $(this).outerWidth() > $(window).width())
-        left = $(window).width() - $(this).outerWidth();
-    $(this).css({
+
+    if (top + t.outerHeight() > win.height())
+        top = win.height() - t.outerHeight();
+
+    if (left + t.outerWidth() > win.width())
+        left = win.width() - t.outerWidth();
+
+    t.css({
         top: top,
         left: left
     });
 };
 
 _.showDialog = function(e) {
-    $('#dialog').css({left: 0, top: 0, width: ""});
+    var dlg = $('#dialog'), left, top;
+
+    dlg.css({left: 0, top: 0, width: ""});
     _.shadow();
-    $('#dialog').css('display', "block");
+    dlg.css('display', "block");
 
     if (e) {
-        var left = e.pageX - parseInt($('#dialog').outerWidth() / 2);
-        var top = e.pageY - parseInt($('#dialog').outerHeight() / 2);
+        left = e.pageX - parseInt(dlg.outerWidth() / 2);
+        top = e.pageY - parseInt(dlg.outerHeight() / 2);
+
         if (left < 0) left = 0;
         if (top < 0) top = 0;
-        if (($('#dialog').outerWidth() + left) > $(window).width())
-            left = $(window).width() - $('#dialog').outerWidth();
-        if (($('#dialog').outerHeight() + top) > $(window).height())
-            top = $(window).height() - $('#dialog').outerHeight();
-        $('#dialog').css({
+
+        if ((dlg.outerWidth() + left) > $(window).width())
+            left = $(window).width() - dlg.outerWidth();
+
+        if ((dlg.outerHeight() + top) > $(window).height())
+            top = $(window).height() - dlg.outerHeight();
+
+        dlg.css({
             left: left,
             top: top
         });
+
     } else
-        $('#dialog').css({
-            left: parseInt(($(window).width() - $('#dialog').outerWidth()) / 2),
-            top: parseInt(($(window).height() - $('#dialog').outerHeight()) / 2)
+        dlg.css({
+            left: parseInt(($(window).width() - dlg.outerWidth()) / 2),
+            top: parseInt(($(window).height() - dlg.outerHeight()) / 2)
         });
+
     $(document).unbind('keydown').keydown(function(e) {
         if (e.keyCode == 27)
             _.hideDialog();
@@ -56,8 +71,7 @@ _.showDialog = function(e) {
 
 _.hideDialog = function() {
     _.unshadow();
-    if ($('#clipboard').hasClass('selected'))
-        $('#clipboard').removeClass('selected');
+    $('#clipboard').removeClass('selected');
     $('div.folder > a > span.folder').removeClass('context');
     $('#dialog').css({display: "none", width: ""}).html("").data('title', null).unbind().click(function() {
         return false;
@@ -76,13 +90,19 @@ _.unshadow = function() {
 };
 
 _.showMenu = function(e) {
-    var left = e.pageX;
-    var top = e.pageY;
-    if (($('#dialog').outerWidth() + left) > $(window).width())
-        left = $(window).width() - $('#dialog').outerWidth();
-    if (($('#dialog').outerHeight() + top) > $(window).height())
-        top = $(window).height() - $('#dialog').outerHeight();
-    $('#dialog').css({
+
+    var left = e.pageX,
+        top = e.pageY,
+        dlg = $('#dialog'),
+        win = $(window);
+
+    if ((dlg.outerWidth() + left) > win.width())
+        left = win.width() - dlg.outerWidth();
+
+    if ((dlg.outerHeight() + top) > win.height())
+        top = win.height() - dlg.outerHeight();
+
+    dlg.css({
         left: left,
         top: top,
         display: "none",
@@ -163,14 +183,14 @@ _.fileNameDialog = function(e, post, inputName, inputValue, url, labels, callBac
 };
 
 _.orderFiles = function(callBack, selected) {
-    var order = $.$.kuki.get('order');
-    var desc = ($.$.kuki.get('orderDesc') == "on");
+    var order = $.$.kuki.get('order'),
+        desc = ($.$.kuki.get('orderDesc') == "on"),
+        a1, b1, arr;
 
     if (!_.files || !_.files.sort)
         _.files = [];
 
     _.files = _.files.sort(function(a, b) {
-        var a1, b1, arr;
         if (!order) order = "name";
 
         if (order == "date") {
@@ -247,7 +267,7 @@ _.label = function(index, data) {
     return label;
 };
 
-_.check4errors = function(data, shadow) {
+_.check4errors = function(data) {
     if (!data.error)
         return false;
     var msg;

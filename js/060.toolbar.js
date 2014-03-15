@@ -25,15 +25,16 @@ _.initToolbar = function() {
     }
 
     $('#toolbar a[href="kcact:settings"]').click(function () {
-        if ($('#settings').css('display') == "none") {
+        var jSettings = $('#settings');
+        if (jSettings.css('display') == "none") {
             $(this).addClass('selected');
             $.$.kuki.set('displaySettings', "on");
-            $('#settings').css('display', "block");
+            jSettings.css('display', "block");
             _.fixFilesHeight();
         } else {
             $(this).removeClass('selected');
             $.$.kuki.set('displaySettings', "off");
-            $('#settings').css('display', "none");
+            jSettings.css('display', "none");
             _.fixFilesHeight();
         }
         return false;
@@ -103,11 +104,13 @@ _.initUploadButton = function() {
         btn.css('display', "none");
         return;
     }
-    var top = btn.get(0).offsetTop;
-    var width = btn.outerWidth();
-    var height = btn.outerHeight();
+    var top = btn.get(0).offsetTop,
+        width = btn.outerWidth(),
+        height = btn.outerHeight(),
+        jInput = $('#upload input');
+
     $('#toolbar').prepend('<div id="upload" style="top:' + top + 'px;width:' + width + 'px;height:' + height + 'px"><form enctype="multipart/form-data" method="post" target="uploadResponse" action="' + _.baseGetData('upload') + '"><input type="file" name="upload[]" onchange="_.uploadFile(this.form)" style="height:' + height + 'px" multiple="multiple" /><input type="hidden" name="dir" value="" /></form></div>');
-    $('#upload input').css('margin-left', "-" + ($('#upload input').outerWidth() - width));
+    jInput.css('margin-left', "-" + (jInput.outerWidth() - width));
     $('#upload').mouseover(function() {
         $('#toolbar a[href="kcact:upload"]').addClass('hover');
     }).mouseout(function() {

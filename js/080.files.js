@@ -38,9 +38,7 @@ _.initFiles = function() {
     });
 
     $.each(_.shows, function(i, val) {
-        var display = ($.$.kuki.get('show' + val) == "off")
-            ? "none" : "block";
-        $('#files .file div.' + val).css('display', display);
+        $('#files .file div.' + val).css('display', ($.$.kuki.get('show' + val) == "off") ? "none" : "block");
     });
     _.statusDir();
 };
@@ -83,8 +81,8 @@ _.showFiles = function(callBack, selected) {
         $.each(_.files, function(i, file) {
             var item = $('#files .file').get(i);
             $(item).data(file);
-            if ($.$.inArray(file.name, selected) ||
-                ((typeof selected != "undefined") && !selected.push && (file.name == selected))
+            if ((file.name === selected) ||
+                $.$.inArray(file.name, selected)
             )
                 $(item).addClass('selected');
         });
@@ -106,7 +104,7 @@ _.selectFile = function(file, e) {
             _.statusDir();
         else {
             $.each(files, function(i, cfile) {
-                size += parseInt($(cfile).data('size'));
+                size += $(cfile).data('size');
             });
             size = _.humanSize(size);
             if (files.length > 1)
@@ -127,17 +125,19 @@ _.selectFile = function(file, e) {
 _.selectAll = function(e) {
     if ((!e.ctrlKey && !e.metaKey) || ((e.keyCode != 65) && (e.keyCode != 97)))
         return false;
-    var files = $('.file').get();
+
+    var files = $('.file'),
+        size = 0;
+
     if (files.length) {
-        var size = 0;
-        $.each(files, function(i, file) {
-            if (!$(file).hasClass('selected'))
-                $(file).addClass('selected');
-            size += parseInt($(file).data('size'));
+
+        files.addClass('selected').each(function() {
+            size += $(this).data('size');
         });
-        size = _.humanSize(size);
-        $('#fileinfo').html(files.length + " " + _.label("selected files") + " (" + size + ")");
+
+        $('#fileinfo').html(files.length + " " + _.label("selected files") + " (" + _.humanSize(size) + ")");
     }
+
     return true;
 };
 
@@ -233,6 +233,7 @@ _.menuFile = function(file, e) {
         files = $('.file.selected').get(),
         html = '';
 
+    // MULTIPLE FILES MENU
     if (file.hasClass('selected') && files.length && (files.length > 1)) {
         var thumb = false,
             notWritable = 0,
@@ -373,6 +374,7 @@ _.menuFile = function(file, e) {
             return false;
         });
 
+    // SINGLE FILES MENU
     } else {
         html += '<ul>';
         $('.file').removeClass('selected');

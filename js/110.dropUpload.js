@@ -11,18 +11,18 @@
   */
 
 _.initDropUpload = function() {
-    if ((typeof(XMLHttpRequest) == "undefined") ||
-        (typeof(document.addEventListener) == "undefined") ||
-        (typeof(File) == "undefined") ||
-        (typeof(FileReader) == "undefined")
+    if ((typeof XMLHttpRequest == "undefined") ||
+        (typeof document.addEventListener == "undefined") ||
+        (typeof File == "undefined") ||
+        (typeof FileReader  == "undefined")
     )
         return;
 
     if (!XMLHttpRequest.prototype.sendAsBinary) {
         XMLHttpRequest.prototype.sendAsBinary = function(datastr) {
             var ords = Array.prototype.map.call(datastr, function(x) {
-                return x.charCodeAt(0) & 0xff;
-            }),
+                    return x.charCodeAt(0) & 0xff;
+                }),
                 ui8a = new Uint8Array(ords);
             this.send(ui8a.buffer);
         }
@@ -62,7 +62,7 @@ _.initDropUpload = function() {
             _.alert("Cannot write to upload folder.");
             return false;
         }
-        filesCount += e.dataTransfer.files.length
+        filesCount += e.dataTransfer.files.length;
         for (var i = 0; i < e.dataTransfer.files.length; i++) {
             var file = e.dataTransfer.files[i];
             file.thisTargetDir = _.dir;
@@ -84,7 +84,7 @@ _.initDropUpload = function() {
             _.alert(_.label("Cannot write to upload folder."));
             return false;
         }
-        filesCount += e.dataTransfer.files.length
+        filesCount += e.dataTransfer.files.length;
         for (var i = 0; i < e.dataTransfer.files.length; i++) {
             var file = e.dataTransfer.files[i];
             file.thisTargetDir = $(dir).data('path');
@@ -155,8 +155,7 @@ _.initDropUpload = function() {
                 number: filesCount - uploadQueue.length,
                 count: filesCount,
                 progress: ""
-            }));
-            $('#loading').css('display', "inline");
+            })).css('display', "inline");
 
             var reader = new FileReader();
             reader.thisFileName = file.name;
@@ -194,7 +193,7 @@ _.initDropUpload = function() {
                     processUploadQueue();
                     if (xhr.responseText.substr(0, 1) != "/")
                         errors[errors.length] = xhr.responseText;
-                }
+                };
 
                 xhr.sendAsBinary(postbody);
             };

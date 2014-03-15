@@ -12,22 +12,24 @@
 
 _.initClipboard = function() {
     if (!_.clipboard || !_.clipboard.length) return;
-    var size = 0;
+
+    var size = 0,
+        jClipboard = $('#clipboard');
+
     $.each(_.clipboard, function(i, val) {
-        size += parseInt(val.size);
+        size += val.size;
     });
     size = _.humanSize(size);
-    $('#clipboard').html('<div title="' + _.label("Clipboard") + ' (' + _.clipboard.length + ' ' + _.label("files") + ', ' + size + ')" onclick="_.openClipboard()"></div>');
+    jClipboard.html('<div title="' + _.label("Clipboard") + ' (' + _.clipboard.length + ' ' + _.label("files") + ', ' + size + ')" onclick="_.openClipboard()"></div>');
     var resize = function() {
-        $('#clipboard').css({
-            left: $(window).width() - $('#clipboard').outerWidth(),
-            top: $(window).height() - $('#clipboard').outerHeight()
+        jClipboard.css({
+            left: $(window).width() - jClipboard.outerWidth(),
+            top: $(window).height() - jClipboard.outerHeight()
         });
     };
     resize();
-    $('#clipboard').css('display', "block");
-    $(window).unbind();
-    $(window).resize(function() {
+    jClipboard.css('display', "block");
+    $(window).unbind().resize(function() {
         _.resize();
         resize();
     });
@@ -67,26 +69,30 @@ _.openClipboard = function() {
         '<li><a href="kcact:clrcbd"><span>' + _.label("Clear the Clipboard") + '</span></a></li></ul>';
 
     setTimeout(function() {
+        var dlg = $('#dialog'),
+            jStatus = $('#status');
+
         $('#clipboard').addClass('selected');
-        $('#dialog').html(html).find('ul').first().menu();
-        $('#dialog a[href="kcact:download"]').click(function() {
+        dlg.html(html).find('ul').first().menu();
+
+        dlg.find('a[href="kcact:download"]').click(function() {
             _.hideDialog();
             _.downloadClipboard();
             return false;
         });
-        $('#dialog a[href="kcact:cpcbd"]').click(function() {
+        dlg.find('a[href="kcact:cpcbd"]').click(function() {
             if (!_.dirWritable) return false;
             _.hideDialog();
             _.copyClipboard(_.dir);
             return false;
         });
-        $('#dialog a[href="kcact:mvcbd"]').click(function() {
+        dlg.find('a[href="kcact:mvcbd"]').click(function() {
             if (!_.dirWritable) return false;
             _.hideDialog();
             _.moveClipboard(_.dir);
             return false;
         });
-        $('#dialog a[href="kcact:rmcbd"]').click(function() {
+        dlg.find('a[href="kcact:rmcbd"]').click(function() {
             _.hideDialog();
             _.confirm(
                 _.label("Are you sure you want to delete all files in the Clipboard?"),
@@ -97,34 +103,38 @@ _.openClipboard = function() {
             );
             return false;
         });
-        $('#dialog a[href="kcact:clrcbd"]').click(function() {
+        dlg.find('a[href="kcact:clrcbd"]').click(function() {
             _.hideDialog();
             _.clearClipboard();
             return false;
         });
 
-        var left = $(window).width() - $('#dialog').css({width: ""}).outerWidth();
-        var top = $(window).height() - $('#dialog').outerHeight() - $('#status').outerHeight();
-        var lheight = top + $('#dialog').outerTopSpace();
-        $('#dialog .list').css({
+        var left = $(window).width() - dlg.css({width: ""}).outerWidth(),
+            top = $(window).height() - dlg.outerHeight() - jStatus.outerHeight(),
+            lheight = top + dlg.outerTopSpace();
+
+        dlg.find('.list').css({
             'max-height': lheight,
             'overflow-y': "auto",
             'overflow-x': "hidden",
             width: ""
         });
-        top = $(window).height() - $('#dialog').outerHeight(true) - $('#status').outerHeight(true);
-        $('#dialog').css({
+
+        top = $(window).height() - dlg.outerHeight(true) - jStatus.outerHeight(true);
+
+        dlg.css({
             left: left - 5,
             top: top
         }).fadeIn("fast");
-        var a = $('#dialog .list').outerHeight(),
-            b = $('#dialog .list div').outerHeight();
+
+        var a = dlg.find('.list').outerHeight(),
+            b = dlg.find('.list div').outerHeight();
+
         if (b - a > 10) {
-            $('#dialog').css({
-                left: parseInt($('#dialog').css('left')) - _.scrollbarWidth,
-            }).width($('#dialog').width() + _.scrollbarWidth);
+            dlg.css({
+                left: parseInt(dlg.css('left')) - _.scrollbarWidth,
+            }).width(dlg.width() + _.scrollbarWidth);
         }
-        console.log(_.scrollbarWidth);
     }, 1);
 };
 

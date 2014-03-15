@@ -421,6 +421,11 @@ a.denied:hover {
     padding: 6px 10px;
     border-radius: 4px;
 }
+#checkver a {
+    font-weight: normal;
+    padding: 3px 3px 3px 20px;
+    background: url(img/icons/download.png) no-repeat left center;
+}
 
 
 /* MISC */
@@ -446,6 +451,9 @@ a.denied:hover {
     padding: 5px 0 1px 24px;
 }
 
+#files.drag {
+    background: #ddebf8;
+}
 
 /* FIX FIELDSET BORDER RADIUS BUG ON IE */
 body.msie fieldset,

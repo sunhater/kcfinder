@@ -14,12 +14,10 @@ _.initSettings = function() {
 
     $('#settings fieldset, #settings input, #settings label').uniform();
 
-    if (!_.shows.length) {
-        var showInputs = $('#show input[type="checkbox"]').toArray();
-        $.each(showInputs, function (i, input) {
-            _.shows[i] = input.name;
+    if (!_.shows.length)
+        $('#show input[type="checkbox"]').each(function(i) {
+            _.shows[i] = this.name;
         });
-    }
 
     var shows = _.shows;
 
@@ -31,25 +29,18 @@ _.initSettings = function() {
     }
 
     $('#show input[type="checkbox"]').click(function() {
-        var kuki = $(this).get(0).checked ? "on" : "off";
-        $.$.kuki.set('show' + $(this).get(0).name, kuki)
-        if ($(this).get(0).checked)
-            $('#files .file div.' + $(this).get(0).name).css('display', "block");
-        else
-            $('#files .file div.' + $(this).get(0).name).css('display', "none");
+        $.$.kuki.set('show' + this.name, this.checked ? "on" : "off")
+        $('#files .file div.' + this.name).css('display', this.checked ? "block" : "none");
     });
 
     $.each(shows, function(i, val) {
-        var checked = ($.$.kuki.get('show' + val) == "on") ? "checked" : "";
-        $('#show input[name="' + val + '"]').get(0).checked = checked;
+        $('#show input[name="' + val + '"]').get(0).checked = ($.$.kuki.get('show' + val) == "on") ? "checked" : "";
     });
 
-    if (!_.orders.length) {
-        var orderInputs = $('#order input[type="radio"]').toArray();
-        $.each(orderInputs, function (i, input) {
-            _.orders[i] = input.value;
-        });
-    }
+    if (!_.orders.length)
+        $('#order input[type="radio"]').each(function(i) {
+            _.orders[i] = this.value;
+        })
 
     var orders = _.orders;
 
@@ -63,12 +54,12 @@ _.initSettings = function() {
     $('#order input[name="desc"]').get(0).checked = ($.$.kuki.get('orderDesc') == "on");
 
     $('#order input[type="radio"]').click(function() {
-        $.$.kuki.set('order', $(this).get(0).value);
+        $.$.kuki.set('order', this.value);
         _.orderFiles();
     });
 
     $('#order input[name="desc"]').click(function() {
-        $.$.kuki.set('orderDesc', $(this).get(0).checked ? 'on' : "off");
+        $.$.kuki.set('orderDesc', this.checked ? 'on' : "off");
         _.orderFiles();
     });
 
@@ -84,7 +75,7 @@ _.initSettings = function() {
     $('#view input[value="' + $.$.kuki.get('view') + '"]').get(0).checked = true;
 
     $('#view input').click(function() {
-        var view = $(this).attr('value');
+        var view = this.value;
         if ($.$.kuki.get('view') != view) {
             $.$.kuki.set('view', view);
             if (view == "list") {

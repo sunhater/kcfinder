@@ -126,7 +126,7 @@
         },
 
         inArray: function(needle, arr) {
-            if ((typeof arr == 'undefined') || !arr.length || !arr.push)
+            if (!$.isArray(arr))
                 return false;
             for (var i = 0; i < arr.length; i++)
                 if (arr[i] == needle)

@@ -132,14 +132,13 @@ _.expandDir = function(dir) {
 _.changeDir = function(dir) {
     if (dir.children('span.folder').hasClass('regular')) {
         $('div.folder > a > span.folder').removeClass('current regular').addClass('regular');
-        dir.children('span.folder').removeClass('regular');
-        dir.children('span.folder').addClass('current');
+        dir.children('span.folder').removeClass('regular').addClass('current');
         $('#files').html(_.label("Loading files..."));
         $.ajax({
             type: "post",
             dataType: "json",
             url: _.baseGetData("chDir"),
-            data: {dir:dir.data('path')},
+            data: {dir: dir.data('path')},
             async: false,
             success: function(data) {
                 if (_.check4errors(data))
@@ -162,8 +161,9 @@ _.changeDir = function(dir) {
 };
 
 _.statusDir = function() {
-    for (var i = 0, size = 0; i < _.files.length; i++)
-        size += parseInt(_.files[i].size);
+    var i = 0, size = 0;
+    for (; i < _.files.length; i++)
+        size += _.files[i].size;
     size = _.humanSize(size);
     $('#fileinfo').html(_.files.length + " " + _.label("files") + " (" + size + ")");
 };

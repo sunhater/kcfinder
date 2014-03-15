@@ -16,12 +16,15 @@ _.init = function() {
     $('body').click(function() {
         _.hideDialog();
     }).rightClick();
+
     $('#shadow').click(function() {
         return false;
     });
+
     $('#dialog').unbind().click(function() {
         return false;
     });
+
     _.initOpeners();
     _.initSettings();
     _.initContent();
@@ -168,14 +171,20 @@ _.initResizer = function() {
                 filter: "alpha(opacity=0)"
             });
             $('#all').css('cursor', "");
-            var left = parseInt($(this).css('left')) + parseInt($(this).css('width'));
-            var right = $(window).width() - left;
-            $('#left').css('width', left);
-            $('#right').css('width', right);
-            $('#files').css('width', $('#right').innerWidth() - $('#files').outerHSpace());
+            var left = parseInt($(this).css('left')) + parseInt($(this).css('width')),
+                right = $(window).width() - left,
+                jLeft = $('#left'),
+                jRight = $('#right'),
+                jFiles = $('#files'),
+                jFolders = $('#folders');
+
+
+            jLeft.css('width', left);
+            jRight.css('width', right);
+            jFiles.css('width', jRight.innerWidth() - jFiles.outerHSpace());
             $('#resizer').css({
-                left: $('#left').outerWidth() - $('#folders').outerRightSpace('m'),
-                width: $('#folders').outerRightSpace('m') + $('#files').outerLeftSpace('m')
+                left: jLeft.outerWidth() - jFolders.outerRightSpace('m'),
+                width: jFolders.outerRightSpace('m') + jFiles.outerLeftSpace('m')
             });
             _.fixFilesHeight();
         }
@@ -183,40 +192,50 @@ _.initResizer = function() {
 };
 
 _.resize = function() {
-    $('#left').css({
+    var jLeft = $('#left'),
+        jRight = $('#right'),
+        jStatus = $('#status'),
+        jFolders = $('#folders'),
+        jFiles = $('#files'),
+        jResizer = $('#resizer'),
+        jWindow = $(window);
+
+    jLeft.css({
         width: "25%",
-        height: $(window).height() - $('#status').outerHeight()
+        height: jWindow.height() - jStatus.outerHeight()
     });
-    $('#right').css({
+    jRight.css({
         width: "75%",
-        height: $(window).height() - $('#status').outerHeight()
+        height: jWindow.height() - jStatus.outerHeight()
     });
     $('#toolbar').css('height', $('#toolbar a').outerHeight());
     $('#shadow').css({
-        width: $(window).width()
+        width: jWindow.width(),
+        height: jWindow.height()
     });
-    $('#shadow').css('height', $(window).height());
-    $('#resizer').css('height', $(window).height());
+    jResizer.css('height', $(window).height());
 
-
-    $('#folders').css('height', $('#left').outerHeight() - $('#folders').outerVSpace());
+    jFolders.css('height', jLeft.outerHeight() - jFolders.outerVSpace());
     _.fixFilesHeight();
-    var width = $('#left').outerWidth() + $('#right').outerWidth();
-    $('#status').css('width', width);
-    while ($('#status').outerWidth() > width)
-        $('#status').css('width', parseInt($('#status').css('width')) - 1);
-    while ($('#status').outerWidth() < width)
-        $('#status').css('width', parseInt($('#status').css('width')) + 1);
-    $('#files').css('width', $('#right').innerWidth() - $('#files').outerHSpace());
-    $('#resizer').css({
-        left: $('#left').outerWidth() - $('#folders').outerRightSpace('m'),
-        width: $('#folders').outerRightSpace('m') + $('files').outerLeftSpace('m')
+    var width = jLeft.outerWidth() + jRight.outerWidth();
+    jStatus.css('width', width);
+    while (jStatus.outerWidth() > width)
+        jStatus.css('width', parseInt(jStatus.css('width')) - 1);
+    while (jStatus.outerWidth() < width)
+        jStatus.css('width', parseInt(jStatus.css('width')) + 1);
+    jFiles.css('width', jRight.innerWidth() - jFiles.outerHSpace());
+    jResizer.css({
+        left: jLeft.outerWidth() - jFolders.outerRightSpace('m'),
+        width: jFolders.outerRightSpace('m') + jFiles.outerLeftSpace('m')
     });
 };
 
 _.fixFilesHeight = function() {
-    $('#files').css('height',
-        $('#left').outerHeight() - $('#toolbar').outerHeight() - $('#files').outerVSpace() -
-        (($('#settings').css('display') != "none") ? $('#settings').outerHeight() : 0)
+    var jFiles = $('#files'),
+        jSettings = $('#settings');
+
+    jFiles.css('height',
+        $('#left').outerHeight() - $('#toolbar').outerHeight() - jFiles.outerVSpace() -
+        ((jSettings.css('display') != "none") ? jSettings.outerHeight() : 0)
     );
 };
