@@ -539,8 +539,8 @@ class browser extends uploader {
             $file = "{$this->config['uploadDir']}/$file.zip";
         } while (file_exists($file));
 
-        $zip = new ZipArchive();
-        $res = $zip->open($file, ZipArchive::CREATE);
+        $zip = new \ZipArchive();
+        $res = $zip->open($file, \ZipArchive::CREATE);
         if ($res === TRUE) {
             foreach ($zipFiles as $cfile)
                 $zip->addFile($cfile, basename($cfile));
