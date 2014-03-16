@@ -614,6 +614,13 @@ class uploader {
         if ($img->initError)
             return true;
 
+        $fimg = new fastImage($file);
+        $type = $fimg->getType();
+        $fimg->close();
+
+        if ($type === false)
+            return true;
+
         $thumb = substr($file, strlen($this->config['uploadDir']));
         $thumb = $this->config['uploadDir'] . "/" . $this->config['thumbsDir'] . "/" . $thumb;
         $thumb = path::normalize($thumb);
@@ -628,9 +635,8 @@ class uploader {
         if (($img->width <= $this->config['thumbWidth']) &&
             ($img->height <= $this->config['thumbHeight'])
         ) {
-            list($tmp, $tmp, $type) = @getimagesize($file);
             // Drop only browsable types
-            if (in_array($type, array(IMAGETYPE_GIF, IMAGETYPE_JPEG, IMAGETYPE_PNG)))
+            if (in_array($type, array("gif", "jpeg", "png")))
                 return true;
 
         // Resize image
@@ -638,10 +644,12 @@ class uploader {
             return false;
 
         // Save thumbnail
-        return $img->output("jpeg", array(
-            'file' => $thumb,
-            'quality' => $this->config['jpegQuality']
-        ));
+        $options = array('file' => $thumb);
+        if ($type == "jpeg")
+            $options['quality'] = $this->config['jpegQuality'];
+        if ($type == "gif")
+            $type = "jpeg";
+        return $img->output($type, $options);
     }
 
     protected function localize($langCode) {

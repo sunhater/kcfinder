@@ -196,7 +196,10 @@ class image_gd extends image {
     // ABSTRACT PROTECTED METHODS
 
     protected function getBlankImage($width, $height) {
-        return @imagecreatetruecolor($width, $height);
+        $image = imagecreatetruecolor($width, $height);
+        imagealphablending($image, false);
+        imagesavealpha($image, true);
+        return $image;
     }
 
     protected function getImage($image, &$width, &$height) {
@@ -204,6 +207,8 @@ class image_gd extends image {
         if (is_resource($image) && (get_resource_type($image) == "gd")) {
             $width = @imagesx($image);
             $height = @imagesy($image);
+            imagealphablending($image, false);
+            imagesavealpha($image, true);
             return $image;
 
         } elseif (is_string($image) &&
@@ -217,6 +222,10 @@ class image_gd extends image {
                 ($t == IMAGETYPE_XBM)  ? @imagecreatefromxbm($image)  : false
             ))));
 
+            if ($t == IMAGETYPE_PNG) {
+                imagealphablending($image, false);
+                imagesavealpha($image, true);
+            }
             return $image;
 
         } else
@@ -256,7 +265,6 @@ class image_gd extends image {
         $filters = isset($options['filters']) ? $options['filters'] : null;
         if (($file === null) && !headers_sent())
             header("Content-Type: image/png");
-        @imagesavealpha($this->image, true);
         return imagepng($this->image, $file, $quality, $filters);
     }
 

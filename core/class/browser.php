@@ -148,7 +148,12 @@ class browser extends uploader {
         $file = $_GET['file'];
         if (basename($file) != $file)
             $this->sendDefaultThumb();
+
         $file = "{$this->thumbsDir}/{$this->type}/{$_GET['dir']}/$file";
+        $img = new fastImage($file);
+        $type = $img->getType();
+        $img->close();
+
         if (!is_file($file) || !is_readable($file)) {
             $file = "{$this->config['uploadDir']}/{$this->type}/{$_GET['dir']}/" . basename($file);
             if (!is_file($file) || !is_readable($file))
@@ -156,20 +161,21 @@ class browser extends uploader {
             $image = image::factory($this->imageDriver, $file);
             if ($image->initError)
                 $this->sendDefaultThumb($file);
-            list($tmp, $tmp, $type) = getimagesize($file);
-            if (in_array($type, array(IMAGETYPE_GIF, IMAGETYPE_JPEG, IMAGETYPE_PNG)) &&
+
+            $img = new fastImage($file);
+            $type = $img->getType();
+            $img->close();
+
+            if (in_array($type, array("gif", "jpeg", "png")) &&
                 ($image->width <= $this->config['thumbWidth']) &&
                 ($image->height <= $this->config['thumbHeight'])
             ) {
-                $mime =
-                    ($type == IMAGETYPE_GIF) ? "gif" : (
-                    ($type == IMAGETYPE_PNG) ? "png" : "jpeg");
-                $mime = "image/$mime";
+                $mime = "image/$type";
                 httpCache::file($file, $mime);
             } else
                 $this->sendDefaultThumb($file);
         }
-        httpCache::file($file, "image/jpeg");
+        httpCache::file($file, "image/$type");
     }
 
     protected function act_expand() {
