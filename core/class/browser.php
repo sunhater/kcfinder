@@ -22,6 +22,7 @@ class browser extends uploader {
     public function __construct() {
         parent::__construct();
 
+        // SECURITY CHECK INPUT DIRECTORY
         if (isset($_POST['dir'])) {
             $dir = $this->checkInputDir($_POST['dir'], true, false);
             if ($dir === false) unset($_POST['dir']);
@@ -35,16 +36,19 @@ class browser extends uploader {
         }
 
         $thumbsDir = $this->config['uploadDir'] . "/" . $this->config['thumbsDir'];
-        if ((
-                !is_dir($thumbsDir) &&
-                !@mkdir($thumbsDir, $this->config['dirPerms'])
-            ) ||
-
-            !is_readable($thumbsDir) ||
-            !dir::isWritable($thumbsDir) ||
+        if (!$this->config['disabled'] &&
             (
-                !is_dir("$thumbsDir/{$this->type}") &&
-                !@mkdir("$thumbsDir/{$this->type}", $this->config['dirPerms'])
+                (
+                    !is_dir($thumbsDir) &&
+                    !@mkdir($thumbsDir, $this->config['dirPerms'])
+                ) ||
+
+                !is_readable($thumbsDir) ||
+                !dir::isWritable($thumbsDir) ||
+                (
+                    !is_dir("$thumbsDir/{$this->type}") &&
+                    !@mkdir("$thumbsDir/{$this->type}", $this->config['dirPerms'])
+                )
             )
         )
             $this->errorMsg("Cannot access or create thumbnails folder.");
@@ -53,16 +57,18 @@ class browser extends uploader {
         $this->thumbsTypeDir = "$thumbsDir/{$this->type}";
 
         // Remove temporary zip downloads if exists
-        $files = dir::content($this->config['uploadDir'], array(
-            'types' => "file",
-            'pattern' => '/^.*\.zip$/i'
-        ));
+        if (!$this->config['disabled']) {
+            $files = dir::content($this->config['uploadDir'], array(
+                'types' => "file",
+                'pattern' => '/^.*\.zip$/i'
+            ));
 
-        if (is_array($files) && count($files)) {
-            $time = time();
-            foreach ($files as $file)
-                if (is_file($file) && ($time - filemtime($file) > 3600))
-                    unlink($file);
+            if (is_array($files) && count($files)) {
+                $time = time();
+                foreach ($files as $file)
+                    if (is_file($file) && ($time - filemtime($file) > 3600))
+                        unlink($file);
+            }
         }
 
         if (isset($_GET['theme']) &&

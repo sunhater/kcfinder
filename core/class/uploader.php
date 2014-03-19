@@ -62,7 +62,7 @@ class uploader {
 
 /** The language got from $_GET['lng'] or $_GET['lang'] or... Please see next property
   * @var string */
-    protected $lang = 'en';
+    protected $lang = "en";
 
 /** Possible language $_GET keys
   * @var array */
@@ -233,8 +233,6 @@ class uploader {
             $this->typeDir = "{$this->config['uploadDir']}/{$this->type}";
             $this->typeURL = "{$this->config['uploadURL']}/{$this->type}";
         }
-        if (!is_dir($this->config['uploadDir']))
-            @mkdir($this->config['uploadDir'], $this->config['dirPerms']);
 
         // HOST APPLICATIONS INIT
         if (isset($_GET['CKEditorFuncNum'])) {
@@ -269,28 +267,37 @@ class uploader {
             }
         $this->localize($this->lang);
 
-        // CHECK & MAKE DEFAULT .htaccess
-        if (isset($this->config['_check4htaccess']) &&
-            $this->config['_check4htaccess']
-        ) {
-            $htaccess = "{$this->config['uploadDir']}/.htaccess";
-            if (!file_exists($htaccess)) {
-                if (!@file_put_contents($htaccess, $this->get_htaccess()))
-                    $this->backMsg("Cannot write to upload folder. {$this->config['uploadDir']}");
-            } else {
-                if (false === ($data = @file_get_contents($htaccess)))
-                    $this->backMsg("Cannot read .htaccess");
-                if (($data != $this->get_htaccess()) && !@file_put_contents($htaccess, $data))
-                    $this->backMsg("Incorrect .htaccess file. Cannot rewrite it!");
-            }
-        }
+        // IF BROWSER IS ENABLED
+        if (!$this->config['disabled']) {
 
-        // CHECK & CREATE UPLOAD FOLDER
-        if (!is_dir($this->typeDir)) {
-            if (!mkdir($this->typeDir, $this->config['dirPerms']))
-                $this->backMsg("Cannot create {dir} folder.", array('dir' => $this->type));
-        } elseif (!is_readable($this->typeDir))
-            $this->backMsg("Cannot read upload folder.");
+            // TRY TO CREATE UPLOAD DIRECTORY IF NOT EXISTS
+            if (!$this->config['disabled'] && !is_dir($this->config['uploadDir']))
+                @mkdir($this->config['uploadDir'], $this->config['dirPerms']);
+
+            // CHECK & MAKE DEFAULT .htaccess
+            if (isset($this->config['_check4htaccess']) &&
+                $this->config['_check4htaccess']
+            ) {
+                $htaccess = "{$this->config['uploadDir']}/.htaccess";
+                if (!file_exists($htaccess)) {
+                    if (!@file_put_contents($htaccess, $this->get_htaccess()))
+                        $this->backMsg("Cannot write to upload folder. {$this->config['uploadDir']}");
+                } else {
+                    if (false === ($data = @file_get_contents($htaccess)))
+                        $this->backMsg("Cannot read .htaccess");
+                    if (($data != $this->get_htaccess()) && !@file_put_contents($htaccess, $data))
+                        $this->backMsg("Incorrect .htaccess file. Cannot rewrite it!");
+                }
+            }
+
+            // CHECK & CREATE UPLOAD FOLDER
+            if (!is_dir($this->typeDir)) {
+                if (!mkdir($this->typeDir, $this->config['dirPerms']))
+                    $this->backMsg("Cannot create {dir} folder.", array('dir' => $this->type));
+            } elseif (!is_readable($this->typeDir))
+                $this->backMsg("Cannot read upload folder.");
+
+        }
     }
 
     public function upload() {
@@ -546,7 +553,6 @@ class uploader {
         )
             return true;
 
-
         // PROPORTIONAL RESIZE
         if ((!$this->config['maxImageWidth'] || !$this->config['maxImageHeight'])) {
 
@@ -645,10 +651,10 @@ class uploader {
 
         // Save thumbnail
         $options = array('file' => $thumb);
-        if ($type == "jpeg")
-            $options['quality'] = $this->config['jpegQuality'];
         if ($type == "gif")
             $type = "jpeg";
+        if ($type == "jpeg")
+            $options['quality'] = $this->config['jpegQuality'];
         return $img->output($type, $options);
     }
 
