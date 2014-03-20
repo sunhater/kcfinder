@@ -1,4 +1,22 @@
 
+VERSION 3.0
+-----------
+* Now KCFinder requires PHP >= 5.3 becouse of using namespace: "kcfinder"
+* Support CSS & JavaScript minifier (on the fly)
+* jQuery UI & Uniform support. New theme & theme engine (old themes is not supported)
+* Improvements in JavaScript code to be well compressed and faster.
+* Keep PNG transparency in generated Thumbnails
+TODO:
+* New image viewer
+* Edit text files
+* Custom image manipulations (resize, crop, rotate)
+
+
+VERSION 2.54 - 2014-03-12
+-------------------------
+* Performance fix only
+
+
 VERSION 2.53 - 2014-02-22
 -------------------------
 * Session start fix

@@ -45,7 +45,7 @@ _.initToolbar = function() {
         return false;
     });
 
-    if (window.opener || (_.opener.name == "tinymce") || $('iframe[name]', window.parent.document).get(0))
+    if (window.opener || (_.opener.name == "tinymce"))
         $('#toolbar a[href="kcact:maximize"]').click(function() {
             _.maximize(this);
             return false;
@@ -211,83 +211,6 @@ _.maximize = function(button) {
                 width: width - _.maximizeMCE.Hspace,
                 height: height - _.maximizeMCE.Vspace
             });
-        }
-
-    } else if ($('iframe', window.parent.document).get(0)) {
-        var width, height,
-            ifrm = $('iframe[name="' + window.name + '"]', window.parent.document);
-
-        if ($(button).hasClass('selected')) {
-            $(button).removeClass('selected');
-            if (_.maximizeThread) {
-                clearInterval(_.maximizeThread);
-                _.maximizeThread = null;
-            }
-            if (_.maximizeW) _.maximizeW = null;
-            if (_.maximizeH) _.maximizeH = null;
-            $.each($('*', window.parent.document).get(), function(i, e) {
-                e.style.display = _.maximizeDisplay[i];
-            });
-            ifrm.css({
-                display: _.maximizeCSS.display,
-                position: _.maximizeCSS.position,
-                left: _.maximizeCSS.left,
-                top: _.maximizeCSS.top,
-                width: _.maximizeCSS.width,
-                height: _.maximizeCSS.height
-            });
-            $(window.parent).scrollLeft(_.maximizeLeft);
-            $(window.parent).scrollTop(_.maximizeTop);
-
-        } else {
-            $(button).addClass('selected');
-            _.maximizeCSS = {
-                display: ifrm.css('display'),
-                position: ifrm.css('position'),
-                left: ifrm.css('left'),
-                top: ifrm.css('top'),
-                width: ifrm.outerWidth(),
-                height: ifrm.outerHeight()
-            };
-            _.maximizeTop = $(window.parent).scrollTop();
-            _.maximizeLeft = $(window.parent).scrollLeft();
-            _.maximizeDisplay = [];
-            $.each($('*', window.parent.document).get(), function(i, e) {
-                _.maximizeDisplay[i] = $(e).css('display');
-                $(e).css('display', "none");
-            });
-
-            ifrm.css({
-                display: "block",
-                position: "absolute"
-            }).parents().css('display', "block");
-            var resize = function() {
-                width = $(window.parent).width();
-                height = $(window.parent).height();
-                if (!_.maximizeW || (_.maximizeW != width) ||
-                    !_.maximizeH || (_.maximizeH != height)
-                ) {
-                    _.maximizeW = width;
-                    _.maximizeH = height;
-                    ifrm.css({
-                        width: width,
-                        height: height
-                    });
-                    _.resize();
-                }
-            }
-            if ((ifrm.offset().left == ifrm.position().left) &&
-                (ifrm.offset().top == ifrm.position().top)
-            )
-                ifrm.css({left: 0, top: 0});
-            else
-                ifrm.css({
-                    left: - ifrm.offset().left,
-                    top: - ifrm.offset().top
-                });
-
-            resize();
-            _.maximizeThread = setInterval(resize, 250);
         }
     }
 };
