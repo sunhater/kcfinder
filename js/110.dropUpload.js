@@ -155,7 +155,7 @@ _.initDropUpload = function() {
                 number: filesCount - uploadQueue.length,
                 count: filesCount,
                 progress: ""
-            })).css('display', "inline");
+            })).show();
 
             var reader = new FileReader();
             reader.thisFileName = file.name;
@@ -186,7 +186,7 @@ _.initDropUpload = function() {
                 xhr.setRequestHeader('Content-Length', postbody.length);
 
                 xhr.onload = function(e) {
-                    $('#loading').css('display', "none");
+                    $('#loading').hide();
                     if (_.dir == reader.thisTargetDir)
                         _.fadeFiles();
                     uploadInProgress = false;
@@ -199,7 +199,7 @@ _.initDropUpload = function() {
             };
 
             reader.onerror = function(evt) {
-                $('#loading').css('display', "none");
+                $('#loading').hide();
                 uploadInProgress = false;
                 processUploadQueue();
                 errors[errors.length] = _.label("Failed to upload {filename}!", {

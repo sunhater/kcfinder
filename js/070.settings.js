@@ -67,10 +67,7 @@ _.initSettings = function() {
         $.$.kuki.set('view', "thumbs");
 
     if ($.$.kuki.get('view') == "list")
-        $('#show input').each(function() {
-            this.checked = this.disabled = true;
-            $(this).parent().addClass('checked').parent().addClass('disabled');
-        });
+        $('#show').parent().hide();
 
     $('#view input[value="' + $.$.kuki.get('view') + '"]').get(0).checked = true;
 
@@ -78,23 +75,10 @@ _.initSettings = function() {
         var view = this.value;
         if ($.$.kuki.get('view') != view) {
             $.$.kuki.set('view', view);
-            if (view == "list") {
-                $('#show input').each(function() {
-                    this.checked = this.disabled = true;
-                    $(this).parent().addClass('checked').parent().addClass('disabled');
-                });
-            } else {
-                $.each(_.shows, function(i, val) {
-                    var input = $('#show input[name="' + val + '"]');
-                    input.get(0).checked = ($.$.kuki.get('show' + val) == "on");
-                    if (!input.get(0).checked)
-                        input.parent().removeClass('checked');
-                });
-                $('#show input').each(function() {
-                    this.disabled = false;
-                    $(this).parent().parent().removeClass('disabled');
-                });
-            }
+            if (view == "list")
+                $('#show').parent().hide();
+            else
+                $('#show').parent().show();
         }
         _.refresh();
     });

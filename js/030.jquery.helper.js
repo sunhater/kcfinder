@@ -78,6 +78,57 @@
         return (this.outerTopSpace(mbp) + this.outerBottomSpace(mbp));
     };
 
+    $.fn.fullscreen = function() {
+        $(this).each(function() {
+            var element = this,
+                requestMethod =
+                    element.requestFullScreen ||
+                    element.webkitRequestFullScreen ||
+                    element.mozRequestFullScreen ||
+                    element.msRequestFullScreen;
+
+            if (requestMethod)
+                requestMethod.call(element);
+
+            else if (typeof window.ActiveXObject !== "undefined") {
+                var wscript = new ActiveXObject("WScript.Shell");
+                if (wscript !== null)
+                    wscript.SendKeys("{F11}");
+            }
+        });
+    };
+
+    $.fn.toggleFullscreen = function() {
+        if ($.isFullscreen())
+            $.exitFullscreen();
+        else
+            $(this).fullscreen();
+    };
+
+    $.exitFullscreen = function() {
+        var d = document,
+            requestMethod =
+                d.cancelFullScreen ||
+                d.webkitCancelFullScreen ||
+                d.mozCancelFullScreen ||
+                d.msCancelFullScreen ||
+                d.exitFullscreen;
+
+        if (requestMethod)
+            requestMethod.call(d);
+
+        else if (typeof window.ActiveXObject !== "undefined") {
+            var wscript = new ActiveXObject("WScript.Shell");
+            if (wscript !== null)
+                wscript.SendKeys("{F11}");
+        }
+    };
+
+    $.isFullscreen = function() {
+        var d = document;
+        return (d.fullScreenElement && (d.fullScreenElement !== null)) || d.mozFullScreen || d.webkitIsFullScreen;
+    };
+
     $.$ = {
 
         unselect: function() {

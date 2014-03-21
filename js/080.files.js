@@ -501,11 +501,11 @@ _.menuFile = function(file, e) {
             var url = $.$.escapeDirs(_.uploadURL + "/" + _.dir + "/" + data.name) + "?ts=" + ts,
                 img = new Image();
 
-            $('#loading').html(_.label("Loading image...")).css('display', "inline");
+            $('#loading').html(_.label("Loading image...")).show();
             img.src = url;
             img.onerror = function() {
                 _.lock = false;
-                $('#loading').css('display', "none");
+                $('#loading').hide();
                 _.alert(_.label("Unknown error."));
                 $(document).unbind('keydown').keydown(function(e) {
                     return !_.selectAll(e);
@@ -518,7 +518,7 @@ _.menuFile = function(file, e) {
                     if ($(this).data('name') == data.name)
                         _.ssImage = this;
                 });
-                $('#loading').css('display', "none");
+                $('#loading').hide();
                 $('#dialog').html('<div class="slideshow"><img /></div>');
                 $('#dialog img').attr({
                     src: url,

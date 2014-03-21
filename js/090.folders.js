@@ -85,7 +85,7 @@ _.expandDir = function(dir) {
             dir.children('.brace').removeClass('closed').addClass('opened');
         } else if (!$('#loadingDirs').get(0)) {
             dir.parent().append('<div id="loadingDirs">' + _.label("Loading folders...") + '</div>');
-            $('#loadingDirs').css('display', "none").show(200, function() {
+            $('#loadingDirs').hide().show(200, function() {
                 $.ajax({
                     type: "post",
                     dataType: "json",
@@ -106,7 +106,7 @@ _.expandDir = function(dir) {
                         if (html.length) {
                             dir.parent().append('<div class="folders">' + html + '</div>');
                             var folders = $(dir.parent().children('.folders').first());
-                            folders.css('display', "none");
+                            folders.hide();
                             $(folders).show(500);
                             $.each(data.dirs, function(i, cdir) {
                                 _.setTreeData(cdir, path);
@@ -148,9 +148,7 @@ _.changeDir = function(dir) {
                 _.dir = dir.data('path');
                 _.dirWritable = data.dirWritable;
                 var title = "KCFinder: /" + _.dir;
-                document.title = title;
-                if (_.opener.name == "tinymce")
-                    tinyMCEPopup.editor.windowManager.setTitle(window, title);
+                _.setTitle(title);
                 _.statusDir();
             },
             error: function() {

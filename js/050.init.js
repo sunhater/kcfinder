@@ -136,6 +136,7 @@ _.initContent = function() {
             _.dirWritable = data.dirWritable;
             $('#folders').html(_.buildTree(data.tree));
             _.setTreeData(data.tree);
+            _.setTitle("KCFinder: /" + _.dir);
             _.initFolders();
             _.files = data.files ? data.files : [];
             _.orderFiles();
@@ -158,34 +159,45 @@ _.initResizer = function() {
             });
             $('#all').css('cursor', cursor);
         },
-        drag: function(e) {
-            var left = e.pageX - parseInt(parseInt($(this).css('width')) / 2);
-            left = (left >= 0) ? left : 0;
-            left = (left + parseInt($(this).css('width')) < $(window).width())
-                ? left : $(window).width() - parseInt($(this).css('width'));
-            $(this).css('left', left);
-        },
+
         stop: function() {
             $(this).css({
                 opacity: "0",
                 filter: "alpha(opacity=0)"
             });
             $('#all').css('cursor', "");
-            var left = parseInt($(this).css('left')) + parseInt($(this).css('width')),
-                right = $(window).width() - left,
-                jLeft = $('#left'),
+
+            var jLeft = $('#left'),
                 jRight = $('#right'),
                 jFiles = $('#files'),
-                jFolders = $('#folders');
+                jFolders = $('#folders'),
+                left = parseInt($(this).css('left')) + parseInt($(this).css('width')),
+                w = 0, r;
 
+            $('#toolbar a').each(function() {
+                if ($(this).css('display') != "none")
+                    w += $(this).outerWidth(true);
+            });
+
+            r = $(window).width() - w;
+
+            if (left < 100)
+                left = 100;
+
+            if (left > r)
+                left = r;
+
+            var right = $(window).width() - left;
 
             jLeft.css('width', left);
             jRight.css('width', right);
             jFiles.css('width', jRight.innerWidth() - jFiles.outerHSpace());
+
             $('#resizer').css({
                 left: jLeft.outerWidth() - jFolders.outerRightSpace('m'),
                 width: jFolders.outerRightSpace('m') + jFiles.outerLeftSpace('m')
             });
+
             _.fixFilesHeight();
         }
     });
@@ -228,6 +240,14 @@ _.resize = function() {
         left: jLeft.outerWidth() - jFolders.outerRightSpace('m'),
         width: jFolders.outerRightSpace('m') + jFiles.outerLeftSpace('m')
     });
+};
+
+_.setTitle = function(title) {
+    document.title = title;
+    if (_.opener.name == "tinymce")
+        tinyMCEPopup.editor.windowManager.setTitle(window, title);
+    else if (_.opener.name == "tinymce4")
+        $('iframe[src*="browse.php?opener=tinymce4&"]', window.parent.document).parent().parent().find('div.mce-title').html(title);
 };
 
 _.fixFilesHeight = function() {

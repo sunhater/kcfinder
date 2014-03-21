@@ -58,7 +58,7 @@ _.dialog = function(title, content, options) {
 
     if (!options) options = {};
     var dlg = $('<div></div>');
-    dlg.css('display', "none").attr('title', title).html(content).appendTo('body');
+    dlg.hide().attr('title', title).html(content).appendTo('body');
     if (dlg.find('form').get(0) && !dlg.find('form [type="submit"]').get(0))
         dlg.find('form').append('<button type="submit" style="width:0;height:0;padding:0;margin:0;border:0;visibility:hidden">Submit</button>');
 

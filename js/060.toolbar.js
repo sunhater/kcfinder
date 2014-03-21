@@ -20,7 +20,7 @@ _.initToolbar = function() {
 
     if ($.$.kuki.get('displaySettings') == "on") {
         $('#toolbar a[href="kcact:settings"]').addClass('selected');
-        $('#settings').css('display', "block");
+        $('#settings').show();
         _.resize();
     }
 
@@ -29,12 +29,12 @@ _.initToolbar = function() {
         if (jSettings.css('display') == "none") {
             $(this).addClass('selected');
             $.$.kuki.set('displaySettings', "on");
-            jSettings.css('display', "block");
+            jSettings.show();
             _.fixFilesHeight();
         } else {
             $(this).removeClass('selected');
             $.$.kuki.set('displaySettings', "off");
-            jSettings.css('display', "none");
+            jSettings.hide();
             _.fixFilesHeight();
         }
         return false;
@@ -45,13 +45,10 @@ _.initToolbar = function() {
         return false;
     });
 
-    if (window.opener || (_.opener.name == "tinymce"))
-        $('#toolbar a[href="kcact:maximize"]').click(function() {
-            _.maximize(this);
-            return false;
-        });
-    else
-        $('#toolbar a[href="kcact:maximize"]').css('display', "none");
+    $('#toolbar a[href="kcact:maximize"]').click(function() {
+        _.maximize(this);
+        return false;
+    });
 
     $('#toolbar a[href="kcact:about"]').click(function() {
         var html = '<div class="box about">' +
@@ -101,7 +98,7 @@ _.initToolbar = function() {
 _.initUploadButton = function() {
     var btn = $('#toolbar a[href="kcact:upload"]');
     if (!_.access.files.upload) {
-        btn.css('display', "none");
+        btn.hide();
         return;
     }
     var top = btn.get(0).offsetTop,
@@ -127,11 +124,11 @@ _.uploadFile = function(form) {
     }
     form.elements[1].value = _.dir;
     $('<iframe id="uploadResponse" name="uploadResponse" src="javascript:;"></iframe>').prependTo(document.body);
-    $('#loading').html(_.label("Uploading file...")).css('display', "inline");
+    $('#loading').html(_.label("Uploading file...")).show();
     form.submit();
     $('#uploadResponse').load(function() {
         var response = $(this).contents().find('body').html();
-        $('#loading').css('display', "none");
+        $('#loading').hide();
         response = response.split("\n");
         var selected = [], errors = [];
         $.each(response, function(i, row) {
@@ -154,27 +151,14 @@ _.uploadFile = function(form) {
 };
 
 _.maximize = function(button) {
-    if (window.opener) {
-        window.moveTo(0, 0);
-        width = screen.availWidth;
-        height = screen.availHeight;
-        if ($.agent.opera)
-            height -= 50;
-        window.resizeTo(width, height);
 
-    } else if (_.opener.name == "tinymce") {
-        var win, ifr, id;
+    // TINYMCE 3
+    if (_.opener.name == "tinymce") {
 
-        $('iframe', window.parent.document).each(function() {
-            if (/^mce_\d+_ifr$/.test($(this).attr('id'))) {
-                id = parseInt($(this).attr('id').replace(/^mce_(\d+)_ifr$/, "$1"));
-                win = $('#mce_' + id, window.parent.document);
-                ifr = $('#mce_' + id + '_ifr', window.parent.document);
-            }
-        });
-
-        if (typeof id == "undefined")
-            return;
+        var par = window.parent.document,
+            ifr = $('iframe[src*="browse.php?opener=tinymce&"]', par),
+            id =  parseInt(ifr.attr('id').replace(/^mce_(\d+)_ifr$/, "$1")),
+            win = $('#mce_' + id, par);
 
         if ($(button).hasClass('selected')) {
             $(button).removeClass('selected');
@@ -199,8 +183,8 @@ _.maximize = function(button) {
                 Hspace: parseInt(win.css('width')) - parseInt(ifr.css('width')),
                 Vspace: parseInt(win.css('height')) - parseInt(ifr.css('height'))
             };
-            var width = $(window.parent).width(),
-                height = $(window.parent).height();
+            var width = $(window.top).width(),
+                height = $(window.top).height();
             win.css({
                 left: $(window.parent).scrollLeft(),
                 top: $(window.parent).scrollTop(),
@@ -212,7 +196,68 @@ _.maximize = function(button) {
                 height: height - _.maximizeMCE.Vspace
             });
         }
-    }
+
+    // TINYMCE 4
+    } else if (_.opener.name == "tinymce4") {
+
+        var par = window.parent.document,
+            ifr = $('iframe[src*="browse.php?opener=tinymce4&"]', par).parent(),
+            win = ifr.parent();
+
+        if ($(button).hasClass('selected')) {
+            $(button).removeClass('selected');
+
+            win.css({
+                left: _.maximizeMCE4.left,
+                top: _.maximizeMCE4.top,
+                width: _.maximizeMCE4.width,
+                height: _.maximizeMCE4.height
+            });
+
+            ifr.css({
+                width: _.maximizeMCE4.width,
+                height: _.maximizeMCE4.height - _.maximizeMCE4.Vspace
+            });
+
+        } else {
+            $(button).addClass('selected');
+
+            _.maximizeMCE4 = {
+                width: parseInt(win.css('width')),
+                height: parseInt(win.css('height')),
+                left: win.position().left,
+                top: win.position().top,
+                Vspace: parseInt(win.css('height')) - parseInt(ifr.css('height'))
+            };
+
+            var width = $(window.top).width(),
+                height = $(window.top).height();
+
+            win.css({
+                left: 0,
+                top: 0,
+                width: width,
+                height: height
+            });
+
+            ifr.css({
+                width: width,
+                height: height - _.maximizeMCE4.Vspace
+            });
+        }
+
+    // PUPUP WINDOW
+    } else if (window.opener) {
+        window.moveTo(0, 0);
+        width = screen.availWidth;
+        height = screen.availHeight;
+        if ($.agent.opera)
+            height -= 50;
+        window.resizeTo(width, height);
+
+    // FULLSCREEN MODE FOR OTHERS
+    } else
+        $('body').toggleFullscreen();
 };
 
 _.refresh = function(selected) {

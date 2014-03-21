@@ -28,7 +28,7 @@ _.initClipboard = function() {
         });
     };
     resize();
-    jClipboard.css('display', "block");
+    jClipboard.show();
     $(window).unbind().resize(function() {
         _.resize();
         resize();

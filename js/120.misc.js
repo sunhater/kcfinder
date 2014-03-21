@@ -37,7 +37,7 @@ _.showDialog = function(e) {
 
     dlg.css({left: 0, top: 0, width: ""});
     _.shadow();
-    dlg.css('display', "block");
+    dlg.show();
 
     if (e) {
         left = e.pageX - parseInt(dlg.outerWidth() / 2);
@@ -73,7 +73,7 @@ _.hideDialog = function() {
     _.unshadow();
     $('#clipboard').removeClass('selected');
     $('div.folder > a > span.folder').removeClass('context');
-    $('#dialog').css({display: "none", width: ""}).html("").data('title', null).unbind().click(function() {
+    $('#dialog').hide().css('width', "").html("").data('title', null).unbind().click(function() {
         return false;
     });
     $(document).unbind('keydown').keydown(function(e) {
@@ -82,11 +82,11 @@ _.hideDialog = function() {
 };
 
 _.shadow = function() {
-    $('#shadow').css('display', "block");
+    $('#shadow').show();
 };
 
 _.unshadow = function() {
-    $('#shadow').css('display', "none");
+    $('#shadow').hide();
 };
 
 _.showMenu = function(e) {
@@ -102,10 +102,9 @@ _.showMenu = function(e) {
     if ((dlg.outerHeight() + top) > win.height())
         top = win.height() - dlg.outerHeight();
 
-    dlg.css({
+    dlg.hide().css({
         left: left,
         top: top,
-        display: "none",
         width: ""
     }).fadeIn('fast');
 };
@@ -290,7 +289,7 @@ _.post = function(url, data) {
             html += '<input type="hidden" name="' + $.$.htmlValue(key) + '" value="' + $.$.htmlValue(val) + '" />';
     });
     html += '</form>';
-    $('#dialog').html(html).css('display', "block");
+    $('#dialog').html(html).show();
     $('#postForm').get(0).submit();
 };
 
