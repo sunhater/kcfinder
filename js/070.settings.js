@@ -80,6 +80,7 @@ _.initSettings = function() {
             else
                 $('#show').parent().show();
         }
+        _.fixFilesHeight();
         _.refresh();
     });
 };

@@ -147,8 +147,7 @@ _.changeDir = function(dir) {
                 _.orderFiles();
                 _.dir = dir.data('path');
                 _.dirWritable = data.dirWritable;
-                var title = "KCFinder: /" + _.dir;
-                _.setTitle(title);
+                _.setTitle("KCFinder: /" + _.dir);
                 _.statusDir();
             },
             error: function() {

@@ -227,7 +227,7 @@ _.maximize = function(button) {
                 height: parseInt(win.css('height')),
                 left: win.position().left,
                 top: win.position().top,
-                Vspace: parseInt(win.css('height')) - parseInt(ifr.css('height'))
+                Vspace: win.outerHeight(true) - ifr.outerHeight(true) - 1
             };
 
             var width = $(window.top).width(),
