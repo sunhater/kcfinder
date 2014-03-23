@@ -171,7 +171,8 @@
         },
 
         dirname: function(path) {
-            return /^(.*)\/[^\/]+\/?$/g.test(path)
+            var expr = /^(.*)\/[^\/]+\/?$/g;
+            return expr.test(path)
                 ? path.replace(expr, "$1")
                 : '';
         },

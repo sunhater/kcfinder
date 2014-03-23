@@ -89,26 +89,6 @@ _.unshadow = function() {
     $('#shadow').hide();
 };
 
-_.showMenu = function(e) {
-
-    var left = e.pageX,
-        top = e.pageY,
-        dlg = $('#dialog'),
-        win = $(window);
-
-    if ((dlg.outerWidth() + left) > win.width())
-        left = win.width() - dlg.outerWidth();
-
-    if ((dlg.outerHeight() + top) > win.height())
-        top = win.height() - dlg.outerHeight();
-
-    dlg.hide().css({
-        left: left,
-        top: top,
-        width: ""
-    }).fadeIn('fast');
-};
-
 _.fileNameDialog = function(e, post, inputName, inputValue, url, labels, callBack, selectAll) {
     _.hideDialog();
     var html = '<form method="post" action="javascript:;"><input name="' + inputName + '" type="text" /></form>',
