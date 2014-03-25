@@ -262,7 +262,8 @@ $lang = array(
     // SINCE 3.0
     "Close" => "Затвори",
     "Previous" => "Предишно",
-    "Next" => "Следващо"
+    "Next" => "Следващо",
+    "Confirmation" => "Потвърждение"
 );
 
 ?>

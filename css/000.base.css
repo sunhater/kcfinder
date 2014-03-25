@@ -199,10 +199,6 @@ span.brace.opened, span.brace.closed {
     display: none;
 }
 
-#dialog img {
-    cursor: pointer;
-}
-
 #resizer {
     position: absolute;
     z-index: 98;

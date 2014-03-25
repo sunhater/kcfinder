@@ -53,7 +53,7 @@ _.confirm = function(text, callback, options) {
     };
 
     $.extend(o, options);
-    return _.dialog(_.label("Question"), text, o);
+    return _.dialog(_.label("Confirmation"), text, o);
 };
 
 _.dialog = function(title, content, options) {
@@ -88,6 +88,7 @@ _.dialog = function(title, content, options) {
         closeText: false,
         zindex: 1000000,
         alone: false,
+        blur: false,
         legend: false
     };
 
@@ -100,13 +101,14 @@ _.dialog = function(title, content, options) {
 
     dlg.dialog(o);
     if (!padding)
-        $('.ui-dialog').last().find('.ui-dialog-content').css({
-            padding: 0,
-            overflow: "hidden"
+        dlg.css({
+            padding: 0
         });
+    if (o.blur)
+        dlg.parent().find('.ui-dialog-buttonpane button').first().get(0).blur();
     if (o.legend)
         dlg.parent().find('.ui-dialog-buttonpane').prepend('<div style="float:left;padding:10px 0 0 10px">' + o.legend + '</div>');
-    if ($.agent && $.agent.mozilla)
-        dlg.css('overflow', "hidden");
+    if ($.agent && $.agent.firefox)
+        dlg.css('overflow-x', "hidden");
     return dlg;
 };
