@@ -258,6 +258,11 @@ $lang = array(
     "Качване на файл {number} от {count}... {progress}",
 
     "Failed to upload {filename}!" => "Несполучливо качване на {filename}!",
+
+    // SINCE 3.0
+    "Close" => "Затвори",
+    "Previous" => "Предишно",
+    "Next" => "Следващо"
 );
 
 ?>

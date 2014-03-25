@@ -123,7 +123,7 @@ _.selectFile = function(file, e) {
 };
 
 _.selectAll = function(e) {
-    if ((!e.ctrlKey && !e.metaKey) || ((e.keyCode != 65) && (e.keyCode != 97)))
+    if ((!e.ctrlKey && !e.metaKey) || ((e.keyCode != 65) && (e.keyCode != 97))) // Ctrl-A
         return false;
 
     var files = $('.file'),

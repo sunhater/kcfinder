@@ -135,12 +135,14 @@ _.fileNameDialog = function(e, post, inputName, inputValue, url, labels, callBac
             buttons: [
                 {
                     text: _.label("OK"),
+                    icons: {primary: "ui-icon-check"},
                     click: function() {
                         submit();
                     }
                 },
                 {
                     text: _.label("Cancel"),
+                    icons: {primary: "ui-icon-closethick"},
                     click: function() {
                         $(this).dialog('destroy').detach();
                     }

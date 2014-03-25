@@ -12,100 +12,181 @@
 
 _.viewImage = function(data) {
     _.hideDialog();
-    var ts = new Date().getTime(),
-    showImage = function(data) {
-        var url = $.$.escapeDirs(_.uploadURL + "/" + _.dir + "/" + data.name) + "?ts=" + ts,
-            img = new Image();
 
+    var ts = new Date().getTime(),
+        dlg = false,
+        images = [],
+
+    showImage = function(data) {
+        _.lock = true;
         $('#loading').html(_.label("Loading image...")).show();
-        img.src = url;
-        img.onerror = function() {
-            _.lock = false;
-            $('#loading').hide();
-            _.alert(_.label("Unknown error."));
-            $(document).unbind('keydown').keydown(function(e) {
-                return !_.selectAll(e);
-            });
-            _.refresh();
-        };
-        var onImgLoad = function() {
-            _.lock = false;
-            $('#files .file').each(function() {
-                if ($(this).data('name') == data.name)
-                    _.ssImage = this;
-            });
-            $('#loading').hide();
-            $('#dialog').html('<div class="slideshow"><img /></div>');
-            $('#dialog img').attr({
-                src: url,
-                title: data.name
-            }).fadeIn('fast', function() {
-                var o_w = $('#dialog').outerWidth();
-                var o_h = $('#dialog').outerHeight();
-                var f_w = $(window).width() - 30;
-                var f_h = $(window).height() - 30;
-                if ((o_w > f_w) || (o_h > f_h)) {
-                    if ((f_w / f_h) > (o_w / o_h))
-                        f_w = parseInt((o_w * f_h) / o_h);
-                    else if ((f_w / f_h) < (o_w / o_h))
-                        f_h = parseInt((o_h * f_w) / o_w);
-                    $('#dialog img').attr({
-                        width: f_w,
-                        height: f_h
-                    });
-                }
-                $('#dialog').unbind('click').click(function(e) {
-                    _.hideDialog();
-                    $(document).unbind('keydown');
-                    $(document).keydown(function(e) {
-                        return !_.selectAll(e);
-                    });
-                    if (_.ssImage) {
-                        _.selectFile($(_.ssImage), e);
+
+        var url = $.$.escapeDirs(_.uploadURL + "/" + _.dir + "/" + data.name) + "?ts=" + ts,
+            img = new Image(),
+
+            onImgLoad = function() {
+                _.lock = false;
+
+                $('#files .file').each(function() {
+                    if ($(this).data('name') == data.name) {
+                        _.ssImage = this;
+                        return false;
                     }
                 });
-                _.showDialog();
-                var images = [];
-                $.each(_.files, function(i, file) {
-                    if (file.thumb || file.smallThumb)
-                        images[images.length] = file;
-                });
-                if (images.length)
-                    $.each(images, function(i, image) {
-                        if (image.name == data.name) {
-                            $(document).unbind('keydown').keydown(function(e) {
-                                if (images.length > 1) {
-                                    if (!_.lock && (e.keyCode == 37)) {
-                                        var nimg = i
-                                            ? images[i - 1]
-                                            : images[images.length - 1];
-                                        _.lock = true;
-                                        showImage(nimg);
-                                    }
-                                    if (!_.lock && (e.keyCode == 39)) {
-                                        var nimg = (i >= images.length - 1)
-                                            ? images[0]
-                                            : images[i + 1];
-                                        _.lock = true;
-                                        showImage(nimg);
-                                    }
-                                }
-                                if (e.keyCode == 27) {
+
+                var i = $(img),
+                    w = $(window),
+                    d = $(document);
+
+                i.hide().appendTo('body');
+
+                var o_w = i.width(),
+                    o_h = i.height(),
+                    i_w = o_w,
+                    i_h = o_h,
+
+                    goTo = function(i) {
+                        if (!_.lock) {
+                            var nimg = images[i];
+                            _.currImg = i;
+                            showImage(nimg);
+                        }
+                    },
+
+                    nextFunc = function() {
+                        goTo((_.currImg >= images.length - 1) ? 0 : (_.currImg + 1));
+                    },
+
+                    prevFunc = function() {
+                        goTo((_.currImg ? _.currImg : images.length) - 1);
+                    },
+
+                    t = $('<div></div>');
+
+                i.detach().appendTo(t);
+                t.addClass("img");
+
+                if (!dlg) {
+
+                    var ww = w.width() - 60,
+
+                        closeFunc = function() {
+                            d.unbind('keydown').keydown(function(e) {
+                                return !_.selectAll(e);
+                            });
+                            dlg.dialog('destroy').detach();
+                        };
+
+                    if ((ww % 2)) ww++;
+
+                    dlg = _.dialog($.$.htmlData(data.name), t.get(0), {
+                        width: ww,
+                        height: w.height() - 36,
+                        position: [30, 30],
+                        draggable: false,
+                        nopadding: true,
+                        close: closeFunc,
+                        buttons: [
+                            {
+                                text: _.label("Previous"),
+                                icons: {primary: "ui-icon-triangle-1-w"},
+                                click: prevFunc
+
+                            }, {
+                                text: _.label("Next"),
+                                icons: {secondary: "ui-icon-triangle-1-e"},
+                                click: nextFunc
+
+                            }, {
+                                text: _.label("Select"),
+                                icons: {primary: "ui-icon-check"},
+                                click: function(e) {
                                     _.hideDialog();
-                                    $(document).unbind('keydown').keydown(function(e) {
+                                    d.unbind('keydown').keydown(function(e) {
                                         return !_.selectAll(e);
                                     });
+                                    if (_.ssImage) {
+                                        _.selectFile($(_.ssImage), e);
+                                    }
+                                    dlg.dialog('destroy').detach();
                                 }
-                            });
-                        }
+
+                            }, {
+                                text: _.label("Close"),
+                                icons: {primary: "ui-icon-closethick"},
+                                click: closeFunc
+                            }
+                        ]
                     });
-            });
-        };
+                    dlg.addClass('kcfImageViewer');
+
+                } else {
+                    dlg.prev().find('.ui-dialog-title').html($.$.htmlData(data.name));
+                    dlg.html(t.get(0));
+                }
+
+                i.click(nextFunc);
+
+                var d_w = dlg.innerWidth(),
+                    d_h = dlg.innerHeight();
+
+                if ((o_w > d_w) || (o_h > d_h)) {
+                    i_w = d_w;
+                    i_h = d_h;
+                    if ((d_w / d_h) > (o_w / o_h))
+                        i_w = parseInt((o_w * d_h) / o_h);
+                    else if ((d_w / d_h) < (o_w / o_h))
+                        i_h = parseInt((o_h * d_w) / o_w);
+                }
+
+                i.css({
+                    width: i_w,
+                    height: i_h
+                }).show().parent().css({
+                    display: "block",
+                    margin: "0 auto",
+                    width: i_w,
+                    height: i_h,
+                    marginTop: parseInt((d_h - i_h) / 2)
+                });
+
+                $('#loading').hide();
+
+                d.unbind('keydown').keydown(function(e) {
+                    if (!_.lock) {
+                        var kc = e.keyCode;
+                        if ((kc == 37)) prevFunc();
+                        if ((kc == 39)) nextFunc();
+                    }
+                });
+            };
+
+        img.src = url;
+
         if (img.complete)
             onImgLoad();
-        else
+        else {
             img.onload = onImgLoad;
+            img.onerror = function() {
+                _.lock = false;
+                $('#loading').hide();
+                _.alert(_.label("Unknown error."));
+                d.unbind('keydown').keydown(function(e) {
+                    return !_.selectAll(e);
+                });
+                _.refresh();
+            };
+        }
     };
+
+    $.each(_.files, function(i, file) {
+        var i = images.length;
+        if (file.thumb || file.smallThumb)
+            images[i] = file;
+        if (file.name == data.name)
+            _.currImg = i;
+    });
+
     showImage(data);
     return false;
 };

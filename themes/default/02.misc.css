@@ -455,6 +455,11 @@ a.denied:hover {
     background: #ddebf8;
 }
 
+/* FOR TRANSPARENT IMAGES */
+.kcfImageViewer .img {
+    background: url(img/bg_transparent.png);
+}
+
 /* FIX FIELDSET BORDER RADIUS BUG ON IE */
 body.msie fieldset,
 body.trident.rv fieldset {

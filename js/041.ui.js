@@ -36,6 +36,7 @@ _.confirm = function(text, callback, options) {
         buttons: [
             {
                 text: _.label("Yes"),
+                icons: {primary: "ui-icon-check"},
                 click: function() {
                     callback();
                     $(this).dialog('destroy').detach();
@@ -43,6 +44,7 @@ _.confirm = function(text, callback, options) {
             },
             {
                 text: _.label("No"),
+                icons: {primary: "ui-icon-closethick"},
                 click: function() {
                     $(this).dialog('destroy').detach();
                 }
@@ -67,10 +69,10 @@ _.dialog = function(title, content, options) {
         minHeight: false,
         modal: true,
         width: 351,
-        show: 'fade',
         buttons: [
             {
                 text: _.label("OK"),
+                icons: {primary: "ui-icon-check"},
                 click: function() {
                     if (typeof options.close != "undefined")
                         options.close();
