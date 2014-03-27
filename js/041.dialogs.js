@@ -31,7 +31,6 @@ _.alert = function(text, field, options) {
 };
 
 _.confirm = function(text, callback, options) {
-
     var o = {
         buttons: [
             {
@@ -89,10 +88,9 @@ _.dialog = function(title, content, options) {
         zindex: 1000000,
         alone: false,
         blur: false,
-        legend: false
+        legend: false,
+        nopadding: false
     };
-
-    var padding = options.nopadding ? false : true;
 
     $.extend(o, options);
 
@@ -100,15 +98,18 @@ _.dialog = function(title, content, options) {
         $('.ui-dialog .ui-dialog-content').dialog('destroy').detach();
 
     dlg.dialog(o);
-    if (!padding)
-        dlg.css({
-            padding: 0
-        });
+
+    if (o.nopadding)
+        dlg.css({padding: 0});
+
     if (o.blur)
         dlg.parent().find('.ui-dialog-buttonpane button').first().get(0).blur();
+
     if (o.legend)
         dlg.parent().find('.ui-dialog-buttonpane').prepend('<div style="float:left;padding:10px 0 0 10px">' + o.legend + '</div>');
+
     if ($.agent && $.agent.firefox)
         dlg.css('overflow-x', "hidden");
+
     return dlg;
 };

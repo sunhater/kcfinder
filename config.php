@@ -12,10 +12,9 @@
   *      @link http://kcfinder.sunhater.com
   */
 
-// IMPORTANT!!! Do not remove uncommented settings in this file even if
-// you are using session configuration.
-// See http://kcfinder.sunhater.com/install for setting descriptions
-
+/* IMPORTANT!!! Do not comment or remove uncommented settings in this file
+   even if you are using session configuration.
+   See http://kcfinder.sunhater.com/install for setting descriptions */
 
 $_CONFIG = array(
 
@@ -23,9 +22,9 @@ $_CONFIG = array(
 // GENERAL SETTINGS
 
     'disabled' => true,
-    'theme' => "default",
     'uploadURL' => "upload",
     'uploadDir' => "",
+    'theme' => "default",
 
     'types' => array(
 
@@ -109,17 +108,21 @@ $_CONFIG = array(
 
 // THE FOLLOWING SETTINGS CANNOT BE OVERRIDED WITH SESSION SETTINGS
 
+    '_normalizeFilenames' => false,
+
     '_check4htaccess' => true,
-    //'_cssMinCmd' => "java -jar /path/to/yuicompressor.jar --type css {file}",
-    //'_jsMinCmd' => "java -jar /path/to/yuicompressor.jar --type js {file}",
+
     //'_tinyMCEPath' => "/tiny_mce",
 
     '_sessionVar' => "KCFINDER",
     //'_sessionLifetime' => 30,
     //'_sessionDir' => "/full/directory/path",
-
     //'_sessionDomain' => ".mysite.com",
     //'_sessionPath' => "/my/path",
+
+    //'_cssMinCmd' => "java -jar /path/to/yuicompressor.jar --type css {file}",
+    //'_jsMinCmd' => "java -jar /path/to/yuicompressor.jar --type js {file}",
+
 );
 
 ?>

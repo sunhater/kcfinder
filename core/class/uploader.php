@@ -367,18 +367,28 @@ class uploader {
     }
 
     protected function normalizeFilename($filename) {
+
         if (isset($this->config['filenameChangeChars']) &&
             is_array($this->config['filenameChangeChars'])
         )
             $filename = strtr($filename, $this->config['filenameChangeChars']);
+
+        if (isset($this->config['_normalizeFilenames']) && $this->config['_normalizeFilenames'])
+            $filename = file::normalizeFilename($filename);
+
         return $filename;
     }
 
     protected function normalizeDirname($dirname) {
+
         if (isset($this->config['dirnameChangeChars']) &&
             is_array($this->config['dirnameChangeChars'])
         )
             $dirname = strtr($dirname, $this->config['dirnameChangeChars']);
+
+        if (isset($this->config['_normalizeFilenames']) && $this->config['_normalizeFilenames'])
+            $dirname = file::normalizeFilename($dirname);
+
         return $dirname;
     }
 
