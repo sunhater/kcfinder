@@ -30,7 +30,6 @@ browser.init = function() {
         return false;
     });
     this.initOpeners();
-    console.log(this.opener);
     this.initSettings();
     this.initContent();
     this.initToolbar();
