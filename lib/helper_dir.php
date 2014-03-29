@@ -16,10 +16,10 @@ namespace kcfinder;
 
 class dir {
 
-  /** Checks if the given directory is really writable. The standard PHP
-    * function is_writable() does not work properly on Windows servers
-    * @param string $dir
-    * @return bool */
+/** Checks if the given directory is really writable. The standard PHP
+  * function is_writable() does not work properly on Windows servers
+  * @param string $dir
+  * @return bool */
 
     static function isWritable($dir) {
         $dir = path::normalize($dir);
@@ -35,16 +35,16 @@ class dir {
         return true;
     }
 
-  /** Recursively delete the given directory. Returns TRUE on success.
-    * If $firstFailExit parameter is true (default), the method returns the
-    * path to the first failed file or directory which cannot be deleted.
-    * If $firstFailExit is false, the method returns an array with failed
-    * files and directories which cannot be deleted. The third parameter
-    * $failed is used for internal use only.
-    * @param string $dir
-    * @param bool $firstFailExit
-    * @param array $failed
-    * @return mixed */
+/** Recursively delete the given directory. Returns TRUE on success.
+  * If $firstFailExit parameter is true (default), the method returns the
+  * path to the first failed file or directory which cannot be deleted.
+  * If $firstFailExit is false, the method returns an array with failed
+  * files and directories which cannot be deleted. The third parameter
+  * $failed is used for internal use only.
+  * @param string $dir
+  * @param bool $firstFailExit
+  * @param array $failed
+  * @return mixed */
 
     static function prune($dir, $firstFailExit=true, array $failed=null) {
         if ($failed === null) $failed = array();
@@ -83,11 +83,11 @@ class dir {
         return count($failed) ? $failed : true;
     }
 
-  /** Get the content of the given directory. Returns an array with filenames
-    * or FALSE on failure
-    * @param string $dir
-    * @param array $options
-    * @return mixed */
+/** Get the content of the given directory. Returns an array with filenames
+  * or FALSE on failure
+  * @param string $dir
+  * @param array $options
+  * @return mixed */
 
     static function content($dir, array $options=null) {
 

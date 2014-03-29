@@ -16,10 +16,10 @@ namespace kcfinder;
 
 class path {
 
-  /** Get the absolute URL path of the given one. Returns FALSE if the URL
-    * is not valid or the current directory cannot be resolved (getcwd())
-    * @param string $path
-    * @return string */
+/** Get the absolute URL path of the given one. Returns FALSE if the URL
+  * is not valid or the current directory cannot be resolved (getcwd())
+  * @param string $path
+  * @return string */
 
     static function rel2abs_url($path) {
         if (substr($path, 0, 1) == "/") return $path;
@@ -41,10 +41,10 @@ class path {
         return $return;
     }
 
-  /** Resolve full filesystem path of given URL. Returns FALSE if the URL
-    * cannot be resolved
-    * @param string $url
-    * @return string */
+/** Resolve full filesystem path of given URL. Returns FALSE if the URL
+  * cannot be resolved
+  * @param string $url
+  * @return string */
 
     static function url2fullPath($url) {
         $url = self::normalize($url);
@@ -86,13 +86,13 @@ class path {
         }
     }
 
-  /** Normalize the given path. On Windows servers backslash will be replaced
-    * with slash. Removes unnecessary double slashes and double dots. Removes
-    * last slash if it exists. Examples:
-    * path::normalize("C:\\any\\path\\") returns "C:/any/path"
-    * path::normalize("/your/path/..//home/") returns "/your/home"
-    * @param string $path
-    * @return string */
+/** Normalize the given path. On Windows servers backslash will be replaced
+  * with slash. Removes unnecessary double slashes and double dots. Removes
+  * last slash if it exists. Examples:
+  * path::normalize("C:\\any\\path\\") returns "C:/any/path"
+  * path::normalize("/your/path/..//home/") returns "/your/home"
+  * @param string $path
+  * @return string */
 
     static function normalize($path) {
 
@@ -118,9 +118,9 @@ class path {
         return $path;
     }
 
-  /** Encode URL Path
-    * @param string $path
-    * @return string */
+/** Encode URL Path
+  * @param string $path
+  * @return string */
 
     static function urlPathEncode($path) {
         $path = self::normalize($path);
@@ -131,9 +131,9 @@ class path {
         return $encoded;
     }
 
-  /** Decode URL Path
-    * @param string $path
-    * @return string */
+/** Decode URL Path
+  * @param string $path
+  * @return string */
 
     static function urlPathDecode($path) {
         $path = self::normalize($path);
@@ -143,6 +143,7 @@ class path {
         $decoded = substr($decoded, 0, -1);
         return $decoded;
     }
+
 }
 
 ?>

@@ -363,7 +363,8 @@ class uploader {
 
         if (strlen($message) && method_exists($this, 'errorMsg'))
             $this->errorMsg($message);
-        $this->callBack($url, $message);
+        else
+            $this->callBack($url, $message);
     }
 
     protected function normalizeFilename($filename) {
@@ -701,43 +702,66 @@ class uploader {
 
     protected function callBack($url, $message="") {
         $message = text::jsValue($message);
-        $CKfuncNum = isset($this->opener['CKEditor']['funcNum'])
-            ? $this->opener['CKEditor']['funcNum'] : 0;
-        if (!$CKfuncNum) $CKfuncNum = 0;
+
+        if (isset($this->opener['name'])) {
+            $method = "callBack_{$this->opener['name']}";
+            if (method_exists($this, $method))
+                $js = $this->$method($url, $message);
+        }
+
+        if (!isset($js))
+            $js = $this->callBack_default($url, $message);
+
         header("Content-Type: text/html; charset={$this->charset}");
+        echo "<html><body>$js</body></html>";
+    }
 
-?><html>
-<body>
-<script type='text/javascript'>
-var kc_CKEditor = (window.parent && window.parent.CKEDITOR)
-    ? window.parent.CKEDITOR.tools.callFunction
-    : ((window.opener && window.opener.CKEDITOR)
-        ? window.opener.CKEDITOR.tools.callFunction
-        : false);
-var kc_FCKeditor = (window.opener && window.opener.OnUploadCompleted)
-    ? window.opener.OnUploadCompleted
-    : ((window.parent && window.parent.OnUploadCompleted)
-        ? window.parent.OnUploadCompleted
-        : false);
-var kc_Custom = (window.parent && window.parent.KCFinder)
-    ? window.parent.KCFinder.callBack
-    : ((window.opener && window.opener.KCFinder)
-        ? window.opener.KCFinder.callBack
-        : false);
-if (kc_CKEditor)
-    kc_CKEditor(<?php echo $CKfuncNum ?>, '<?php echo $url ?>', '<?php echo $message ?>');
-if (kc_FCKeditor)
-    kc_FCKeditor(<?php echo strlen($message) ? 1 : 0 ?>, '<?php echo $url ?>', '', '<?php echo $message ?>');
-if (kc_Custom) {
-    if (<?php echo strlen($message) ?>) alert('<?php echo $message ?>');
-    kc_Custom('<?php echo $url ?>');
+    protected function callBack_ckeditor($url, $message) {
+        $CKfuncNum = isset($this->opener['CKEditor']['funcNum']) ? $this->opener['CKEditor']['funcNum'] : 0;
+        if (!$CKfuncNum) $CKfuncNum = 0;
+        return "<script type='text/javascript'>
+var par = window.parent,
+    op = window.opener,
+    o = (par && par.CKEDITOR) ? par : ((op && op.CKEDITOR) ? op : false);
+if (o !== false) {
+    if (op) window.close();
+    o.CKEDITOR.tools.callFunction($CKfuncNum, '$url', '$message');
+} else {
+    alert('$message');
+    if (op) window.close();
 }
-if (!kc_CKEditor && !kc_FCKeditor && !kc_Custom)
-    alert("<?php echo $message ?>");
-</script>
-</body>
-</html><?php
+</script>";
+    }
 
+    protected function callBack_fckeditor($url, $message) {
+        $n = strlen($message) ? 1 : 0;
+        return "<script type='text/javascript'>
+var par = window.parent,
+    op = window.opener,
+    o = (op && op.OnUploadCompleted) ? op.OnUploadCompleted : ((par && par.OnUploadCompleted) ? par.OnUploadCompleted : false);
+if (o !== false) {
+    if (op) window.close();
+    o($n, '$url', '', '$message');
+} else {
+    alert('$message');
+    if (op) window.close();
+}
+</script>";
+    }
+
+    protected function callBack_tinymce($url, $message) {
+        return $this->callBack_default($url, $message);
+    }
+
+    protected function callBack_tinymce4($url, $message) {
+        return $this->callBack_default($url, $message);
+    }
+
+    protected function callBack_default($url, $message) {
+        return "<script type='text/javascript'>
+alert('$message');
+if (window.opener) window.close();
+</script>";
     }
 
     protected function get_htaccess() {

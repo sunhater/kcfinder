@@ -79,23 +79,23 @@
     };
 
     $.fn.fullscreen = function() {
-        $(this).each(function() {
-            var element = this,
-                requestMethod =
-                    element.requestFullScreen ||
-                    element.webkitRequestFullScreen ||
-                    element.mozRequestFullScreen ||
-                    element.msRequestFullScreen;
+        if (!$(this).get(0))
+            return
+        var t = $(this).get(0),
+            requestMethod =
+                t.requestFullScreen ||
+                t.webkitRequestFullScreen ||
+                t.mozRequestFullScreen ||
+                t.msRequestFullScreen;
 
-            if (requestMethod)
-                requestMethod.call(element);
+        if (requestMethod)
+            requestMethod.call(t);
 
-            else if (typeof window.ActiveXObject !== "undefined") {
-                var wscript = new ActiveXObject("WScript.Shell");
-                if (wscript !== null)
-                    wscript.SendKeys("{F11}");
-            }
-        });
+        else if (typeof window.ActiveXObject !== "undefined") {
+            var wscript = new ActiveXObject("WScript.Shell");
+            if (wscript !== null)
+                wscript.SendKeys("{F11}");
+        }
     };
 
     $.fn.toggleFullscreen = function() {
