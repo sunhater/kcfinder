@@ -157,14 +157,14 @@ span.brace.opened, span.brace.closed {
     filter: alpha(opacity=50);
 }
 
-#dialog, #clipboard {
+#menu, #clipboard {
     position: absolute;
     display: none;
     z-index: 101;
     cursor: default;
 }
 
-#dialog .box, #alert {
+#menu .box, #alert {
     max-width: 350px;
 }
 

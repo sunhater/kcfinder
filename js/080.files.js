@@ -15,7 +15,7 @@ _.initFiles = function() {
         return !_.selectAll(e);
     });
     $('#files').unbind().scroll(function() {
-        _.hideDialog();
+        _.menu.hide();
     });
 
     $('.file').unbind().click(function(e) {
@@ -65,7 +65,7 @@ _.showFiles = function(callBack, selected) {
                 if (i == _.files.length - 1) html += '</table>';
             } else {
                 if (file.thumb)
-                    icon = _.baseGetData('thumb') + "&file=" + encodeURIComponent(file.name) + "&dir=" + encodeURIComponent(_.dir) + "&stamp=" + stamp;
+                    icon = _.getURL('thumb') + "&file=" + encodeURIComponent(file.name) + "&dir=" + encodeURIComponent(_.dir) + "&stamp=" + stamp;
                 else if (file.smallThumb) {
                     icon = _.uploadURL + "/" + _.dir + "/" + file.name;
                     icon = $.$.escapeDirs(icon).replace(/\'/g, "%27");

@@ -10,157 +10,12 @@
   *      @link http://kcfinder.sunhater.com
   */
 
-_.drag = function(ev, dd) {
-
-    var top = dd.offsetY,
-        left = dd.offsetX,
-        t = $(this),
-        win = $(window);
-
-    if (top < 0) top = 0;
-    if (left < 0) left = 0;
-
-    if (top + t.outerHeight() > win.height())
-        top = win.height() - t.outerHeight();
-
-    if (left + t.outerWidth() > win.width())
-        left = win.width() - t.outerWidth();
-
-    t.css({
-        top: top,
-        left: left
-    });
-};
-
-_.showDialog = function(e) {
-    var dlg = $('#dialog'), left, top;
-
-    dlg.css({left: 0, top: 0, width: ""});
-    _.shadow();
-    dlg.show();
-
-    if (e) {
-        left = e.pageX - parseInt(dlg.outerWidth() / 2);
-        top = e.pageY - parseInt(dlg.outerHeight() / 2);
-
-        if (left < 0) left = 0;
-        if (top < 0) top = 0;
-
-        if ((dlg.outerWidth() + left) > $(window).width())
-            left = $(window).width() - dlg.outerWidth();
-
-        if ((dlg.outerHeight() + top) > $(window).height())
-            top = $(window).height() - dlg.outerHeight();
-
-        dlg.css({
-            left: left,
-            top: top
-        });
-
-    } else
-        dlg.css({
-            left: parseInt(($(window).width() - dlg.outerWidth()) / 2),
-            top: parseInt(($(window).height() - dlg.outerHeight()) / 2)
-        });
-
-    $(document).unbind('keydown').keydown(function(e) {
-        if (e.keyCode == 27)
-            _.hideDialog();
-    });
-};
-
-_.hideDialog = function() {
-    _.unshadow();
-    $('#clipboard').removeClass('selected');
-    $('div.folder > a > span.folder').removeClass('context');
-    $('#dialog').hide().css('width', "").html("").data('title', null).unbind().click(function() {
-        return false;
-    });
-    $(document).unbind('keydown').keydown(function(e) {
-        return !_.selectAll(e);
-    });
-};
-
 _.shadow = function() {
     $('#shadow').show();
 };
 
 _.unshadow = function() {
     $('#shadow').hide();
-};
-
-_.fileNameDialog = function(e, post, inputName, inputValue, url, labels, callBack, selectAll) {
-    _.hideDialog();
-    var html = '<form method="post" action="javascript:;"><input name="' + inputName + '" type="text" /></form>',
-        submit = function() {
-            var name = dlg.find('[type="text"]').get(0);
-            name.value = $.trim(name.value);
-            if (name.value == "") {
-                _.alert(_.label(labels.errEmpty), function() {
-                    name.focus();
-                });
-                return false;
-            } else if (/[\/\\]/g.test(name.value)) {
-                _.alert(_.label(labels.errSlash), function() {
-                    name.focus();
-                });
-                return false;
-            } else if (name.value.substr(0, 1) == ".") {
-                _.alert(_.label(labels.errDot), function() {
-                    name.focus();
-                });
-                return false;
-            }
-            post[inputName] = name.value;
-            $.ajax({
-                type: "post",
-                dataType: "json",
-                url: url,
-                data: post,
-                async: false,
-                success: function(data) {
-                    if (_.check4errors(data, false))
-                        return;
-                    if (callBack) callBack(data);
-                    dlg.dialog("destroy").detach();
-                },
-                error: function() {
-                    _.alert(_.label("Unknown error."));
-                }
-            });
-            return false;
-        },
-        dlg = _.dialog(_.label(labels.title), html, {
-            width: 351,
-            buttons: [
-                {
-                    text: _.label("OK"),
-                    icons: {primary: "ui-icon-check"},
-                    click: function() {
-                        submit();
-                    }
-                },
-                {
-                    text: _.label("Cancel"),
-                    icons: {primary: "ui-icon-closethick"},
-                    click: function() {
-                        $(this).dialog('destroy').detach();
-                    }
-                }
-            ]
-        }),
-
-        field = dlg.find('[type="text"]');
-
-    field.uniform().attr('value', inputValue).css('width', 310);
-    dlg.find('form').submit(submit);
-
-    if (!selectAll && /^(.+)\.[^\.]+$/ .test(inputValue))
-        field.selection(0, inputValue.replace(/^(.+)\.[^\.]+$/, "$1").length);
-    else {
-        field.get(0).focus();
-        field.get(0).select();
-    }
 };
 
 _.orderFiles = function(callBack, selected) {
@@ -230,13 +85,15 @@ _.humanSize = function(size) {
     return size;
 };
 
-_.baseGetData = function(act) {
-    var data = "browse.php?type=" + encodeURIComponent(_.type) + "&lng=" + _.lang;
+_.getURL = function(act) {
+    var url = "browse.php?type=" + encodeURIComponent(_.type) + "&lng=" + _.lang;
+    if (_.opener.name)
+        url += "&opener=" + _.opener.name;
     if (act)
-        data += "&act=" + act;
+        url += "&act=" + act;
     if (_.cms)
-        data += "&cms=" + _.cms;
-    return data;
+        url += "&cms=" + _.cms;
+    return url;
 };
 
 _.label = function(index, data) {
@@ -271,7 +128,7 @@ _.post = function(url, data) {
             html += '<input type="hidden" name="' + $.$.htmlValue(key) + '" value="' + $.$.htmlValue(val) + '" />';
     });
     html += '</form>';
-    $('#dialog').html(html).show();
+    $('#menu').html(html).show();
     $('#postForm').get(0).submit();
 };
 

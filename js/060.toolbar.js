@@ -12,7 +12,7 @@
 
 _.initToolbar = function() {
     $('#toolbar a').click(function() {
-        _.hideDialog();
+        _.menu.hide();
     });
 
     if (!$.$.kuki.isSet('displaySettings'))
@@ -65,7 +65,7 @@ _.initToolbar = function() {
         setTimeout(function() {
             $.ajax({
                 dataType: "json",
-                url: _.baseGetData('check4Update'),
+                url: _.getURL('check4Update'),
                 async: true,
                 success: function(data) {
                     if (!dlg.html().length)
@@ -106,7 +106,7 @@ _.initUploadButton = function() {
         height = btn.outerHeight(),
         jInput = $('#upload input');
 
-    $('#toolbar').prepend('<div id="upload" style="top:' + top + 'px;width:' + width + 'px;height:' + height + 'px"><form enctype="multipart/form-data" method="post" target="uploadResponse" action="' + _.baseGetData('upload') + '"><input type="file" name="upload[]" onchange="_.uploadFile(this.form)" style="height:' + height + 'px" multiple="multiple" /><input type="hidden" name="dir" value="" /></form></div>');
+    $('#toolbar').prepend('<div id="upload" style="top:' + top + 'px;width:' + width + 'px;height:' + height + 'px"><form enctype="multipart/form-data" method="post" target="uploadResponse" action="' + _.getURL('upload') + '"><input type="file" name="upload[]" onchange="_.uploadFile(this.form)" style="height:' + height + 'px" multiple="multiple" /><input type="hidden" name="dir" value="" /></form></div>');
     jInput.css('margin-left', "-" + (jInput.outerWidth() - width));
     $('#upload').mouseover(function() {
         $('#toolbar a[href="kcact:upload"]').addClass('hover');
@@ -265,7 +265,7 @@ _.refresh = function(selected) {
     $.ajax({
         type: "post",
         dataType: "json",
-        url: _.baseGetData("chDir"),
+        url: _.getURL("chDir"),
         data: {dir: _.dir},
         async: false,
         success: function(data) {

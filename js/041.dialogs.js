@@ -113,3 +113,76 @@ _.dialog = function(title, content, options) {
 
     return dlg;
 };
+
+_.fileNameDialog = function(e, post, inputName, inputValue, url, labels, callBack, selectAll) {
+    var html = '<form method="post" action="javascript:;"><input name="' + inputName + '" type="text" /></form>',
+        submit = function() {
+            var name = dlg.find('[type="text"]').get(0);
+            name.value = $.trim(name.value);
+            if (name.value == "") {
+                _.alert(_.label(labels.errEmpty), function() {
+                    name.focus();
+                });
+                return false;
+            } else if (/[\/\\]/g.test(name.value)) {
+                _.alert(_.label(labels.errSlash), function() {
+                    name.focus();
+                });
+                return false;
+            } else if (name.value.substr(0, 1) == ".") {
+                _.alert(_.label(labels.errDot), function() {
+                    name.focus();
+                });
+                return false;
+            }
+            post[inputName] = name.value;
+            $.ajax({
+                type: "post",
+                dataType: "json",
+                url: url,
+                data: post,
+                async: false,
+                success: function(data) {
+                    if (_.check4errors(data, false))
+                        return;
+                    if (callBack) callBack(data);
+                    dlg.dialog("destroy").detach();
+                },
+                error: function() {
+                    _.alert(_.label("Unknown error."));
+                }
+            });
+            return false;
+        },
+        dlg = _.dialog(_.label(labels.title), html, {
+            width: 351,
+            buttons: [
+                {
+                    text: _.label("OK"),
+                    icons: {primary: "ui-icon-check"},
+                    click: function() {
+                        submit();
+                    }
+                },
+                {
+                    text: _.label("Cancel"),
+                    icons: {primary: "ui-icon-closethick"},
+                    click: function() {
+                        $(this).dialog('destroy').detach();
+                    }
+                }
+            ]
+        }),
+
+        field = dlg.find('[type="text"]');
+
+    field.uniform().attr('value', inputValue).css('width', 310);
+    dlg.find('form').submit(submit);
+
+    if (!selectAll && /^(.+)\.[^\.]+$/ .test(inputValue))
+        field.selection(0, inputValue.replace(/^(.+)\.[^\.]+$/, "$1").length);
+    else {
+        field.get(0).focus();
+        field.get(0).select();
+    }
+};

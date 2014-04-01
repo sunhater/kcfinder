@@ -105,6 +105,22 @@
             $(this).fullscreen();
     };
 
+    $.fn.disableTextSelect = function() {
+        return this.each(function(){
+            if ($.agent.firefox) { // Firefox
+                $(this).css('MozUserSelect', "none");
+            } else if ($.agent.msie) { // IE
+                $(this).bind('selectstart', function() {
+                    return false;
+                });
+            } else { //Opera, etc.
+                $(this).mousedown(function() {
+                    return false;
+                });
+            }
+        });
+    };
+
     $.exitFullscreen = function() {
         var d = document,
             requestMethod =

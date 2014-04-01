@@ -39,7 +39,7 @@ _.removeFromClipboard = function(i) {
     if (!_.clipboard || !_.clipboard[i]) return false;
     if (_.clipboard.length == 1) {
         _.clearClipboard();
-        _.hideDialog();
+        _.menu.hide();
         return;
     }
 
@@ -51,7 +51,7 @@ _.removeFromClipboard = function(i) {
         _.clipboard.pop();
 
     _.initClipboard();
-    _.hideDialog();
+    _.menu.hide();
     _.openClipboard();
     return true;
 };
@@ -75,7 +75,7 @@ _.copyClipboard = function(dir) {
         $.ajax({
             type: "post",
             dataType: "json",
-            url: _.baseGetData("cp_cbd"),
+            url: _.getURL("cp_cbd"),
             data: {dir: dir, files: files},
             async: false,
             success: function(data) {
@@ -125,7 +125,7 @@ _.moveClipboard = function(dir) {
         $.ajax({
             type: "post",
             dataType: "json",
-            url: _.baseGetData("mv_cbd"),
+            url: _.getURL("mv_cbd"),
             data: {dir: dir, files: files},
             async: false,
             success: function(data) {
@@ -172,7 +172,7 @@ _.deleteClipboard = function() {
         $.ajax({
             type: "post",
             dataType: "json",
-            url: _.baseGetData("rm_cbd"),
+            url: _.getURL("rm_cbd"),
             data: {files:files},
             async: false,
             success: function(data) {
@@ -207,7 +207,7 @@ _.downloadClipboard = function() {
         if (_.clipboard[i].readable)
             files[i] = _.clipboard[i].dir + "/" + _.clipboard[i].name;
     if (files.length)
-        _.post(_.baseGetData('downloadClipboard'), {files:files});
+        _.post(_.getURL('downloadClipboard'), {files:files});
 };
 
 _.clearClipboard = function() {

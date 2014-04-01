@@ -14,14 +14,14 @@ _.init = function() {
     if (!_.checkAgent()) return;
 
     $('body').click(function() {
-        _.hideDialog();
+        _.menu.hide();
     }).rightClick();
 
     $('#shadow').click(function() {
         return false;
     });
 
-    $('#dialog').unbind().click(function() {
+    $('#menu').unbind().click(function() {
         return false;
     });
 
@@ -128,7 +128,7 @@ _.initContent = function() {
     $.ajax({
         type: "get",
         dataType: "json",
-        url: _.baseGetData("init"),
+        url: _.getURL("init"),
         async: false,
         success: function(data) {
             if (_.check4errors(data))

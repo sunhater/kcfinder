@@ -13,27 +13,30 @@
 _.menu = {
 
     init: function() {
-        $('#dialog').html("<ul></ul>").css('display', 'none');
+        $('#menu').html("<ul></ul>").css('display', 'none');
     },
 
     addItem: function(href, label, callback, denied) {
         if (typeof denied == "undefined")
             denied = false;
 
-        $('#dialog ul').append('<li><a href="' + href + '"' + (denied ? ' class="denied"' : "") + '><span>' + label + '</span></a></li>');
+        $('#menu ul').append('<li><a href="' + href + '"' + (denied ? ' class="denied"' : "") + '><span>' + label + '</span></a></li>');
 
         if (!denied && $.isFunction(callback))
-            $('#dialog a[href="' + href + '"]').click(callback)
+            $('#menu a[href="' + href + '"]').click(function() {
+                _.menu.hide();
+                return callback();
+            });
     },
 
     addDivider: function() {
-        if ($('#dialog ul').html().length)
-            $('#dialog ul').append("<li>-</li>");
+        if ($('#menu ul').html().length)
+            $('#menu ul').append("<li>-</li>");
     },
 
     show: function(e) {
-        var dlg = $('#dialog'),
-            ul = $('#dialog ul');
+        var dlg = $('#menu'),
+            ul = $('#menu ul');
         if (ul.html().length) {
             dlg.find('ul').first().menu();
             if (typeof e != "undefined") {
@@ -56,6 +59,18 @@ _.menu = {
                 dlg.fadeIn();
         } else
             ul.detach();
+    },
+
+    hide: function() {
+        _.unshadow();
+        $('#clipboard').removeClass('selected');
+        $('div.folder > a > span.folder').removeClass('context');
+        $('#menu').hide().css('width', "").html("").data('title', null).unbind().click(function() {
+            return false;
+        });
+        $(document).unbind('keydown').keydown(function(e) {
+            return !_.selectAll(e);
+        });
     }
 };
 
@@ -83,7 +98,6 @@ _.menuFile = function(file, e) {
             // SELECT FILES
             _.menu.addItem("kcact:pick", _.label("Select"), function() {
                 _.returnFiles(files);
-                _.hideDialog();
                 return false;
             });
 
@@ -91,7 +105,6 @@ _.menuFile = function(file, e) {
             if (thumb)
                 _.menu.addItem("kcact:pick_thumb", _.label("Select Thumbnails"), function() {
                     _.returnThumbnails(files);
-                    _.hideDialog();
                     return false;
                 });
         }
@@ -109,12 +122,11 @@ _.menuFile = function(file, e) {
             // DOWNLOAD
             if (_.support.zip)
                 _.menu.addItem("kcact:download", _.label("Download"), function() {
-                    _.hideDialog();
                     var pfiles = [];
                     $.each(files, function(i, cfile) {
                         pfiles[i] = $(cfile).data('name');
                     });
-                    _.post(_.baseGetData('downloadSelected'), {dir:_.dir, files:pfiles});
+                    _.post(_.getURL('downloadSelected'), {dir:_.dir, files:pfiles});
                     return false;
                 });
         }
@@ -123,7 +135,6 @@ _.menuFile = function(file, e) {
         if (_.access.files.copy || _.access.files.move) {
             _.menu.addDivider();
             _.menu.addItem("kcact:clpbrdadd", _.label("Add to Clipboard"), function() {
-                _.hideDialog();
                 var msg = '';
                 $.each(files, function(i, cfile) {
                     var cdata = $(cfile).data(),
@@ -153,7 +164,6 @@ _.menuFile = function(file, e) {
             _.menu.addDivider();
             _.menu.addItem("kcact:rm", _.label("Delete"), function() {
                 if ($(this).hasClass('denied')) return false;
-                _.hideDialog();
                 var failed = 0,
                     dfiles = [];
                 $.each(files, function(i, cfile) {
@@ -173,7 +183,7 @@ _.menuFile = function(file, e) {
                     $.ajax({
                         type: "post",
                         dataType: "json",
-                        url: _.baseGetData("rm_cbd"),
+                        url: _.getURL("rm_cbd"),
                         data: {files:dfiles},
                         async: false,
                         success: function(data) {
@@ -221,7 +231,6 @@ _.menuFile = function(file, e) {
             // SELECT FILE
             _.menu.addItem("kcact:pick", _.label("Select"), function() {
                 _.returnFile(file);
-                _.hideDialog();
                 return false;
             });
 
@@ -229,7 +238,6 @@ _.menuFile = function(file, e) {
             if (data.thumb)
                 _.menu.addItem("kcact:pick_thumb", _.label("Select Thumbnail"), function() {
                     _.returnFile(_.thumbsURL + "/" + _.dir + "/" + data.name);
-                    _.hideDialog();
                     return false;
                 });
 
@@ -244,7 +252,7 @@ _.menuFile = function(file, e) {
 
         // DOWNLOAD
         _.menu.addItem("kcact:download", _.label("Download"), function() {
-            $('#dialog').html('<form id="downloadForm" method="post" action="' + _.baseGetData('download') + '"><input type="hidden" name="dir" /><input type="hidden" name="file" /></form>');
+            $('#menu').html('<form id="downloadForm" method="post" action="' + _.getURL('download') + '"><input type="hidden" name="dir" /><input type="hidden" name="file" /></form>');
             $('#downloadForm input').get(0).value = _.dir;
             $('#downloadForm input').get(1).value = data.name;
             $('#downloadForm').submit();
@@ -259,7 +267,6 @@ _.menuFile = function(file, e) {
                 if ((_.clipboard[i].name == data.name) &&
                     (_.clipboard[i].dir == _.dir)
                 ) {
-                    _.hideDialog();
                     _.alert(_.label("This file is already added to the Clipboard."));
                     return false;
                 }
@@ -267,7 +274,6 @@ _.menuFile = function(file, e) {
                 cdata.dir = _.dir;
                 _.clipboard[_.clipboard.length] = cdata;
                 _.initClipboard();
-                _.hideDialog();
                 return false;
             });
         }
@@ -282,7 +288,7 @@ _.menuFile = function(file, e) {
                 if (!data.writable) return false;
                 _.fileNameDialog(
                     e, {dir: _.dir, file: data.name},
-                    'newName', data.name, _.baseGetData("rename"), {
+                    'newName', data.name, _.getURL("rename"), {
                         title: "New file name:",
                         errEmpty: "Please enter new file name.",
                         errSlash: "Unallowable characters in file name.",
@@ -297,13 +303,12 @@ _.menuFile = function(file, e) {
         if (_.access.files['delete'])
             _.menu.addItem("kcact:rm", _.label("Delete"), function() {
                 if (!data.writable) return false;
-                _.hideDialog();
                 _.confirm(_.label("Are you sure you want to delete this file?"),
                     function(callBack) {
                         $.ajax({
                             type: "post",
                             dataType: "json",
-                            url: _.baseGetData("delete"),
+                            url: _.getURL("delete"),
                             data: {dir: _.dir, file: data.name},
                             async: false,
                             success: function(data) {
@@ -340,7 +345,6 @@ _.menuDir = function(dir, e) {
         // COPY CLIPBOARD
         if (_.access.files.copy)
             _.menu.addItem("kcact:cpcbd", _.label("Copy {count} files", {count: _.clipboard.length}), function() {
-                _.hideDialog();
                 _.copyClipboard(data.path);
                 return false;
             }, !data.writable);
@@ -348,7 +352,6 @@ _.menuDir = function(dir, e) {
         // MOVE CLIPBOARD
         if (_.access.files.move)
             _.menu.addItem("kcact:mvcbd", _.label("Move {count} files", {count: _.clipboard.length}), function() {
-                _.hideDialog();
                 _.moveClipboard(data.path);
                 return false;
             }, !data.writable);
@@ -359,7 +362,6 @@ _.menuDir = function(dir, e) {
 
     // REFRESH
     _.menu.addItem("kcact:refresh", _.label("Refresh"), function() {
-        _.hideDialog();
         _.refreshDir(dir);
         return false;
     });
@@ -368,8 +370,7 @@ _.menuDir = function(dir, e) {
     if (_.support.zip) {
         _.menu.addDivider();
         _.menu.addItem("kcact:download", _.label("Download"), function() {
-            _.hideDialog();
-            _.post(_.baseGetData("downloadDir"), {dir:data.path});
+            _.post(_.getURL("downloadDir"), {dir:data.path});
             return false;
         });
     }
@@ -381,10 +382,9 @@ _.menuDir = function(dir, e) {
     if (_.access.dirs.create)
         _.menu.addItem("kcact:mkdir", _.label("New Subfolder..."), function(e) {
             if (!data.writable) return false;
-            _.hideDialog();
             _.fileNameDialog(
                 e, {dir: data.path},
-                "newDir", "", _.baseGetData("newDir"), {
+                "newDir", "", _.getURL("newDir"), {
                     title: "New folder name:",
                     errEmpty: "Please enter new folder name.",
                     errSlash: "Unallowable characters in folder name.",
@@ -405,10 +405,9 @@ _.menuDir = function(dir, e) {
     if (_.access.dirs.rename)
         _.menu.addItem("kcact:mvdir", _.label("Rename..."), function(e) {
             if (!data.removable) return false;
-            _.hideDialog();
             _.fileNameDialog(
                 e, {dir: data.path},
-                "newName", data.name, _.baseGetData("renameDir"), {
+                "newName", data.name, _.getURL("renameDir"), {
                     title: "New folder name:",
                     errEmpty: "Please enter new folder name.",
                     errSlash: "Unallowable characters in folder name.",
@@ -435,14 +434,13 @@ _.menuDir = function(dir, e) {
     if (_.access.dirs['delete'])
         _.menu.addItem("kcact:rmdir", _.label("Delete"), function() {
             if (!data.removable) return false;
-            _.hideDialog();
             _.confirm(
                 _.label("Are you sure you want to delete this folder and all its content?"),
                 function(callBack) {
                      $.ajax({
                         type: "post",
                         dataType: "json",
-                        url: _.baseGetData("deleteDir"),
+                        url: _.getURL("deleteDir"),
                         data: {dir: data.path},
                         async: false,
                         success: function(data) {
@@ -486,16 +484,16 @@ _.openClipboard = function() {
     if (!_.clipboard || !_.clipboard.length) return;
 
     // CLOSE MENU
-    if ($('#dialog a[href="kcact:clrcbd"]').html()) {
+    if ($('#menu a[href="kcact:clrcbd"]').html()) {
         $('#clipboard').removeClass('selected');
-        _.hideDialog();
+        _.menu.hide();
         return;
     }
 
     setTimeout(function() {
         _.menu.init();
 
-        var dlg = $('#dialog'),
+        var dlg = $('#menu'),
             jStatus = $('#status'),
             html = '<li class="list"><div>';
 
@@ -510,12 +508,11 @@ _.openClipboard = function() {
             html += '<a title="' + _.label("Click to remove from the Clipboard") + '" onclick="_.removeFromClipboard(' + i + ')"' + ((i == 0) ? ' class="first"' : "") + '><span style="background-image:url(' + $.$.escapeDirs(icon) + ')">' + $.$.htmlData($.$.basename(val.name)) + '</span></a>';
         });
         html += '</div></li><li class="div-files">-</li>';
-        $('#dialog ul').append(html);
+        $('#menu ul').append(html);
 
         // DOWNLOAD
         if (_.support.zip)
             _.menu.addItem("kcact:download", _.label("Download files"), function() {
-                _.hideDialog();
                 _.downloadClipboard();
                 return false;
             });
@@ -527,7 +524,6 @@ _.openClipboard = function() {
         if (_.access.files.copy)
             _.menu.addItem("kcact:cpcbd", _.label("Copy files here"), function() {
                 if (!_.dirWritable) return false;
-                _.hideDialog();
                 _.copyClipboard(_.dir);
                 return false;
             }, !_.dirWritable);
@@ -536,7 +532,6 @@ _.openClipboard = function() {
         if (_.access.files.move)
             _.menu.addItem("kcact:mvcbd", _.label("Move files here"), function() {
                 if (!_.dirWritable) return false;
-                _.hideDialog();
                 _.moveClipboard(_.dir);
                 return false;
             }, !_.dirWritable);
@@ -544,7 +539,6 @@ _.openClipboard = function() {
         // DELETE
         if (_.access.files['delete'])
             _.menu.addItem("kcact:rmcbd", _.label("Delete files"), function() {
-                _.hideDialog();
                 _.confirm(
                     _.label("Are you sure you want to delete all files in the Clipboard?"),
                     function(callBack) {
@@ -559,7 +553,6 @@ _.openClipboard = function() {
 
         // CLEAR CLIPBOARD
         _.menu.addItem("kcact:clrcbd", _.label("Clear the Clipboard"), function() {
-            _.hideDialog();
             _.clearClipboard();
             return false;
         });

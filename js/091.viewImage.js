@@ -11,7 +11,6 @@
   */
 
 _.viewImage = function(data) {
-    _.hideDialog();
 
     var ts = new Date().getTime(),
         dlg = false,
@@ -100,7 +99,6 @@ _.viewImage = function(data) {
                             text: _.label("Select"),
                             icons: {primary: "ui-icon-check"},
                             click: function(e) {
-                                _.hideDialog();
                                 d.unbind('keydown').keydown(function(e) {
                                     return !_.selectAll(e);
                                 });
@@ -125,7 +123,7 @@ _.viewImage = function(data) {
                 dlg.html(t.get(0));
             }
 
-            i.click(nextFunc);
+            dlg.unbind('click').click(nextFunc).disableTextSelect();
 
             var d_w = dlg.innerWidth(),
                 d_h = dlg.innerHeight();

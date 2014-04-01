@@ -181,7 +181,7 @@ _.initDropUpload = function() {
                     xhr.upload.thisFileName = evt.target.thisFileName;
                     xhr.upload.addEventListener("progress", updateProgress, false);
                 }
-                xhr.open('post', _.baseGetData('upload'), true);
+                xhr.open('post', _.getURL('upload'), true);
                 xhr.setRequestHeader('Content-Type', "multipart/form-data; boundary=" + boundary);
                 xhr.setRequestHeader('Content-Length', postbody.length);
 

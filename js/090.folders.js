@@ -12,10 +12,10 @@
 
 _.initFolders = function() {
     $('#folders').scroll(function() {
-        _.hideDialog();
+        _.menu.hide();
     });
     $('div.folder > a').unbind().click(function() {
-        _.hideDialog();
+        _.menu.hide();
         return false;
     });
     $('div.folder > a > span.brace').unbind().click(function() {
@@ -89,7 +89,7 @@ _.expandDir = function(dir) {
                 $.ajax({
                     type: "post",
                     dataType: "json",
-                    url: _.baseGetData("expand"),
+                    url: _.getURL("expand"),
                     data: {dir: path},
                     async: false,
                     success: function(data) {
@@ -137,7 +137,7 @@ _.changeDir = function(dir) {
         $.ajax({
             type: "post",
             dataType: "json",
-            url: _.baseGetData("chDir"),
+            url: _.getURL("chDir"),
             data: {dir: dir.data('path')},
             async: false,
             success: function(data) {
