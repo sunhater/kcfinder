@@ -2,7 +2,7 @@
   *
   *      @desc File related functionality
   *   @package KCFinder
-  *   @version 3.0-dev1
+  *   @version 3.0-pre1
   *    @author Pavel Tzonkov <sunhater@sunhater.com>
   * @copyright 2010-2014 KCFinder Project
   *   @license http://opensource.org/licenses/GPL-3.0 GPLv3
@@ -16,25 +16,16 @@ _.initFiles = function() {
     });
     $('#files').unbind().scroll(function() {
         _.menu.hide();
-    });
+    }).disableTextSelect();
 
     $('.file').unbind().click(function(e) {
-        $.$.unselect();
         _.selectFile($(this), e);
 
     }).rightClick(function(el, e) {
-        $.$.unselect();
         _.menuFile($(el), e);
 
     }).dblclick(function() {
-        $.$.unselect();
         _.returnFile($(this));
-
-    }).mouseup(function() {
-        $.$.unselect();
-
-    }).mouseout(function() {
-        $.$.unselect();
     });
 
     $.each(_.shows, function(i, val) {

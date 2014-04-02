@@ -4,7 +4,7 @@
   *
   *      @desc Base configuration file
   *   @package KCFinder
-  *   @version 3.0-dev1
+  *   @version 3.0-pre1
   *    @author Pavel Tzonkov <sunhater@sunhater.com>
   * @copyright 2010-2014 KCFinder Project
   *   @license http://opensource.org/licenses/GPL-3.0 GPLv3
@@ -31,7 +31,7 @@ $_CONFIG = array(
     // (F)CKEditor types
         'files'   =>  "",
         'flash'   =>  "swf",
-        'images'  =>  "*img",
+        'imagess'  =>  "*img",
 
     // TinyMCE types
         'file'    =>  "",
@@ -122,7 +122,6 @@ $_CONFIG = array(
 
     //'_cssMinCmd' => "java -jar /path/to/yuicompressor.jar --type css {file}",
     //'_jsMinCmd' => "java -jar /path/to/yuicompressor.jar --type js {file}",
-
 );
 
 ?>

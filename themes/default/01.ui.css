@@ -1258,22 +1258,18 @@ body .ui-tooltip {
 .ui-menu .ui-menu-item.ui-menu-item-last a,
 .ui-dialog-buttonpane,
 .ui-datepicker-multi .ui-datepicker-group-last .ui-datepicker-header,
-.ui-datepicker .ui-datepicker-buttonpane{
+.ui-datepicker .ui-datepicker-buttonpane {
     border-bottom-right-radius: 4px;
 }
 
 /* Overlays */
 .ui-widget-overlay {
-    background: #fff;
-    opacity: .5;
-    filter: alpha(opacity=50);
+    background: rgba(255,255,255,.5);
 }
 .ui-widget-shadow {
     margin: -7px 0 0 -7px;
     padding: 7px;
-    background: #000;
-    opacity: .3;
-    filter: alpha(opacity=30);
+    background: rgba(0,0,0,.3);
     border-radius: 8px;
 }
 

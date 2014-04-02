@@ -2,7 +2,7 @@
   *
   *      @desc Dialog boxes functionality
   *   @package KCFinder
-  *   @version 3.0-dev1
+  *   @version 3.0-pre1
   *    @author Pavel Tzonkov <sunhater@sunhater.com>
   * @copyright 2010-2014 KCFinder Project
   *   @license http://opensource.org/licenses/GPL-3.0 GPLv3
@@ -89,7 +89,9 @@ _.dialog = function(title, content, options) {
         alone: false,
         blur: false,
         legend: false,
-        nopadding: false
+        nopadding: false,
+        show: { effect: "fade", duration: 250 },
+        hide: { effect: "fade", duration: 250 }
     };
 
     $.extend(o, options);

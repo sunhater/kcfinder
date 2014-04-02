@@ -4,7 +4,7 @@
   *
   *      @desc Uploader class
   *   @package KCFinder
-  *   @version 3.0-dev1
+  *   @version 3.0-pre1
   *    @author Pavel Tzonkov <sunhater@sunhater.com>
   * @copyright 2010-2014 KCFinder Project
   *   @license http://opensource.org/licenses/GPL-3.0 GPLv3
@@ -17,7 +17,7 @@ namespace kcfinder;
 class uploader {
 
 /** Release version */
-    const VERSION = "3.0-dev1";
+    const VERSION = "3.0-pre1";
 
 /** Config session-overrided settings
   * @var array */
@@ -279,13 +279,14 @@ class uploader {
                 $this->config['_check4htaccess']
             ) {
                 $htaccess = "{$this->config['uploadDir']}/.htaccess";
+                $original = $this->get_htaccess();
                 if (!file_exists($htaccess)) {
-                    if (!@file_put_contents($htaccess, $this->get_htaccess()))
+                    if (!@file_put_contents($htaccess, $original))
                         $this->backMsg("Cannot write to upload folder. {$this->config['uploadDir']}");
                 } else {
                     if (false === ($data = @file_get_contents($htaccess)))
                         $this->backMsg("Cannot read .htaccess");
-                    if (($data != $this->get_htaccess()) && !@file_put_contents($htaccess, $data))
+                    if (($data != $original) && !@file_put_contents($htaccess, $original))
                         $this->backMsg("Incorrect .htaccess file. Cannot rewrite it!");
                 }
             }
@@ -296,7 +297,6 @@ class uploader {
                     $this->backMsg("Cannot create {dir} folder.", array('dir' => $this->type));
             } elseif (!is_readable($this->typeDir))
                 $this->backMsg("Cannot read upload folder.");
-
         }
     }
 

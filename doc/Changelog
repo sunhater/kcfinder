@@ -6,9 +6,6 @@ VERSION 3.0
 * Improvements in JavaScript code to be well compressed and faster
 * Keep PNG transparency in generated thumbnails
 * New image viewer
-TODO:
-* Edit text files
-* Custom image manipulations (resize, crop, rotate)
 
 
 VERSION 2.54 - 2014-03-12

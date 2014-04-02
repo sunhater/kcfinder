@@ -2,7 +2,7 @@
   *
   *      @desc Folder related functionality
   *   @package KCFinder
-  *   @version 3.0-dev1
+  *   @version 3.0-pre1
   *    @author Pavel Tzonkov <sunhater@sunhater.com>
   * @copyright 2010-2014 KCFinder Project
   *   @license http://opensource.org/licenses/GPL-3.0 GPLv3
@@ -13,7 +13,7 @@
 _.initFolders = function() {
     $('#folders').scroll(function() {
         _.menu.hide();
-    });
+    }).disableTextSelect();
     $('div.folder > a').unbind().click(function() {
         _.menu.hide();
         return false;
@@ -25,7 +25,6 @@ _.initFolders = function() {
     $('div.folder > a > span.folder').unbind().click(function() {
         _.changeDir($(this).parent());
     }).rightClick(function(el, e) {
-        $.$.unselect();
         _.menuDir($(el).parent(), e);
     });
 };

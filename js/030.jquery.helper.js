@@ -2,7 +2,7 @@
   *
   *      @desc Helper functions integrated in jQuery
   *   @package KCFinder
-  *   @version 3.0-dev1
+  *   @version 3.0-pre1
   *    @author Pavel Tzonkov <sunhater@sunhater.com>
   * @copyright 2010-2014 KCFinder Project
   *   @license http://opensource.org/licenses/GPL-3.0 GPLv3
@@ -28,6 +28,22 @@
             field.selectionEnd = end;
         }
         field.focus();
+    };
+
+    $.fn.disableTextSelect = function() {
+        return this.each(function() {
+            if ($.agent.firefox) { // Firefox
+                $(this).css('MozUserSelect', "none");
+            } else if ($.agent.msie) { // IE
+                $(this).bind('selectstart', function() {
+                    return false;
+                });
+            } else { //Opera, etc.
+                $(this).mousedown(function() {
+                    return false;
+                });
+            }
+        });
     };
 
     $.fn.outerSpace = function(type, mbp) {
@@ -105,22 +121,6 @@
             $(this).fullscreen();
     };
 
-    $.fn.disableTextSelect = function() {
-        return this.each(function(){
-            if ($.agent.firefox) { // Firefox
-                $(this).css('MozUserSelect', "none");
-            } else if ($.agent.msie) { // IE
-                $(this).bind('selectstart', function() {
-                    return false;
-                });
-            } else { //Opera, etc.
-                $(this).mousedown(function() {
-                    return false;
-                });
-            }
-        });
-    };
-
     $.exitFullscreen = function() {
         var d = document,
             requestMethod =
@@ -147,16 +147,6 @@
 
     $.$ = {
 
-        unselect: function() {
-            if (document.selection && document.selection.empty)
-                document.selection.empty() ;
-            else if (window.getSelection) {
-                var sel = window.getSelection();
-                if (sel && sel.removeAllRanges)
-                sel.removeAllRanges();
-            }
-        },
-
         htmlValue: function(value) {
             return value
                 .replace(/\&/g, "&amp;")
@@ -181,7 +171,8 @@
         },
 
         basename: function(path) {
-            return /^.*\/([^\/]+)\/?$/g.test(path)
+            var expr = /^.*\/([^\/]+)\/?$/g;
+            return expr.test(path)
                 ? path.replace(expr, "$1")
                 : path;
         },
