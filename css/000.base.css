@@ -146,17 +146,6 @@ span.brace.opened, span.brace.closed {
     cursor: pointer;
 }
 
-#shadow {
-    position: absolute;
-    top: 0;
-    left: 0;
-    display: none;
-    background: #fff;
-    z-index: 100;
-    opacity: 0.5;
-    filter: alpha(opacity=50);
-}
-
 #menu, #clipboard {
     position: absolute;
     display: none;

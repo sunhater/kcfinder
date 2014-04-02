@@ -20,7 +20,7 @@
                 expr: / [a-z]+\/[0-9a-z\.]+/ig,
                 delim: "/"
             }, {
-                expr: / [a-z]+\:[0-9a-z\.]+/ig,
+                expr: / [a-z]+:[0-9a-z\.]+/ig,
                 delim: ":",
                 keys: ["rv", "version"]
             }, {
@@ -28,7 +28,7 @@
                 delim: /\s+/,
                 keys: ["opera", "msie", "firefox", "android"]
             }, {
-                expr: /[ \/\(]([a-z0-9_]+)[ \;\)\/]/ig,
+                expr: /[ \/\(]([a-z0-9_]+)[ ;\)\/]/ig,
                 keys: "i386|i486|i586|i686|x86|x64|x86_64|intel|ppc|powerpc|windows|macintosh|darwin|unix|linux|sunos|android|iphone|ipad|ipod|amiga|amigaos|beos|wii|playstation|gentoo|fedora|slackware|ubuntu|archlinux|debian|mint|mageia|mandriva|freebsd|openbsd|netbsd|solaris|opensolaris|x11|mobile".split('|'),
                 sub: "platform"
             }
@@ -49,8 +49,8 @@
             }
 
             if (typeof pattern.keys != "undefined") {
-                var exists = false;
-                for (k = 0; k < pattern.keys.length; k++)
+                var exists = false, k = 0;
+                for (; k < pattern.keys.length; k++)
                     if (pattern.keys[k] == key) {
                         exists = true;
                         break;

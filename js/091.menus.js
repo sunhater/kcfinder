@@ -62,7 +62,6 @@ _.menu = {
     },
 
     hide: function() {
-        _.unshadow();
         $('#clipboard').removeClass('selected');
         $('div.folder > a > span.folder').removeClass('context');
         $('#menu').hide().css('width', "").html("").data('title', null).unbind().click(function() {

@@ -17,10 +17,6 @@ _.init = function() {
         _.menu.hide();
     }).rightClick();
 
-    $('#shadow').click(function() {
-        return false;
-    });
-
     $('#menu').unbind().click(function() {
         return false;
     });
@@ -220,10 +216,7 @@ _.resize = function() {
         height: jWindow.height() - jStatus.outerHeight()
     });
     $('#toolbar').css('height', $('#toolbar a').outerHeight());
-    $('#shadow').css({
-        width: jWindow.width(),
-        height: jWindow.height()
-    });
+
     jResizer.css('height', $(window).height());
 
     jFolders.css('height', jLeft.outerHeight() - jFolders.outerVSpace());

@@ -119,28 +119,23 @@ class dir {
 
         $files = array();
         while (($file = @readdir($dh)) !== false) {
-            $type = filetype("$dir/$file");
 
-            if ($options['followLinks'] && ($type === "link")) {
-                $lfile = "$dir/$file";
-                do {
-                    $ldir = dirname($lfile);
-                    $lfile = @readlink($lfile);
-                    if (substr($lfile, 0, 1) != "/")
-                        $lfile = "$ldir/$lfile";
-                    $type = filetype($lfile);
-                } while ($type == "link");
-            }
-
-            if ((($type === "dir") && (($file == ".") || ($file == ".."))) ||
+            if (($file == '.') || ($file == '..') ||
                 !preg_match($options['pattern'], $file)
             )
                 continue;
 
+            $fullpath = "$dir/$file";
+            $type = filetype($fullpath);
+
+            // If file is a symlink, get the true type of its destination
+            if ($options['followLinks'] && ($type == "link"))
+                $type = filetype(realpath($fullpath));
+
             if (($options['types'] === "all") || ($type === $options['types']) ||
-                ((is_array($options['types'])) && in_array($type, $options['types']))
+                (is_array($options['types']) && in_array($type, $options['types']))
             )
-                $files[] = $options['addPath'] ? "$dir/$file" : $file;
+                $files[] = $options['addPath'] ? $fullpath : $file;
         }
         closedir($dh);
         usort($files, array(__NAMESPACE__ . "\\dir", "fileSort"));

@@ -10,14 +10,6 @@
   *      @link http://kcfinder.sunhater.com
   */
 
-_.shadow = function() {
-    $('#shadow').show();
-};
-
-_.unshadow = function() {
-    $('#shadow').hide();
-};
-
 _.orderFiles = function(callBack, selected) {
     var order = $.$.kuki.get('order'),
         desc = ($.$.kuki.get('orderDesc') == "on"),
@@ -108,11 +100,9 @@ _.label = function(index, data) {
 _.check4errors = function(data) {
     if (!data.error)
         return false;
-    var msg;
-    if (data.error.join)
-        msg = data.error.join("\n");
-    else
-        msg = data.error;
+    var msg = data.error.join
+        ? data.error.join("\n")
+        : data.error;
     _.alert(msg);
     return true;
 };
