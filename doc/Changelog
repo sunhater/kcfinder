@@ -1,5 +1,5 @@
-VERSION 3.0
------------
+VERSION 3.0-pre1 - 2014-04-02
+-----------------------------
 * Now KCFinder requires PHP >= 5.3 becouse of using namespace: "kcfinder"
 * Support CSS & JavaScript minifier (on the fly)
 * jQuery UI & Uniform support. New theme & theme engine (old themes are not supported)

@@ -255,6 +255,18 @@ _.maximize = function(button) {
             height -= 50;
         window.resizeTo(width, height);
 
+    // IFRAME
+    } else if (window.parent) {
+        var el = null;
+        $(window.parent.document).find('iframe').each(function() {
+            if (this.src.replace('/?', '?') == window.location.href.replace('/?', '?')) {
+                el = this;
+                return false;
+            }
+        });
+        if (el !== null)
+            $(el).toggleFullscreen(window.parent.document);
+
     // FULLSCREEN MODE FOR OTHERS
     } else
         $('body').toggleFullscreen();

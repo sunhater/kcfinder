@@ -183,7 +183,7 @@ _.initDropUpload = function() {
                 }
                 xhr.open('post', _.getURL('upload'), true);
                 xhr.setRequestHeader('Content-Type', "multipart/form-data; boundary=" + boundary);
-                xhr.setRequestHeader('Content-Length', postbody.length);
+                //xhr.setRequestHeader('Content-Length', postbody.length);
 
                 xhr.onload = function(e) {
                     $('#loading').hide();

@@ -765,13 +765,7 @@ if (window.opener) window.close();
     }
 
     protected function get_htaccess() {
-        return "<IfModule mod_php4.c>
-  php_value engine off
-</IfModule>
-<IfModule mod_php5.c>
-  php_value engine off
-</IfModule>
-";
+        return file_get_contents("core/upload.htaccess");
     }
 }
 
