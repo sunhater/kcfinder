@@ -255,21 +255,27 @@ _.maximize = function(button) {
             height -= 50;
         window.resizeTo(width, height);
 
-    // IFRAME
-    } else if (window.parent) {
-        var el = null;
-        $(window.parent.document).find('iframe').each(function() {
-            if (this.src.replace('/?', '?') == window.location.href.replace('/?', '?')) {
-                el = this;
-                return false;
-            }
-        });
-        if (el !== null)
-            $(el).toggleFullscreen(window.parent.document);
+    } else {
+        if (window.parent) {
+            var el = null;
+            $(window.parent.document).find('iframe').each(function() {
+                if (this.src.replace('/?', '?') == window.location.href.replace('/?', '?')) {
+                    el = this;
+                    return false;
+                }
+            });
 
-    // FULLSCREEN MODE FOR OTHERS
-    } else
-        $('body').toggleFullscreen();
+            // IFRAME
+            if (el !== null)
+                $(el).toggleFullscreen(window.parent.document);
+
+            // SELF WINDOW
+            else
+                $('body').toggleFullscreen();
+
+        } else
+            $('body').toggleFullscreen();
+    }
 };
 
 _.refresh = function(selected) {
