@@ -122,4 +122,5 @@ $_CONFIG = array(
     //'_jsMinCmd' => "java -jar /path/to/yuicompressor.jar --type js {file}",
 );
 
+
 ?>
