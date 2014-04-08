@@ -4,7 +4,7 @@
   *
   *      @desc Base configuration file
   *   @package KCFinder
-  *   @version 3.0-pre1
+  *   @version 3.0
   *    @author Pavel Tzonkov <sunhater@sunhater.com>
   * @copyright 2010-2014 KCFinder Project
   *   @license http://opensource.org/licenses/GPL-3.0 GPLv3
@@ -84,7 +84,7 @@ $_CONFIG = array(
         )
     ),
 
-    'deniedExts' => "exe com msi bat php phps phtml php3 php4 php5 php6 cgi pl",
+    'deniedExts' => "exe com msi bat cgi pl php phps phtml php3 php4 php5 php6 py pyc pyo pcgi pcgi3 pcgi4 pcgi5 pchi6",
 
 
 // MISC SETTINGS
@@ -109,9 +109,7 @@ $_CONFIG = array(
 // THE FOLLOWING SETTINGS CANNOT BE OVERRIDED WITH SESSION SETTINGS
 
     '_normalizeFilenames' => false,
-
     '_check4htaccess' => true,
-
     //'_tinyMCEPath' => "/tiny_mce",
 
     '_sessionVar' => "KCFINDER",
