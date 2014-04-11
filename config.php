@@ -21,7 +21,7 @@ $_CONFIG = array(
 
 // GENERAL SETTINGS
 
-    'disabled' => true,
+    'disabled' => false,
     'uploadURL' => "upload",
     'uploadDir' => "",
     'theme' => "default",
@@ -110,7 +110,7 @@ $_CONFIG = array(
 
     '_normalizeFilenames' => false,
     '_check4htaccess' => true,
-    //'_tinyMCEPath' => "/tiny_mce",
+    '_tinyMCEPath' => "/tiny_mce",
 
     '_sessionVar' => "KCFINDER",
     //'_sessionLifetime' => 30,
@@ -120,6 +120,9 @@ $_CONFIG = array(
 
     //'_cssMinCmd' => "java -jar /path/to/yuicompressor.jar --type css {file}",
     //'_jsMinCmd' => "java -jar /path/to/yuicompressor.jar --type js {file}",
+
+    '_cssMinCmd' => "java -jar D:/yuicompressor.jar --type css {file}",
+    '_jsMinCmd' => "java -jar D:/yuicompressor.jar --type js {file}",
 );
 
 ?>

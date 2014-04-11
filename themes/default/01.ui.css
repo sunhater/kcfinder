@@ -1542,11 +1542,11 @@ div.checker {
 div.checker,
 div.checker span,
 div.checker input {
-    width: 16px;
-    height: 16px;
+    width: 15px;
+    height: 15px;
 }
 div.checker span.checked {
-    background: url(img/ui-icons_white.png) -64px -144px;
+    background: url(img/ui-icons_white.png) -64px -145px;
 }
 div.checker input {
     opacity: 0;
@@ -1562,7 +1562,6 @@ div.radio {
     border: 1px solid;
     padding: 1px;
     border-radius: 9px;
-    margin-bottom: 1px;
 }
 div.radio,
 div.radio span,

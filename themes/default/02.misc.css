@@ -198,11 +198,11 @@ span.denied {
 div.file {
     padding: 4px;
     margin: 3px;
-    border: 1px solid #aaa;
+    border: 1px solid transparent;
     border-radius: 4px;
-    background: #fff;
 }
 div.file:hover {
+    border-color: #aaa;
     box-shadow: inset 0 0 7px #fff, inset 0 0 3px #fff;
     background: #c6c6c6;
     background: -webkit-linear-gradient(top, #e7e7e7, #c6c6c6);
@@ -216,6 +216,7 @@ div.file .name {
     font-weight: bold;
     height: 16px;
     overflow: hidden;
+    padding-bottom: 2px;
 }
 div.file .time {
     font-size: 10px;

@@ -20,7 +20,7 @@ _.initClipboard = function() {
         size += val.size;
     });
     size = _.humanSize(size);
-    jClipboard.html('<div title="' + _.label("Clipboard") + ' (' + _.clipboard.length + ' ' + _.label("files") + ', ' + size + ')" onclick="_.openClipboard()"></div>');
+    jClipboard.disableTextSelect().html('<div title="' + _.label("Clipboard") + ' (' + _.clipboard.length + ' ' + _.label("files") + ', ' + size + ')" onclick="_.openClipboard()"></div>');
     var resize = function() {
         jClipboard.css({
             left: $(window).width() - jClipboard.outerWidth(),
