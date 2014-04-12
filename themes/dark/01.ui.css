@@ -1279,42 +1279,12 @@ body .ui-tooltip {
     margin-top: -1px
 }
 
-/*.ui-accordion-header,
-.ui-tabs-nav,
-.ui-button,
-.ui-tabs li,
-.ui-slider-handle,
-.ui-slider-range,
-.ui-datepicker-header,
-.ui-datepicker-header a:hover,
-.ui-datepicker-calendar .ui-state-default,
-.ui-progressbar-value,
-.ui-menu .ui-menu-item a.ui-state-focus,
-.ui-menu .ui-menu-item a.ui-state-active,
-.ui-dialog-titlebar,
-.ui-dialog-titlebar-close.ui-state-default.ui-state-hover,
-.ui-datepicker .ui-datepicker-buttonpane button {
-    box-shadow: inset 0 0 4px #fff;
-}
-
-.ui-spinner,
-.ui-menu {
-    box-shadow: inset 0 0 4px #777;
-}
-
-.ui-accordion-content,
-.ui-tabs,
-.ui-dialog-content,
-.ui-dialog-buttonpane,
-.ui-datepicker,
-.ui-datepicker .ui-datepicker-buttonpane {
-    box-shadow: 0 0 3px #425064, 0 0 2px #425064;
-}*/
-
 .ui-button {
     box-shadow: inset 0 0 3px #555, inset 0 0 6px #555, 0 0 3px #000, 0 0 2px #000;
 }
-.ui-button.ui-state-active,
+.ui-button.ui-state-active {
+    box-shadow: inset 0 0 3px #88b9da, 0 0 3px #000, 0 0 2px #000;
+}
 .ui-widget-header,
 .ui-menu-item .ui-state-focus {
     box-shadow: inset 0 0 3px #88b9da;
