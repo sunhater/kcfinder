@@ -122,6 +122,10 @@ $lang = array(
     "You cannot rename the extension of files!" => "Dosya uzantılarını değiştiremezsiniz!",
     "Uploading file {number} of {count}... {progress}" => "{number} / {count} dosya yükleniyor... {progress}",
     "Failed to upload {filename}!" => "{filename} dosyası yüklenemedi!",
+    "Close" => "Kapat",
+    "Previous" => "Önceki",
+    "Next" => "Sonraki",
+    "Confirmation" => "Onay",
 );
 
 ?>
