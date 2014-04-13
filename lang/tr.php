@@ -126,6 +126,7 @@ $lang = array(
     "Previous" => "Önceki",
     "Next" => "Sonraki",
     "Confirmation" => "Onay",
+    "Warning" => "Uyarı",
 );
 
 ?>
