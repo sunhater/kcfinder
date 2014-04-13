@@ -123,6 +123,11 @@ $lang = array(
     "You cannot rename the extension of files!" => "Вы не можете изменять расширения файлов!",
     "Uploading file {number} of {count}... {progress}" => "Загрузка {number} файла из {count}... {progress}",
     "Failed to upload {filename}!" => "Неудачная попытка загрузки {filename}!",
+    "Close" => "Закрыть",
+    "Previous" => "Предыдущий",
+    "Next" => "Следующий",
+    "Confirmation" => "Подтверждение",
+    "Warning" => "Предупреждение",
 );
 
 ?>
