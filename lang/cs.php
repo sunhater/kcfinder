@@ -80,7 +80,7 @@ $lang = array(
     "Upload" => "Nahrát",
     "Refresh" => "Obnovit",
     "Settings" => "Nastavení",
-    "Maximize" => "Maxializovat",
+    "Maximize" => "Maximalizovat",
     "About" => "O aplikaci",
     "files" => "soubory",
     "selected files" => "vybrané soubory",
@@ -122,6 +122,11 @@ $lang = array(
     "You cannot rename the extension of files!" => "Nemůžete přejmenovat příponu souborů!",
     "Uploading file {number} of {count}... {progress}" => "Nahrávám soubor {number} z {count}... {progress}",
     "Failed to upload {filename}!" => "Nepodařilo se nahrát soubor {filename}!",
+    "Close" => "Zavřít",
+    "Previous" => "Předchozí",
+    "Next" => "Další",
+    "Confirmation" => "Potvrzení",
+    "Warning" => "Varování",
 );
 
 ?>
