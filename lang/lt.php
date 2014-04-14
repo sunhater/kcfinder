@@ -122,6 +122,9 @@ $lang = array(
     "You cannot rename the extension of files!" => "Negalima keisti failų plėtinių!",
     "Uploading file {number} of {count}... {progress}" => "Įkeliamas {number} failas iš {count}... {progress}",
     "Failed to upload {filename}!" => "Nepavyko įkelti {filename}!",
+    "Close" => "Uždaryti",
+    "Previous" => "Ankstesnis",
+    "Next" => "Kitas",
+    "Confirmation" => "Patvirtinimas",
+    "Warning" => "Įspėjimas",
 );
-
-?>
