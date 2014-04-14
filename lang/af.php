@@ -115,16 +115,16 @@ $lang = array(
     "Die lêer '{file}' bestaan ​​nie.",
 
     "Cannot read '{file}'." =>
-    "Kan nie '{lêer}' lees nie.",
+    "Kan nie '{file}' lees nie.",
 
     "Cannot copy '{file}'." =>
-    "Kan nie '{lêer}' kopieer nie.",
+    "Kan nie '{file}' kopieer nie.",
 
     "Cannot move '{file}'." =>
-    "Kan nie '{lêer}' beweeg nie.",
+    "Kan nie '{file}' beweeg nie.",
 
     "Cannot delete '{file}'." =>
-    "Kan nie '{lêer}' verwyder .",
+    "Kan nie '{file}' verwyder .",
 
     "Click to remove from the Clipboard" =>
     "Klik om te verwyder van die Klembord",
