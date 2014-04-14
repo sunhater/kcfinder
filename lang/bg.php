@@ -263,7 +263,8 @@ $lang = array(
     "Close" => "Затвори",
     "Previous" => "Предишно",
     "Next" => "Следващо",
-    "Confirmation" => "Потвърждение"
+    "Confirmation" => "Потвърждение",
+    "Warning" => "Внимание"
 );
 
 ?>
