@@ -441,7 +441,10 @@ class uploader {
             return $this->label("File name shouldn't begins with '.'");
 
         // EXTENSION CHECK
-        elseif (!$this->validateExtension($extension, $this->type))
+        elseif (
+            (substr($file['name'], -1) == ".") ||
+            !$this->validateExtension($extension, $this->type)
+        )
             return $this->label("Denied file extension.");
 
         // SPECIAL DIRECTORY TYPES CHECK (e.g. *img)
