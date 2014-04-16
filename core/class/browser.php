@@ -715,29 +715,6 @@ class browser extends uploader {
         return "/" . basename($target);
     }
 
-    protected function checkFilePath($file) {
-        $rPath = realpath($file);
-        if (strtoupper(substr(PHP_OS, 0, 3)) == "WIN")
-            $rPath = str_replace("\\", "/", $rPath);
-        return (substr($rPath, 0, strlen($this->typeDir)) === $this->typeDir);
-    }
-
-    protected function checkFilename($file) {
-
-        if ((basename($file) !== $file) ||
-
-            preg_match('/[\<\>\|\/\\\\]/s', $file) ||
-            (
-                isset($this->config['_normalizeFilenames']) &&
-                $this->config['_normalizeFilenames'] &&
-                preg_match('/[^0-9a-z\.\- ]/si', $file)
-            )
-        )
-            return false;
-
-        return true;
-    }
-
     protected function sendDefaultThumb($file=null) {
         if ($file !== null) {
             $ext = file::getExtension($file);
