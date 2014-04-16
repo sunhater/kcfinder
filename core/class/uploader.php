@@ -4,7 +4,7 @@
   *
   *      @desc Uploader class
   *   @package KCFinder
-  *   @version 3.0
+  *   @version 3.10
   *    @author Pavel Tzonkov <sunhater@sunhater.com>
   * @copyright 2010-2014 KCFinder Project
   *   @license http://opensource.org/licenses/GPL-3.0 GPLv3
@@ -17,7 +17,7 @@ namespace kcfinder;
 class uploader {
 
 /** Release version */
-    const VERSION = "3.0";
+    const VERSION = "3.10";
 
 /** Config session-overrided settings
   * @var array */
@@ -156,7 +156,7 @@ class uploader {
         if (!isset($this->session['stamp']))
             $this->session['stamp'] = $stamp;
         elseif ($this->session['stamp'] != $stamp) {
-            session_destroy();
+            //session_destroy();
             die;
         }
 
