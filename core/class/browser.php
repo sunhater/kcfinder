@@ -72,7 +72,7 @@ class browser extends uploader {
         }
 
         if (isset($_GET['theme']) &&
-            !$this->checkFilename($_GET['theme']) &&
+            $this->checkFilename($_GET['theme']) &&
             is_dir("themes/{$_GET['theme']}")
         )
             $this->config['theme'] = $_GET['theme'];
