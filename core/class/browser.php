@@ -72,7 +72,7 @@ class browser extends uploader {
         }
 
         if (isset($_GET['theme']) &&
-            ($_GET['theme'] == basename($_GET['theme'])) &&
+            !$this->checkFilename($_GET['theme']) &&
             is_dir("themes/{$_GET['theme']}")
         )
             $this->config['theme'] = $_GET['theme'];
@@ -149,7 +149,7 @@ class browser extends uploader {
     protected function act_thumb() {
         if (!isset($_GET['file']) ||
             !isset($_GET['dir']) ||
-            (basename($_GET['file']) !== $_GET['file'])
+            !$this->checkFilename($_GET['file'])
         )
             $this->sendDefaultThumb();
 
@@ -204,8 +204,9 @@ class browser extends uploader {
     protected function act_newDir() {
         if (!$this->config['access']['dirs']['create'] ||
             !isset($_POST['dir']) ||
+            !strlen(rtrim(rtrim(trim($_POST['dir']), "/"), "\\")) ||
             !isset($_POST['newDir']) ||
-            (basename($_POST['newDir']) !== $_POST['newDir'])
+            !$this->checkFilename($_POST['newDir'])
         )
             $this->errorMsg("Unknown error.");
 
@@ -227,8 +228,9 @@ class browser extends uploader {
     protected function act_renameDir() {
         if (!$this->config['access']['dirs']['rename'] ||
             !isset($_POST['dir']) ||
+            !strlen(rtrim(rtrim(trim($_POST['dir']), "/"), "\\")) ||
             !isset($_POST['newName']) ||
-            (basename($_POST['newName']) !== $_POST['newName'])
+            !$this->checkFilename($_POST['newName'])
         )
             $this->errorMsg("Unknown error.");
 
@@ -251,7 +253,7 @@ class browser extends uploader {
     protected function act_deleteDir() {
         if (!$this->config['access']['dirs']['delete'] ||
             !isset($_POST['dir']) ||
-            !strlen(trim($_POST['dir']))
+            !strlen(rtrim(rtrim(trim($_POST['dir']), "/"), "\\"))
         )
             $this->errorMsg("Unknown error.");
 
@@ -297,7 +299,7 @@ class browser extends uploader {
         $dir = $this->postDir();
         if (!isset($_POST['dir']) ||
             !isset($_POST['file']) ||
-            (basename($_POST['file']) !== $_POST['file']) ||
+            !$this->checkFilename($_POST['file']) ||
             (false === ($file = "$dir/{$_POST['file']}")) ||
             !file_exists($file) || !is_readable($file)
         )
@@ -321,8 +323,8 @@ class browser extends uploader {
             !isset($_POST['dir']) ||
             !isset($_POST['file']) ||
             !isset($_POST['newName']) ||
-            (basename($_POST['file']) !== $_POST['file']) ||
-            (basename($_POST['newName']) !== $_POST['newName']) ||
+            !$this->checkFilename($_POST['file']) ||
+            !$this->checkFilename($_POST['newName']) ||
             (false === ($file = "$dir/{$_POST['file']}")) ||
             !file_exists($file) || !is_readable($file) || !file::isWritable($file)
         )
@@ -365,7 +367,7 @@ class browser extends uploader {
         if (!$this->config['access']['files']['delete'] ||
             !isset($_POST['dir']) ||
             !isset($_POST['file']) ||
-            (basename($_POST['file']) !== $_POST['file']) ||
+            !$this->checkFilename($_POST['file']) ||
             (false === ($file = "$dir/{$_POST['file']}")) ||
             !file_exists($file) || !is_readable($file) || !file::isWritable($file) ||
             !@unlink($file)
@@ -718,6 +720,22 @@ class browser extends uploader {
         if (strtoupper(substr(PHP_OS, 0, 3)) == "WIN")
             $rPath = str_replace("\\", "/", $rPath);
         return (substr($rPath, 0, strlen($this->typeDir)) === $this->typeDir);
+    }
+
+    protected function checkFilename($file) {
+
+        if ((basename($file) !== $file) ||
+
+            preg_match('/[\<\>\|\/\\\\]/s', $file) ||
+            (
+                isset($this->config['_normalizeFilenames']) &&
+                $this->config['_normalizeFilenames'] &&
+                preg_match('/[^0-9a-z\.\- ]/si', $file)
+            )
+        )
+            return false;
+
+        return true;
     }
 
     protected function sendDefaultThumb($file=null) {
