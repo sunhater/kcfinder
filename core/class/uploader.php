@@ -28,9 +28,6 @@ class uploader {
     protected $imageDriver = "gd";
 
 /** Opener applocation properties
-  *   $opener['name']                 Got from $_GET['opener'];
-  *   $opener['CKEditor']['funcNum']  CKEditor function number (got from $_GET)
-  *   $opener['TinyMCE']              Boolean
   * @var array */
     protected $opener = array();
 
@@ -150,6 +147,18 @@ class uploader {
 
         } else
             $this->session = &$_SESSION;
+
+        // SECURING THE SESSION
+        $stamp = md5(
+            $_SERVER['HTTP_USER_AGENT'] .
+            $_SERVER['REMOTE_ADDR']
+        );
+        if (!isset($this->session['stamp']))
+            $this->session['stamp'] = $stamp;
+        elseif ($this->session['stamp'] != $stamp) {
+            session_destroy();
+            die;
+        }
 
         // IMAGE DRIVER INIT
         if (isset($this->config['imageDriversPriority'])) {
