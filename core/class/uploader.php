@@ -413,11 +413,11 @@ class uploader {
 
         if ((basename($file) !== $file) ||
 
-            preg_match('/[\<\>\|\/\\\\]/s', $file) ||
+            preg_match('/[\<\>\|\/\:\\\\]/s', $file) ||
             (
                 isset($this->config['_normalizeFilenames']) &&
                 $this->config['_normalizeFilenames'] &&
-                preg_match('/[^0-9a-z\.\- ]/si', $file)
+                preg_match('/[^0-9a-z\.\- _]/si', $file)
             )
         )
             return false;
