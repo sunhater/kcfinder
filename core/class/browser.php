@@ -204,7 +204,6 @@ class browser extends uploader {
     protected function act_newDir() {
         if (!$this->config['access']['dirs']['create'] ||
             !isset($_POST['dir']) ||
-            !strlen(rtrim(rtrim(trim($_POST['newDir']), "/"), "\\")) ||
             !isset($_POST['newDir']) ||
             !$this->checkFilename($_POST['newDir'])
         )
