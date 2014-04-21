@@ -1,3 +1,8 @@
+VERSION 3.11 - 2014-04-21
+-------------------------
+* "Unknown error." fixes when using `_normalizeFilenames` setting
+  and upon new folder creation
+
 VERSION 3.10 - 2014-04-16
 -------------------------
 * Important secirity fixes
