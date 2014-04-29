@@ -149,14 +149,15 @@ class uploader {
             $this->session = &$_SESSION;
 
         // SECURING THE SESSION
-        $stamp = md5(
-            $_SERVER['HTTP_USER_AGENT'] .
-            $_SERVER['REMOTE_ADDR']
+        $stamp = array(
+            'ip' => $_SERVER['REMOTE_ADDR'],
+            'agent' => md5($_SERVER['HTTP_USER_AGENT'])
         );
         if (!isset($this->session['stamp']))
             $this->session['stamp'] = $stamp;
-        elseif ($this->session['stamp'] != $stamp) {
-            //session_destroy();
+        elseif ($this->session['stamp'] !== $stamp) {
+            if ($this->session['stamp']['ip'] === $stamp['ip'])
+                session_destroy();
             die;
         }
 
