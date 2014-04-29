@@ -155,7 +155,7 @@ class uploader {
         );
         if (!isset($this->session['stamp']))
             $this->session['stamp'] = $stamp;
-        elseif ($this->session['stamp'] !== $stamp) {
+        elseif (!is_array($this->session['stamp']) || ($this->session['stamp'] !== $stamp)) {
             if ($this->session['stamp']['ip'] === $stamp['ip'])
                 session_destroy();
             die;
