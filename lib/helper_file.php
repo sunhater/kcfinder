@@ -52,6 +52,7 @@ class file {
         'movie' => 'video/x-sgi-movie',
         'mp2'   => 'audio/mpeg',
         'mp3'   => 'audio/mpeg',
+        'mp4'   => 'video/mpeg',
         'mpe'   => 'video/mpeg',
         'mpeg'  => 'video/mpeg',
         'mpg'   => 'video/mpeg',
