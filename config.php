@@ -38,7 +38,7 @@ $_CONFIG = array(
         'media'   =>  "swf flv avi mpg mpeg qt mov wmv asf rm",
         'image'   =>  "*img",
     ),
-
+    'hideFiles' => array("^\."),
 
 // IMAGE SETTINGS
 
