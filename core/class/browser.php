@@ -736,6 +736,25 @@ class browser extends uploader {
 
         foreach ($files as $file) {
 
+
+            if ( isset( $this->config[ 'hideFiles' ] ) && is_array( $this->config[ 'hideFiles' ] ) )
+            {
+                $continue = false;
+                $basename = basename($file);
+                foreach( $this->config[ 'hideFiles' ] as $pattern )
+                {
+                    preg_match( '/'.$pattern.'/', $basename, $matches );
+                    if ( $matches && count( $matches ) > 0 )
+                    {
+                        $continue = true;
+                    }
+                }
+                if ( $continue )
+                {
+                    continue;
+                }
+            }
+
             $img = new fastImage($file);
             $type = $img->getType();
 
