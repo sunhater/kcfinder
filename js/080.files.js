@@ -27,6 +27,12 @@ _.initFiles = function() {
     }).dblclick(function() {
         _.returnFile($(this));
     });
+    if ( 'touch' in window.document )
+    {
+        $('.file').click(function() {
+            _.returnFile($(this));
+        });
+    }
 
     $.each(_.shows, function(i, val) {
         $('#files .file div.' + val).css('display', ($.$.kuki.get('show' + val) == "off") ? "none" : "block");
