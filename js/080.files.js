@@ -27,7 +27,7 @@ _.initFiles = function() {
     }).dblclick(function() {
         _.returnFile($(this));
     });
-    if ( 'touch' in window.document )
+    if ( 'ontouchstart' in window.document )
     {
         $('.file').click(function() {
             _.returnFile($(this));
