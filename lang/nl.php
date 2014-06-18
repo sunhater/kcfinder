@@ -2,6 +2,7 @@
 
 /** Dutch localization file for KCFinder
   * author: Lars Anderson <lars16anderson@users.sourceforge.net>
+  * update: Richard Leurs
   */
 
 $lang = array(
