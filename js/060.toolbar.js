@@ -128,9 +128,10 @@ _.uploadFile = function(form) {
     $('#loading').html(_.label("Uploading file...")).show();
     form.submit();
     $('#uploadResponse').load(function() {
-        var response = $(this).contents().find('body').html();
+        var response = $(this).contents().find('body').text();
         $('#loading').hide();
         response = response.split("\n");
+
         var selected = [], errors = [];
         $.each(response, function(i, row) {
             if (row.substr(0, 1) == "/")

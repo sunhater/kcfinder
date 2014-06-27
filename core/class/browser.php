@@ -270,6 +270,8 @@ class browser extends uploader {
     }
 
     protected function act_upload() {
+        header("Content-Type: text/plain; charset={$this->charset}");
+
         if (!$this->config['access']['files']['upload'] ||
             !isset($_POST['dir'])
         )

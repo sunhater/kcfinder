@@ -223,7 +223,7 @@ _.menuFile = function(file, e) {
     } else {
         $('.file').removeClass('selected');
         file.addClass('selected');
-        $('#fileinfo').html(data.name + " (" + _.humanSize(data.size) + ", " + data.date + ")");
+        $('#fileinfo').html($.$.htmlData(data.name) + " (" + _.humanSize(data.size) + ", " + data.date + ")");
 
         if (_.opener.callBack || _.opener.callBackMultiple) {
 

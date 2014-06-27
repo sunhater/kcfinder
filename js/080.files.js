@@ -58,7 +58,7 @@ _.showFiles = function(callBack, selected) {
                 if (file.thumb)
                     icon = _.getURL('thumb') + "&file=" + encodeURIComponent(file.name) + "&dir=" + encodeURIComponent(_.dir) + "&stamp=" + stamp;
                 else if (file.smallThumb) {
-                    icon = _.uploadURL + "/" + _.dir + "/" + file.name;
+                    icon = _.uploadURL + "/" + _.dir + "/" + encodeURIComponent(file.name);
                     icon = $.$.escapeDirs(icon).replace(/\'/g, "%27");
                 } else {
                     icon = file.bigIcon ? $.$.getFileExtension(file.name) : ".";
@@ -102,14 +102,14 @@ _.selectFile = function(file, e) {
                 $('#fileinfo').html(files.length + " " + _.label("selected files") + " (" + size + ")");
             else {
                 data = $(files[0]).data();
-                $('#fileinfo').html(data.name + " (" + _.humanSize(data.size) + ", " + data.date + ")");
+                $('#fileinfo').html($.$.htmlData(data.name) + " (" + _.humanSize(data.size) + ", " + data.date + ")");
             }
         }
     } else {
         data = file.data();
         $('.file').removeClass('selected');
         file.addClass('selected');
-        $('#fileinfo').html(data.name + " (" + _.humanSize(data.size) + ", " + data.date + ")");
+        $('#fileinfo').html($.$.htmlData(data.name) + " (" + _.humanSize(data.size) + ", " + data.date + ")");
     }
 };
 

@@ -78,13 +78,13 @@ _.humanSize = function(size) {
 };
 
 _.getURL = function(act) {
-    var url = "browse.php?type=" + encodeURIComponent(_.type) + "&lng=" + _.lang;
+    var url = "browse.php?type=" + encodeURIComponent(_.type) + "&lng=" + encodeURIComponent(_.lang);
     if (_.opener.name)
-        url += "&opener=" + _.opener.name;
+        url += "&opener=" + encodeURIComponent(_.opener.name);
     if (act)
-        url += "&act=" + act;
+        url += "&act=" + encodeURIComponent(act);
     if (_.cms)
-        url += "&cms=" + _.cms;
+        url += "&cms=" + encodeURIComponent(_.cms);
     return url;
 };
 

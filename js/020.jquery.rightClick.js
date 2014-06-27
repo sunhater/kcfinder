@@ -16,6 +16,7 @@
         $(this).each(function() {
             $(this).unbind(events).bind(events, function(e) {
                 e.preventDefault();
+                $.clearSelection();
                 if ($.isFunction(func))
                     func(this, e);
             });

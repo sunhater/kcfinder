@@ -150,6 +150,13 @@
                d.mozFullScreen || d.webkitIsFullScreen;
     };
 
+    $.clearSelection = function() {
+        if (document.selection)
+            document.selection.empty();
+        else if (window.getSelection)
+            window.getSelection().removeAllRanges();
+    };
+
     $.$ = {
 
         htmlValue: function(value) {
