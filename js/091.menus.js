@@ -56,7 +56,7 @@ _.menu = {
                     width: ""
                 }).fadeIn('fast');
             } else
-                dlg.fadeIn();
+                dlg.fadeIn('fast');
         } else
             ul.detach();
     },

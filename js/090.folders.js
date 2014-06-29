@@ -26,6 +26,11 @@ _.initFolders = function() {
         _.changeDir($(this).parent());
     }).rightClick(function(el, e) {
         _.menuDir($(el).parent(), e);
+    }).on('taphold', function() {
+        _.menuDir($(this).parent(), {
+            pageX: $(this).offset().left,
+            pageY: $(this).offset().top + $(this).outerHeight()
+        });
     });
 };
 

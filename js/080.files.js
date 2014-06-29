@@ -24,6 +24,12 @@ _.initFiles = function() {
     }).rightClick(function(el, e) {
         _.menuFile($(el), e);
 
+    }).on('taphold', function() {
+        _.menuFile($(this), {
+            pageX: $(this).offset().left,
+            pageY: $(this).offset().top + $(this).outerHeight()
+        });
+
     }).dblclick(function() {
         _.returnFile($(this));
     });
