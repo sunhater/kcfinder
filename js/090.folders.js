@@ -26,12 +26,15 @@ _.initFolders = function() {
         _.changeDir($(this).parent());
     }).rightClick(function(el, e) {
         _.menuDir($(el).parent(), e);
-    }).on('taphold', function() {
-        _.menuDir($(this).parent(), {
-            pageX: $(this).offset().left,
-            pageY: $(this).offset().top + $(this).outerHeight()
-        });
     });
+    if ($.mobile) {
+        $('div.folder > a > span.folder').on('taphold', function() {
+            _.menuDir($(this).parent(), {
+                pageX: $(this).offset().left + 1,
+                pageY: $(this).offset().top + $(this).outerHeight()
+            });
+        });
+    }
 };
 
 _.setTreeData = function(data, path) {

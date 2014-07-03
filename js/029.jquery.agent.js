@@ -29,7 +29,7 @@
                 keys: ["opera", "msie", "firefox", "android"]
             }, {
                 expr: /[ \/\(]([a-z0-9_]+)[ ;\)\/]/ig,
-                keys: "i386|i486|i586|i686|x86|x64|x86_64|intel|ppc|powerpc|windows|macintosh|darwin|unix|linux|sunos|android|iphone|ipad|ipod|amiga|amigaos|beos|wii|playstation|gentoo|fedora|slackware|ubuntu|archlinux|debian|mint|mageia|mandriva|freebsd|openbsd|netbsd|solaris|opensolaris|x11|mobile".split('|'),
+                keys: "i386|i486|i586|i686|x86|x64|x86_64|intel|ppc|powerpc|windows|macintosh|darwin|unix|linux|sunos|android|iphone|ipad|ipod|amiga|amigaos|beos|wii|playstation|gentoo|fedora|slackware|ubuntu|archlinux|debian|mint|mageia|mandriva|freebsd|openbsd|netbsd|solaris|opensolaris|x11|mobile|phone".split('|'),
                 sub: "platform"
             }
         ];
@@ -68,5 +68,22 @@
             } else if (typeof $.agent[key] == "undefined")
                 $.agent[key] = val;
         });
+    });
+
+    if (!$.agent.platform)
+        $.agent.platform = {};
+
+    // Check for mobile device
+    $.mobile = false;
+    var keys = "mobile|android|iphone|ipad|ipod|iemobile|phone".split('|');
+        a = $.agent;
+
+    $.each([a, a.platform], function(i, p) {
+        for (var j = 0; j < keys.length; j++) {
+            if (p[keys[j]]) {
+                $.mobile = true;
+                return false;
+            }
+        }
     });
 })(jQuery);

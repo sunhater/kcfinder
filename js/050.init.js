@@ -43,6 +43,9 @@ _.init = function() {
         $.each($.agent.platform, function(i) {
             $('body').addClass(i)
         });
+
+    if ($.mobile)
+        $('body').addClass("mobile");
 };
 
 _.checkAgent = function() {

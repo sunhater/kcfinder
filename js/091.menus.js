@@ -286,7 +286,7 @@ _.menuFile = function(file, e) {
             _.menu.addItem("kcact:mv", _.label("Rename..."), function() {
                 if (!data.writable) return false;
                 _.fileNameDialog(
-                    e, {dir: _.dir, file: data.name},
+                    {dir: _.dir, file: data.name},
                     'newName', data.name, _.getURL("rename"), {
                         title: "New file name:",
                         errEmpty: "Please enter new file name.",
@@ -382,7 +382,7 @@ _.menuDir = function(dir, e) {
         _.menu.addItem("kcact:mkdir", _.label("New Subfolder..."), function(e) {
             if (!data.writable) return false;
             _.fileNameDialog(
-                e, {dir: data.path},
+                {dir: data.path},
                 "newDir", "", _.getURL("newDir"), {
                     title: "New folder name:",
                     errEmpty: "Please enter new folder name.",
@@ -405,7 +405,7 @@ _.menuDir = function(dir, e) {
         _.menu.addItem("kcact:mvdir", _.label("Rename..."), function(e) {
             if (!data.removable) return false;
             _.fileNameDialog(
-                e, {dir: data.path},
+                {dir: data.path},
                 "newName", data.name, _.getURL("renameDir"), {
                     title: "New folder name:",
                     errEmpty: "Please enter new folder name.",

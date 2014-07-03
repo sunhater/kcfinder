@@ -116,7 +116,7 @@ _.dialog = function(title, content, options) {
     return dlg;
 };
 
-_.fileNameDialog = function(e, post, inputName, inputValue, url, labels, callBack, selectAll) {
+_.fileNameDialog = function(post, inputName, inputValue, url, labels, callBack, selectAll) {
     var html = '<form method="post" action="javascript:;"><input name="' + inputName + '" type="text" /></form>',
         submit = function() {
             var name = dlg.find('[type="text"]').get(0);

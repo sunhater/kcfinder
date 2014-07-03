@@ -7,6 +7,12 @@ body, form, th, td {
     padding: 0;
 }
 
+body.mobile {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+}
+
 a {
     cursor: pointer;
 }

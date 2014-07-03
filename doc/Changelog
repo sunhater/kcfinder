@@ -1,7 +1,15 @@
+VERSION 3.12 - 2014-07-
+-------------------------
+* XSS security fix
+* Added taphold event. Emulates right-click on touchscreen devices
+* Minor fixes
+
+
 VERSION 3.11 - 2014-04-21
 -------------------------
 * "Unknown error." fixes when using `_normalizeFilenames` setting
   and upon new folder creation
+
 
 VERSION 3.10 - 2014-04-16
 -------------------------

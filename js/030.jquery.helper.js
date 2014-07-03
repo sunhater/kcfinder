@@ -171,7 +171,9 @@
                 .replace(/\&/g, "&amp;")
                 .replace(/\</g, "&lt;")
                 .replace(/\>/g, "&gt;")
-                .replace(/\ /g, "&nbsp;");
+                .replace(/\ /g, "&nbsp;")
+                .replace(/\"/g, "&quot;")
+                .replace(/\'/g, "&#39;");
         },
 
         jsValue: function(value) {

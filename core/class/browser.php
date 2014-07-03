@@ -107,9 +107,12 @@ class browser extends uploader {
         }
         $this->session['dir'] = path::normalize($this->session['dir']);
 
+        // Render the browser
         if ($act == "browser") {
             header("X-UA-Compatible: chrome=1");
             header("Content-Type: text/html; charset={$this->charset}");
+
+        // Ajax requests
         } elseif (
             (substr($act, 0, 8) != "download") &&
             !in_array($act, array("thumb", "upload"))

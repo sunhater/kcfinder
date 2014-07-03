@@ -413,8 +413,6 @@ class uploader {
     protected function checkFilename($file) {
 
         if ((basename($file) !== $file) ||
-
-            //preg_match('/[\<\>\|\/\:\\\\]/s', $file) ||
             (
                 isset($this->config['_normalizeFilenames']) &&
                 $this->config['_normalizeFilenames'] &&
