@@ -1,8 +1,6 @@
 # KCFinder web file manager
-```
-http://kcfinder.sunhater.com
+http://kcfinder.sunhater.com  
 Pavel Tzonkov (sunhater@sunhater.com)
-```
 
 ## Overview
 KCFinder is free open-source replacement of CKFinder web file manager. It can be integrated into FCKeditor, CKEditor, and TinyMCE WYSIWYG web editors (or your custom web applications) to upload and manage images, flash movies, and other files that can be embedded into an editor's generated HTML content.
