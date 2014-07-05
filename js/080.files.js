@@ -91,11 +91,22 @@ _.showFiles = function(callBack, selected) {
 };
 
 _.selectFile = function(file, e) {
-    if (e.ctrlKey || e.metaKey) {
-        if (file.hasClass('selected'))
-            file.removeClass('selected');
-        else
-            file.addClass('selected');
+
+    // Click with Ctrl, Meta or Shift key
+    if (e.ctrlKey || e.metaKey || e.shiftKey) {
+
+        // Click with Shift key
+        if (e.shiftKey && !file.hasClass('selected')) {
+            var f = file.prev();
+            while (f.get(0) && !f.hasClass('selected')) {
+                f.addClass('selected');
+                f = f.prev();
+            }
+        }
+
+        file.toggleClass('selected');
+
+        // Update statusbar
         var files = $('.file.selected').get(),
             size = 0, data;
         if (!files.length)
@@ -112,6 +123,8 @@ _.selectFile = function(file, e) {
                 $('#fileinfo').html($.$.htmlData(data.name) + " (" + _.humanSize(data.size) + ", " + data.date + ")");
             }
         }
+
+    // Normal click
     } else {
         data = file.data();
         $('.file').removeClass('selected');
