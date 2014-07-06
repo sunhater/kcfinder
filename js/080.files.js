@@ -87,7 +87,7 @@ _.showFiles = function(callBack, selected) {
             f.data(file);
 
             if ((file.name === selected) || $.$.inArray(file.name, selected))
-                f.addclass('selected');
+                f.addClass('selected');
         });
 
         c.css({opacity:'', filter:''});
