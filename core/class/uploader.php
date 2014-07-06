@@ -728,14 +728,25 @@ class uploader {
 
     protected function backMsg($message, array $data=null) {
         $message = $this->label($message, $data);
-        if (isset($this->file['tmp_name']) && file_exists($this->file['tmp_name']))
-            @unlink($this->file['tmp_name']);
+        $tmp_name = isset($this->file['tmp_name']) ? $this->file['tmp_name'] : false;
+
+        if ($tmp_name) {
+            $tmp_name = (is_array($tmp_name) && isset($tmp_name[0]))
+                ? $tmp_name[0]
+                : $tmp_name;
+
+            if (file_exists($tmp_name))
+                @unlink($tmp_name);
+        }
         $this->callBack("", $message);
         die;
     }
 
     protected function callBack($url, $message="") {
         $message = text::jsValue($message);
+
+        if ((get_class($this) == "kcfinder\\browser") && ($this->action != "browser"))
+            return;
 
         if (isset($this->opener['name'])) {
             $method = "callBack_{$this->opener['name']}";

@@ -219,7 +219,9 @@ _.initDropUpload = function() {
                 if (currentFile.thisTargetDir == _.dir)
                     _.refresh();
                 if (errors.length) {
-                    _.alert(errors.join("\n"));
+                    errors = errors.join("\n");
+                    if (errors.replace(/^\s+/g, "").replace(/\s+$/g, "").length)
+                        _.alert(errors);
                     errors = [];
                 }
             }, 333);

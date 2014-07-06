@@ -139,8 +139,11 @@ _.uploadFile = function(form) {
             else
                 errors[errors.length] = row;
         });
-        if (errors.length)
-            _.alert(errors.join("\n"));
+        if (errors.length) {
+            errors = errors.join("\n");
+            if (errors.replace(/^\s+/g, "").replace(/\s+$/g, "").length)
+                _.alert(errors);
+        }
         if (!selected.length)
             selected = null;
         _.refresh(selected);
@@ -289,8 +292,10 @@ _.refresh = function(selected) {
         data: {dir: _.dir},
         async: false,
         success: function(data) {
-            if (_.check4errors(data))
+            if (_.check4errors(data)) {
+                $('#files > div').css({opacity: "", filter: ""});
                 return;
+            }
             _.dirWritable = data.dirWritable;
             _.files = data.files ? data.files : [];
             _.orderFiles(null, selected);
