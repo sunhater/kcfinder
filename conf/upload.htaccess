@@ -16,6 +16,6 @@ RemoveType .cgi .pl .py .pyc .pyo .phtml .php .php3 .php4 .php5 .php6 .pcgi .pcg
 SetHandler None
 SetHandler default-handler
 
-# Remove the two lines below if you want to render HTML files
+# Remove both lines below if you want to render HTML files from the upload folder
 AddType text/plain .html
 AddType text/plain .htm

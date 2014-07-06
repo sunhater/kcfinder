@@ -108,7 +108,7 @@ class uploader {
             $this->file = &$_FILES[key($_FILES)];
 
         // LOAD DEFAULT CONFIGURATION
-        require "config.php";
+        require "conf/config.php";
 
         // SETTING UP SESSION
         if (!session_id()) {
@@ -810,7 +810,7 @@ if (window.opener) window.close();
     }
 
     protected function get_htaccess() {
-        return file_get_contents("core/upload.htaccess");
+        return file_get_contents("conf/upload.htaccess");
     }
 }
 
