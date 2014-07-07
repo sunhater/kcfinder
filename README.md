@@ -25,7 +25,7 @@ KCFinder is free open-source replacement of CKFinder web file manager. It can be
 * Multilanguage system
 * Preview images in full size
 
-## Compatibality
+## Compatibility
 * KCFinder is officialy tested on Apache 2 web server only. Probably it will works on other web servers. If your web server does not support .htaccess files, you should take care turning off script execution in the upload directory.
 * PHP 5.3 or better is required. Safe mode should be off.
 * At least one of these PHP extensions is required: GD, ImageMagick or GraphicsMagick.
