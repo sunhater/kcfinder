@@ -108,7 +108,7 @@ $_CONFIG = array(
 
 // THE FOLLOWING SETTINGS CANNOT BE OVERRIDED WITH SESSION SETTINGS
 
-    '_normalizeFilenames' => false,
+    '_normalizeFilenames' => true,
     '_check4htaccess' => true,
     //'_tinyMCEPath' => "/tiny_mce",
 
