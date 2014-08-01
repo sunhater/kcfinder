@@ -111,9 +111,9 @@ class uploader {
         $config = require "conf/config.php";
 
         // SETTING UP SESSION & CONFIG
-		$session = new session($config);
-		$this->session = $session->getSession();
-		$this->config = $session->getConfig();
+        $session = new session($config);
+        $this->session = $session->getSession();
+        $this->config = $session->getConfig();
 
         // SECURING THE SESSION
         $stamp = array(

@@ -28,8 +28,8 @@ spl_autoload_register(function($path) {
             require "core/class/browser.php";
         elseif ($class == "minifier")
             require "core/class/minifier.php";
-		elseif ($class == "session")
-			require "core/class/session.php";
+        elseif ($class == "session")
+            require "core/class/session.php";
 
         elseif (file_exists("core/types/$class.php"))
             require "core/types/$class.php";
