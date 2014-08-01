@@ -411,7 +411,7 @@ class uploader {
     }
 
     protected function checkFilename($file) {
-		return (basename($file) === $file);
+        return (basename($file) === $file);
     }
 
     protected function checkUploadedFile(array $aFile=null) {
