@@ -108,45 +108,12 @@ class uploader {
             $this->file = &$_FILES[key($_FILES)];
 
         // LOAD DEFAULT CONFIGURATION
-        require "conf/config.php";
+        $config = require "conf/config.php";
 
-        // SETTING UP SESSION
-        if (!session_id()) {
-            if (isset($_CONFIG['_sessionLifetime']))
-                ini_set('session.gc_maxlifetime', $_CONFIG['_sessionLifetime'] * 60);
-            if (isset($_CONFIG['_sessionDir']))
-                ini_set('session.save_path', $_CONFIG['_sessionDir']);
-            if (isset($_CONFIG['_sessionDomain']))
-                ini_set('session.cookie_domain', $_CONFIG['_sessionDomain']);
-            session_start();
-        }
-
-        // LOAD SESSION CONFIGURATION IF EXISTS
-        $this->config = $_CONFIG;
-        $sessVar = "_sessionVar";
-        if (isset($_CONFIG[$sessVar])) {
-
-            $sessVar = $_CONFIG[$sessVar];
-
-            if (!isset($_SESSION[$sessVar]))
-                $_SESSION[$sessVar] = array();
-
-            $sessVar = &$_SESSION[$sessVar];
-
-            if (!is_array($sessVar))
-                $sessVar = array();
-
-            foreach ($sessVar as $key => $val)
-                if ((substr($key, 0, 1) != "_") && isset($_CONFIG[$key]))
-                    $this->config[$key] = $val;
-
-            if (!isset($sessVar['self']))
-                $sessVar['self'] = array();
-
-            $this->session = &$sessVar['self'];
-
-        } else
-            $this->session = &$_SESSION;
+        // SETTING UP SESSION & CONFIG
+		$session = new session($config);
+		$this->session = $session->getSession();
+		$this->config = $session->getConfig();
 
         // SECURING THE SESSION
         $stamp = array(
