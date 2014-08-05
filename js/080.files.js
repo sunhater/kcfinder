@@ -81,7 +81,7 @@ _.showFiles = function(callBack, selected) {
             }
 
             f.find('.thumb').css({backgroundImage: 'url("' + icon + '")'});
-            f.find('.name').html($.$.htmlData(file.name));
+            f.find('.name').text(file.name);
             f.find('.time').html(file.date);
             f.find('.size').html(_.humanSize(file.size));
             f.data(file);
@@ -128,7 +128,7 @@ _.selectFile = function(file, e) {
                 $('#fileinfo').html(files.length + " " + _.label("selected files") + " (" + size + ")");
             else {
                 data = $(files[0]).data();
-                $('#fileinfo').html($.$.htmlData(data.name) + " (" + _.humanSize(data.size) + ", " + data.date + ")");
+                $('#fileinfo').text(data.name + " (" + _.humanSize(data.size) + ", " + data.date + ")");
             }
         }
 
@@ -137,7 +137,7 @@ _.selectFile = function(file, e) {
         data = file.data();
         $('.file').removeClass('selected');
         file.addClass('selected');
-        $('#fileinfo').html($.$.htmlData(data.name) + " (" + _.humanSize(data.size) + ", " + data.date + ")");
+        $('#fileinfo').text(data.name + " (" + _.humanSize(data.size) + ", " + data.date + ")");
     }
 };
 

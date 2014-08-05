@@ -121,7 +121,7 @@ _.viewImage = function(data) {
                 dlg.addClass('kcfImageViewer').css('overflow', "hidden").parent().find('.ui-dialog-buttonpane button').get(2).focus();
 
             } else {
-                dlg.prev().find('.ui-dialog-title').html($.$.htmlData(data.name));
+                dlg.prev().find('.ui-dialog-title').text(data.name);
                 dlg.html(t.get(0));
             }
 

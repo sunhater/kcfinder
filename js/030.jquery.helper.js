@@ -161,27 +161,21 @@
 
         htmlValue: function(value) {
             return value
-                .replace(/\&/g, "&amp;")
-                .replace(/\"/g, "&quot;")
-                .replace(/\'/g, "&#39;");
+                .replace(/&/g, "&amp;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#39;");
         },
 
         htmlData: function(value) {
-            return value.toString()
-                .replace(/\&/g, "&amp;")
-                .replace(/\</g, "&lt;")
-                .replace(/\>/g, "&gt;")
-                .replace(/\ /g, "&nbsp;")
-                .replace(/\"/g, "&quot;")
-                .replace(/\'/g, "&#39;");
+            return $('<p></p>').text(value).html();
         },
 
         jsValue: function(value) {
             return value
                 .replace(/\\/g, "\\\\")
                 .replace(/\r?\n/, "\\\n")
-                .replace(/\"/g, "\\\"")
-                .replace(/\'/g, "\\'");
+                .replace(/"/g, "\\\"")
+                .replace(/'/g, "\\'");
         },
 
         basename: function(path) {

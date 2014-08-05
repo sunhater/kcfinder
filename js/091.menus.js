@@ -223,7 +223,7 @@ _.menuFile = function(file, e) {
     } else {
         $('.file').removeClass('selected');
         file.addClass('selected');
-        $('#fileinfo').html($.$.htmlData(data.name) + " (" + _.humanSize(data.size) + ", " + data.date + ")");
+        $('#fileinfo').text(data.name + " (" + _.humanSize(data.size) + ", " + data.date + ")");
 
         if (_.opener.callBack || _.opener.callBackMultiple) {
 
@@ -417,7 +417,7 @@ _.menuDir = function(dir, e) {
                         return;
                     }
                     var currentDir = (data.path == _.dir);
-                    dir.children('span.folder').html($.$.htmlData(dt.name));
+                    dir.children('span.folder').text(dt.name);
                     dir.data('name', dt.name);
                     dir.data('path', $.$.dirname(data.path) + '/' + dt.name);
                     if (currentDir)
