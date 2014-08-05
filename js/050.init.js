@@ -224,12 +224,7 @@ _.resize = function() {
 
     jFolders.css('height', jLeft.outerHeight() - jFolders.outerVSpace());
     _.fixFilesHeight();
-    var width = jLeft.outerWidth() + jRight.outerWidth();
-    jStatus.css('width', width);
-    while (jStatus.outerWidth() > width)
-        jStatus.css('width', parseInt(jStatus.css('width')) - 1);
-    while (jStatus.outerWidth() < width)
-        jStatus.css('width', parseInt(jStatus.css('width')) + 1);
+    jStatus.css('width', jLeft.outerWidth() + jRight.outerWidth() - jStatus.outerHSpace('p'));
     jFiles.css('width', jRight.innerWidth() - jFiles.outerHSpace());
     jResizer.css({
         left: jLeft.outerWidth() - jFolders.outerRightSpace('m'),
