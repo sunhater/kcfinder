@@ -95,6 +95,7 @@ _.showFiles = function(callBack, selected) {
 
         if (callBack) callBack();
         _.initFiles();
+        _.fixScrollRadius();
     }, 200);
 };
 

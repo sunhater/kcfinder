@@ -197,6 +197,7 @@ _.initResizer = function() {
             });
 
             _.fixFilesHeight();
+            _.fixScrollRadius();
         }
     });
 };
@@ -230,6 +231,7 @@ _.resize = function() {
         left: jLeft.outerWidth() - jFolders.outerRightSpace('m'),
         width: jFolders.outerRightSpace('m') + jFiles.outerLeftSpace('m')
     });
+    _.fixScrollRadius();
 };
 
 _.setTitle = function(title) {
@@ -251,4 +253,39 @@ _.fixFilesHeight = function() {
         $('#left').outerHeight() - $('#toolbar').outerHeight() - jFiles.outerVSpace() -
         ((jSettings.css('display') != "none") ? jSettings.outerHeight() : 0)
     );
+};
+
+_.fixScrollRadius = function() {
+
+    var jFolders = $('#folders'),
+        jFiles = $('#files'),
+        dFolders = jFolders.get(0),
+        dFiles = jFiles.get(0),
+        vScrollFolders = (dFolders.clientHeight < dFolders.scrollHeight),
+        hScrollFolders = (dFolders.clientWidth < dFolders.scrollWidth),
+        vScrollFiles = (dFiles.clientHeight < dFiles.scrollHeight);
+
+    if (!_.r)
+        _.r = {
+            fo: {
+                tr: jFolders.css('borderTopRightRadius'),
+                br: jFolders.css('borderBottomRightRadius'),
+                bl: jFolders.css('borderBottomLeftRadius')
+            },
+            fi: {
+                tr: jFiles.css('borderTopRightRadius'),
+                br: jFiles.css('borderBottomRightRadius')
+            }
+        };
+
+    jFolders.css({
+        borderTopRightRadius: vScrollFolders ? 0 : _.r.fo.tr,
+        borderBottomRightRadius: (vScrollFolders || hScrollFolders) ? 0 : _.r.fo.br,
+        borderBottomLeftRadius: hScrollFolders ? 0 : _.r.fo.bl
+    });
+
+    jFiles.css({
+        borderTopRightRadius: vScrollFiles ? 0 : _.r.fi.tr,
+        borderBottomRightRadius: vScrollFiles ? 0 : _.r.fi.br
+    });
 };
