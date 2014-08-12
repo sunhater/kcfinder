@@ -110,6 +110,7 @@ $_CONFIG = array(
 
     '_normalizeFilenames' => false,
     '_check4htaccess' => true,
+    '_dropUploadMaxFilesize' => 10485760,
     //'_tinyMCEPath' => "/tiny_mce",
 
     '_sessionVar' => "KCFINDER",

@@ -276,11 +276,11 @@ class browser extends uploader {
         header("Content-Type: text/plain; charset={$this->charset}");
 
         if (!$this->config['access']['files']['upload'] ||
-            !isset($_POST['dir'])
+            (!isset($_POST['dir']) && !isset($_GET['dir']))
         )
             $this->errorMsg("Unknown error.");
 
-        $dir = $this->postDir();
+        $dir = isset($_GET['dir']) ? $this->getDir() : $this->postDir();
 
         if (!dir::isWritable($dir))
             $this->errorMsg("Cannot access or write to upload folder.");

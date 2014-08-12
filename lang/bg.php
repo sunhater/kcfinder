@@ -260,11 +260,19 @@ $lang = array(
     "Failed to upload {filename}!" => "Несполучливо качване на {filename}!",
 
     // SINCE 3.0
+
     "Close" => "Затвори",
     "Previous" => "Предишно",
     "Next" => "Следващо",
     "Confirmation" => "Потвърждение",
-    "Warning" => "Внимание"
+    "Warning" => "Внимание",
+
+    // SINCE 3.20
+
+    "Uploading files" => "Качване на файлове",
+    "Uploading file {current} of {count}" => "Качване на файл {current} от общо {count}",
+    "Uploaded {uploaded} of {total}" => "Качено {uploaded} от общо {total}",
+    "Errors:" => "Грешки:"
 );
 
 ?>
