@@ -38,7 +38,7 @@ _.initDropUpload = function() {
         return true;
     },
 
-    options = {
+    localOptions = {
         param: "upload[]",
         maxFilesize: _.dropUploadMaxFilesize,
 
@@ -102,10 +102,31 @@ _.initDropUpload = function() {
                     _.alert(err.join('<br />'));
             }, 500);
         }
-    };
+    },
 
-    files.shDropUpload($.extend(true, options, {
-        url: _.getURL('upload') + "&dir=" + encodeURIComponent(_.dir),
+    remoteOptions = {
+        ajax: {
+            success: function(data) {
+                 _.refresh();
+                if (data.error) {
+                    _.alert(data.error)
+                    return;
+                }
+            },
+            error: function() {
+                 _.refresh();
+                _.alert(_.label("Unknown error."));
+            },
+            abort: function() {
+                 _.refresh();
+            }
+        }
+    },
+
+    url = "&dir=" + encodeURIComponent(_.dir);
+
+    files.shDropUpload($.extend(localOptions, {
+        url: _.getURL('upload') + url,
         precheck: function(e) {
             if (!$('#folders span.current').first().parent().data('writable')) {
                 _.alert(_.label("Cannot write to upload folder."));
@@ -113,18 +134,27 @@ _.initDropUpload = function() {
             }
             return precheck(e);
         }
+    }), $.extend(true, remoteOptions, {
+        ajax: {
+            url: _.getURL('dragUrl') + url
+        }
     }));
 
     folders.each(function() {
-        var folder = this;
-        $(folder).shDropUpload($.extend(true, options, {
-            url: _.getURL('upload') + "&dir=" + encodeURIComponent($(folder).data('path')),
+        var folder = this,
+            url = "&dir=" + encodeURIComponent($(folder).data('path'));
+        $(folder).shDropUpload($.extend(localOptions, {
+            url: _.getURL('upload') + url,
             precheck: function(e) {
                 if (!$(folder).data('writable')) {
                     _.alert(_.label("Cannot write to upload folder."));
                     return false;
                 }
                 return precheck(e);
+            }
+        }), $.extend(true, remoteOptions, {
+            ajax: {
+                url: _.getURL('dragUrl') + url
             }
         }));
     });

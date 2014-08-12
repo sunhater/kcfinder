@@ -299,6 +299,50 @@ class browser extends uploader {
             return $this->moveUploadFile($this->file, $dir);
     }
 
+    protected function act_dragUrl() {
+        if (!$this->config['access']['files']['upload'] ||
+            !isset($_GET['dir']) ||
+            !isset($_POST['url']) ||
+            !isset($_POST['type'])
+        )
+            $this->errorMsg("Unknown error.");
+
+        $dir = $this->getDir();
+
+        if (!dir::isWritable($dir))
+            $this->errorMsg("Cannot access or write to upload folder.");
+
+        $downloadURL = function($url, $dir) {
+            $expr = '/^[a-z]+?:\/\/(([a-z\d\-]+\.)+[a-z]{1,4}(\:\d{1,6})?(\/.*)*)?$/i';
+
+            if (!preg_match($expr, $url, $match))
+                return;
+
+            $filename = (isset($match[4]) && strlen($match[4]))
+                ? basename(explode("&", $match[4])[0])
+                : "web_image.jpg";
+
+            $file = tempnam(sys_get_temp_dir(), $filename);
+
+            if (phpGet::get($url, $file))
+                $this->moveUploadFile(array(
+                    'name' => $filename,
+                    'tmp_name' => $file,
+                    'error' => UPLOAD_ERR_OK
+                ), $dir);
+            else
+                @unlink($file);
+        };
+
+        if (is_array($_POST['url']))
+            foreach ($_POST['url'] as $url)
+                $downloadURL($url, $dir);
+        else
+            $downloadURL($_POST['url'], $dir);
+
+        return true;
+    }
+
     protected function act_download() {
         $dir = $this->postDir();
         if (!isset($_POST['dir']) ||
