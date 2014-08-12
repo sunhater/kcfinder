@@ -1,9 +1,9 @@
 /*!
- * jQuery shDropUpload v1.1
+ * jQuery shDropUpload v1.2
  * http://jquery.sunhater.com/shDropUpload
- * 2014-07-17
+ * 2014-08-12
  *
- * Copyright (c) 2010-2014 Pavel Tzonkov <sunhater@sunhater.com>
+ * Copyright (c) 2014 Pavel Tzonkov <sunhater@sunhater.com>
  * Dual licensed under the MIT and GPL licenses.
  */
 
@@ -256,6 +256,12 @@
 
                     currentFile = reader.file = file;
 
+                    reader.onerror = function(evt) {
+                        evt.file = file;
+                        lo.error(evt, currentNum, filesCount);
+                        uploadNext();
+                    };
+
                     reader.onload = function(evt) {
                         uploadInProgress = true;
 
@@ -329,17 +335,23 @@
                 }
             };
 
-            var bind = function(event, callback) {
-                    t.addEventListener(event, callback, false);
-                },
-                unbind = function(event, callback) {
-                    t.removeEventListener(event, callback, false);
-                };
+            if (!$(t).data('shdu'))
+                $(t).data('shdu', {
+                    dragover: dragOver,
+                    dragenter: dragEnter,
+                    dragLeave: dragLeave,
+                    drop: drop
+                });
 
-            unbind('dragover', dragOver);
-            unbind('dragenter', dragEnter);
-            unbind('dragleave', dragLeave);
-            unbind('drop', drop);
+            var bind = function(event, callback) {
+                t.removeEventListener(event, $(t).data('shdu')[event], false);
+                var data = $(t).data('shdu'),
+                    newData = {};
+                newData[event] = callback;
+                $.extend(data, newData);
+                $(t).data('shdu', data);
+                t.addEventListener(event, callback, false);
+            };
 
             bind('dragover', dragOver);
             bind('dragenter', dragEnter);

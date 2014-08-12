@@ -23,6 +23,7 @@ fieldset td {
 span.current,
 span.regular:hover,
 span.context,
+a.drag > span.folder,
 #clipboard div:hover,
 div.file:hover,
 #files div.selected,
@@ -166,7 +167,7 @@ span.regular {
     background-image: url(img/tree/folder.png);
     background-color: transparent;
 }
-span.regular:hover, span.context, #clipboard div:hover {
+span.regular:hover, span.context, a.drag > span.folder, #clipboard div:hover {
     transition: .3s;
     background-color: #333;
     border-color: #777;

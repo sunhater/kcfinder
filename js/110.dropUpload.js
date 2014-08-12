@@ -3,7 +3,7 @@
   *      @desc Upload files using drag and drop
   *   @package KCFinder
   *   @version 3.12
-  *    @author Forum user (updated by Pavel Tzonkov)
+  *    @author Pavel Tzonkov
   * @copyright 2010-2014 KCFinder Project
   *   @license http://opensource.org/licenses/GPL-3.0 GPLv3
   *   @license http://opensource.org/licenses/LGPL-3.0 LGPLv3
@@ -17,19 +17,23 @@ _.initDropUpload = function() {
 
     precheck = function(e) {
         filesSize = uploaded = 0; errors = [];
-
-        dlg = _.dialog(_.label("Uploading files"), '<div class="info count">&nbsp;</div><div class="bar count"></div><div class="info size">&nbsp</div><div class="bar size"></div><div class="info errors">&nbsp;</div>', {
-            buttons: []
-        });
-
-        dlg.parent().css('padding-bottom', 0).find('.ui-dialog-titlebar button').css('visibility', 'hidden').get(0).disabled = true;
-
         var fs = e.dataTransfer.files;
         for (i = 0; i < fs.length; i++)
             filesSize += fs[i].size;
 
+        dlg = $('<div><div class="info count">&nbsp;</div><div class="bar count"></div><div class="info size">&nbsp;</div><div class="bar size"></div><div class="info errors">&nbsp;</div></div>');
+
         dlg.find('.bar.count').progressbar({max: fs.length, value: 0});
         dlg.find('.bar.size').progressbar({max: filesSize, value: 0});
+        dlg.find('.info').css('padding', "5px 0").first().css('paddingTop', 0);
+        dlg.find('.info').last().css('paddingBottom', 0);
+
+        dlg = _.dialog(_.label("Uploading files"), dlg, {
+            closeOnEscape: false,
+            buttons: []
+        });
+
+        dlg.parent().css('paddingBottom', 0).find('.ui-dialog-titlebar button').css('visibility', 'hidden').get(0).disabled = true;
 
         return true;
     },
@@ -53,14 +57,13 @@ _.initDropUpload = function() {
             dlg.find('.info.errors').html(_.label("Errors:") + " " + errors.length);
             dlg.find('.bar.count').progressbar({value: currentFile});
             dlg.find('.bar.size').progressbar({value: uploaded});
-            dlg.find('.info').css('padding', "5px 0");
         },
 
         success: function(xhr, currentFile, count) {
             uploaded += xhr.file.size;
             var response = xhr.responseText;
             if (response.substr(0, 1) != "/")
-                errors.push($.$.htmlData(xhr.file.name + ": " + response));
+                errors.push($.$.htmlData(response));
         },
 
         error: function(xhr, currentFile, count) {
