@@ -115,7 +115,7 @@ _.initDropUpload = function() {
             },
             error: function() {
                  _.refresh();
-                _.alert(_.label("Unknown error."));
+                 _.alert(_.label("Unknown error."));
             },
             abort: function() {
                  _.refresh();

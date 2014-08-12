@@ -164,6 +164,7 @@ _.changeDir = function(dir) {
                 _.dirWritable = data.dirWritable;
                 _.setTitle("KCFinder: /" + _.dir);
                 _.statusDir();
+                _.initDropUpload();
             },
             error: function() {
                 $('#files').html(_.label("Unknown error."));
