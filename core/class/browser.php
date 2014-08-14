@@ -312,33 +312,11 @@ class browser extends uploader {
         if (!dir::isWritable($dir))
             $this->errorMsg("Cannot access or write to upload folder.");
 
-        $downloadURL = function($url, $dir) {
-            $expr = '/^[a-z]+?:\/\/(([a-z\d\-]+\.)+[a-z]{1,4}(\:\d{1,6})?(\/.*)*)?$/i';
-
-            if (!preg_match($expr, $url, $match))
-                return;
-
-            $filename = (isset($match[4]) && strlen($match[4]))
-                ? basename(explode("&", $match[4])[0])
-                : "web_image.jpg";
-
-            $file = tempnam(sys_get_temp_dir(), $filename);
-
-            if (phpGet::get($url, $file))
-                $this->moveUploadFile(array(
-                    'name' => $filename,
-                    'tmp_name' => $file,
-                    'error' => UPLOAD_ERR_OK
-                ), $dir);
-            else
-                @unlink($file);
-        };
-
         if (is_array($_POST['url']))
             foreach ($_POST['url'] as $url)
-                $downloadURL($url, $dir);
+                $this->downloadURL($url, $dir);
         else
-            $downloadURL($_POST['url'], $dir);
+            $this->downloadURL($_POST['url'], $dir);
 
         return true;
     }
@@ -960,6 +938,31 @@ class browser extends uploader {
 
     protected function htmlData($str) {
         return htmlentities($str, null, strtoupper($this->charset));
+    }
+
+    protected function downloadURL($url, $dir) {
+        $expr = '/^[a-z]+?:\/\/(([a-z\d\-]+\.)+[a-z]{1,4}(\:\d{1,6})?(\/.*)*)?$/i';
+
+        if (!preg_match($expr, $url, $match))
+            return;
+
+        if ((isset($match[4]) && strlen($match[4])))
+            $furl = explode("&", $match[4]);
+
+        $filename = isset($furl)
+            ? basename($furl[0])
+            : "web_image.jpg";
+
+        $file = tempnam(sys_get_temp_dir(), $filename);
+
+        if (phpGet::get($url, $file))
+            $this->moveUploadFile(array(
+                'name' => $filename,
+                'tmp_name' => $file,
+                'error' => UPLOAD_ERR_OK
+            ), $dir);
+        else
+            @unlink($file);
     }
 }
 

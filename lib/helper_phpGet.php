@@ -18,9 +18,7 @@ class phpGet {
 
     static public $methods = array('curl', 'fopen', 'http', 'socket');
     static private $urlExpr = '/^([a-z]+):\/\/((([\p{L}\d\-]+\.)+[\p{L}]{1,4})(\:(\d{1,6}))?(\/.*)*)?$/u';
-    static private $httpExpr = '/^[A-Z]+\/\d+(\.\d+)\s+\d+\s+OK\s*([a-zA-Z0-9\-]+\:\s*[^\n]*\n)*\s*([a-f0-9]+\r?\n)?(.*)\r\n0\r\n\r\n$/s';
     static private $socketExpr = '/^[A-Z]+\/\d+(\.\d+)\s+\d+\s+OK\s*([a-zA-Z0-9\-]+\:\s*[^\n]*\n)*\s*([a-f0-9]+\r?\n)?(.*)$/s';
-
 
     static public function get($url, $file=null, $method=null) {
         if ($file === true)
@@ -85,8 +83,8 @@ class phpGet {
             (false !== ($content = @http_get($url))) &&
             (
                 (
-                    preg_match(self::$httpExpr, $content, $match) &&
-                    false !== ($content = $match[3])
+                    preg_match(self::$socketExpr, $content, $match) &&
+                    false !== ($content = $match[4])
                 ) || true
             )
         )
@@ -117,8 +115,9 @@ class phpGet {
                 $piece = @socket_read($socket, 2048);
                 $content .= $piece;
             } while ($piece);
-            if (preg_match(self::$socketExpr, $content, $match))
-                $content = $match[4];
+
+            $content = preg_match(self::$socketExpr, $content, $match)
+                ? $match[4] : false;
         }
 
         if (isset($socket) && is_resource($socket))

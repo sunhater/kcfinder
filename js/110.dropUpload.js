@@ -11,6 +11,10 @@
   */
 
 _.initDropUpload = function() {
+
+    if (!_.access.files.upload)
+        return;
+
     var files = $('#files'),
         folders = $('#folders').find('div.folder > a'),
         i, dlg, filesSize, uploaded, errors,
