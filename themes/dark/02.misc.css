@@ -387,12 +387,26 @@ a.denied:hover {
 
 /* IMAGE VIEWER */
 
-.ui-dialog-content.kcfImageViewer {
+.kcfImageViewer .ui-dialog-content {
     background: #000;
     cursor: pointer;
 }
 .kcfImageViewer .img {
     background: url(img/bg_transparent.png);
+}
+.ui-dialog-titlebar.loading {
+    background:  url(img/loading.gif);
+    box-shadow:  inset 0 0 3px #000, inset 0 0 6px #000;
+    border-color: #425064;
+}
+
+.ui-dialog-titlebar.loading .ui-dialog-title {
+    color: #aaa;
+    font-weight: normal;
+}
+
+.ui-dialog-titlebar.loading .ui-dialog-titlebar-close .ui-button-icon-primary.ui-icon.ui-icon-closethick {
+    background-image: url(img/ui-icons_grey.png);
 }
 
 /* MISC */

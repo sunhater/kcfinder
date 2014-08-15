@@ -394,13 +394,25 @@ a.denied:hover {
 
 /* IMAGE VIEWER */
 
-.ui-dialog-content.kcfImageViewer {
-    background: #000;
+.kcfImageViewer .ui-dialog-content {
     cursor: pointer;
 }
 .kcfImageViewer .img {
     background: url(img/bg_transparent.png);
 }
+.ui-dialog-titlebar.loading {
+    background:  url(img/loading.gif);
+}
+
+.ui-dialog-titlebar.loading .ui-dialog-title {
+    color: #6b6b6b;
+    text-shadow:none;
+    font-weight: normal;
+}
+.ui-dialog-titlebar.loading .ui-dialog-titlebar-close .ui-button-icon-primary.ui-icon.ui-icon-closethick {
+    background-image: url(img/ui-icons_black.png);
+}
+
 
 /* MISC */
 

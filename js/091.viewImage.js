@@ -15,16 +15,17 @@ _.viewImage = function(data) {
     var ts = new Date().getTime(),
         dlg = false,
         images = [],
+        min_h = 100,
+        min_w, dd, dv, dh;
 
     showImage = function(data) {
         _.lock = true;
-        $('#loading').html(_.label("Loading image...")).show();
 
         var url = $.$.escapeDirs(_.uploadURL + "/" + _.dir + "/" + data.name) + "?ts=" + ts,
             img = new Image(),
             i = $(img),
             w = $(window),
-            d = $(document);
+            d = $(document),
 
         onImgLoad = function() {
             _.lock = false;
@@ -38,10 +39,13 @@ _.viewImage = function(data) {
 
             i.hide().appendTo('body');
 
-            var o_w = i.width(),
+            var w_w = w.width(),
+                w_h = w.height(),
+                o_w = i.width(),
                 o_h = i.height(),
                 i_w = o_w,
                 i_h = o_h,
+                openDlg = false,
 
                 goTo = function(i) {
                     if (!_.lock) {
@@ -59,28 +63,21 @@ _.viewImage = function(data) {
                     goTo((_.currImg ? _.currImg : images.length) - 1);
                 },
 
-                t = $('<div></div>');
+                t = $('<div class="img"></div>');
 
             i.detach().appendTo(t);
-            t.addClass("img");
 
             if (!dlg) {
+                openDlg = true;
 
-                var ww = w.width() - 60,
-
-                closeFunc = function() {
+                var closeFunc = function() {
                     d.unbind('keydown').keydown(function(e) {
                         return !_.selectAll(e);
                     });
                     dlg.dialog('destroy').detach();
                 };
 
-                if ((ww % 2)) ww++;
-
-                dlg = _.dialog($.$.htmlData(data.name), t.get(0), {
-                    width: ww,
-                    height: w.height() - 36,
-                    position: [30, 30],
+                dlg = _.dialog(".", "", {
                     draggable: false,
                     nopadding: true,
                     close: closeFunc,
@@ -118,39 +115,61 @@ _.viewImage = function(data) {
                     ]
                 });
 
-                dlg.addClass('kcfImageViewer').css('overflow', "hidden").parent().find('.ui-dialog-buttonpane button').get(2).focus();
+                dd = dlg.parent();
+                dd.addClass('kcfImageViewer');
+                dlg.css({overflow: "hidden"}).parent().css({width:"auto", height:"auto"}).find('.ui-dialog-buttonpane button').get(2).focus();
+                dv = dd.find('.ui-dialog-titlebar').outerHeight() + dd.find('.ui-dialog-buttonpane').outerHeight() + dd.outerVSpace('b');
+                dh = dd.outerHSpace('b');
+                min_w = dd.outerWidth() - dh;
+            }
+
+            var max_w = w_w - dh,
+                max_h = w_h - dv + 1,
+                width, height, top, left;
+
+            if ((o_w > max_w) || (o_h > max_h)) {
+
+                if ((max_h / max_w) < (o_h / o_w)) {
+                    height = max_h;
+                    width = ((o_w * height) / o_h);
+                } else {
+                    width = max_w;
+                    height = ((o_h * width) / o_w);
+                }
+
+                i_w = width;
+                i_h = height;
+
+            } else if ((o_w < min_w) || (o_h < min_h)) {
+                width = (o_w < min_w) ? min_w : o_w;
+                height = (o_h < min_h) ? min_h : o_h;
+                left = (o_w < min_w) ? (min_w - o_w) / 2 : 0;
+                top = (o_h < min_h) ? (min_h - o_h) / 2 : 0;
 
             } else {
-                dlg.prev().find('.ui-dialog-title').text(data.name);
-                dlg.html(t.get(0));
+                width = o_w;
+                height = o_h;
+                left = top = 0;
             }
+
+            var show = function() {
+                dlg.animate({width: width, height: height}, 100);
+                dlg.parent().animate({top: (w_h - height - dv) / 2, left: (w_w - width - dh) / 2}, 100, function() {
+                    dlg.html(t.get(0));
+                    i.css({paddingTop: top, paddingLeft: left, width: i_w, height: i_h}).show();
+                    dlg.children().first().css({width: width, height: height, display: "none"}).fadeIn(100, function() {
+                        loadingStop();
+                        dlg.prev().find('.ui-dialog-title').css({width:width - dlg.prev().find('.ui-dialog-titlebar-close').outerWidth() - 20}).text(data.name + " (" + o_w + " x " + o_h + ")");
+                    });
+                });
+            }
+
+            if (openDlg)
+                show();
+            else
+                dlg.children().first().fadeOut(100, show);
 
             dlg.unbind('click').click(nextFunc).disableTextSelect();
-
-            var d_w = dlg.innerWidth(),
-                d_h = dlg.innerHeight();
-
-            if ((o_w > d_w) || (o_h > d_h)) {
-                i_w = d_w;
-                i_h = d_h;
-                if ((d_w / d_h) > (o_w / o_h))
-                    i_w = parseInt((o_w * d_h) / o_h);
-                else if ((d_w / d_h) < (o_w / o_h))
-                    i_h = parseInt((o_h * d_w) / o_w);
-            }
-
-            i.css({
-                width: i_w,
-                height: i_h
-            }).show().parent().css({
-                display: "block",
-                margin: "0 auto",
-                width: i_w,
-                height: i_h,
-                marginTop: parseInt((d_h - i_h) / 2)
-            });
-
-            $('#loading').hide();
 
             d.unbind('keydown').keydown(function(e) {
                 if (!_.lock) {
@@ -159,8 +178,22 @@ _.viewImage = function(data) {
                     if ((kc == 39)) nextFunc();
                 }
             });
+        },
+
+        loadingStart = function() {
+            if (dlg)
+                dlg.prev().addClass("loading").find('.ui-dialog-title').html(_.label("Loading image...")).css({width: "auto"});
+            else
+                $('#loading').html(_.label("Loading image...")).show();
+        },
+
+        loadingStop = function() {
+            if (dlg)
+                dlg.prev().removeClass("loading");
+            $('#loading').hide();
         };
 
+        loadingStart();
         img.src = url;
 
         if (img.complete)
@@ -169,7 +202,7 @@ _.viewImage = function(data) {
             img.onload = onImgLoad;
             img.onerror = function() {
                 _.lock = false;
-                $('#loading').hide();
+                loadingStop();
                 _.alert(_.label("Unknown error."));
                 d.unbind('keydown').keydown(function(e) {
                     return !_.selectAll(e);

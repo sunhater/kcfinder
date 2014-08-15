@@ -17,8 +17,8 @@ namespace kcfinder;
 class phpGet {
 
     static public $methods = array('curl', 'fopen', 'http', 'socket');
-    static private $urlExpr = '/^([a-z]+):\/\/((([\p{L}\d\-]+\.)+[\p{L}]{1,4})(\:(\d{1,6}))?(\/.*)*)?$/u';
-    static private $socketExpr = '/^[A-Z]+\/\d+(\.\d+)\s+\d+\s+OK\s*([a-zA-Z0-9\-]+\:\s*[^\n]*\n)*\s*([a-f0-9]+\r?\n)?(.*)$/s';
+    static public $urlExpr = '/^([a-z]+):\/\/((([\p{L}\d\-]+\.)+[\p{L}]{1,4})(\:(\d{1,6}))?(\/.*)*)?$/u';
+    static public $socketExpr = '/^[A-Z]+\/\d+(\.\d+)\s+\d+\s+OK\s*([a-zA-Z0-9\-]+\:\s*[^\n]*\n)*\s*([a-f0-9]+\r?\n)?(.*)$/s';
 
     static public function get($url, $file=null, $method=null) {
         if ($file === true)
