@@ -5,6 +5,8 @@
 
 $lang = array(
 
+    '_lang' => "Romanian",
+    '_native' => "Română",
     '_locale' => "ro_RO.UTF-8",  // UNIX localization code
     '_charset' => "utf-8",       // Browser charset
 

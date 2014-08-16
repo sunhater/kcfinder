@@ -6,6 +6,8 @@
 
 $lang = array(
 
+    '_lang' => "Swedish",
+    '_native' => "Svensk",
     '_locale' => "sv_SE.UTF-8",  // UNIX localization code
     '_charset' => "utf-8",       // Browser charset
 

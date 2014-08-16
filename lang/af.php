@@ -4,6 +4,9 @@
   */
 
 $lang = array(
+
+    '_lang' => "Afrikaans",
+    '_native' => "Afrikaans",
     '_locale' => "af-ZA.UTF-8",
     '_charset' => "utf-8",
 

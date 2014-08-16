@@ -11,7 +11,7 @@
   */
 
 _.initSettings = function() {
-    $('#settings').disableTextSelect();
+    $('#settings fieldset').disableTextSelect();
     $('#settings fieldset, #settings input, #settings label').uniform();
 
     if (!_.shows.length)
@@ -83,4 +83,20 @@ _.initSettings = function() {
         _.fixFilesHeight();
         _.refresh();
     });
+
+    _.initLangs();
 };
+
+
+_.initLangs = function() {
+    $.each(_.langs, function(id, lng) {
+        var opt = $('<option></option>');
+        opt.val(id).text(lng);
+        if (id == _.lang)
+            opt.attr({selected: true});
+        $('#lang').append(opt);
+    });
+    $('#lang').uniform().change(function() {
+        window.location = _.getURL("browser", this.value);
+    });
+}

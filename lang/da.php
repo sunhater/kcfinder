@@ -6,6 +6,8 @@
 
 $lang = array(
 
+    '_lang' => "Danish",
+    '_native' => "Dansk",
     '_locale' => "da_DK.UTF-8",  // UNIX localization code
     '_charset' => "utf-8",       // Browser charset
 

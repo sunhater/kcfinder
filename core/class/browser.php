@@ -910,6 +910,31 @@ class browser extends uploader {
         else
             @unlink($file);
     }
+
+    protected function getLangs() {
+        if (isset($this->session['langs']))
+            return $this->session['langs'];
+
+        $files = dir::content("lang", array(
+            'pattern' => '/^[a-z]{2,3}(\-[a-z]{2})?\.php$/',
+            'types' => "file"
+        ));
+
+        $langs = array();
+        if (is_array($files))
+            foreach ($files as $file) {
+                include $file;
+                $id = substr(basename($file), 0, -4);
+                $langs[$id] = isset($lang['_native'])
+                    ? $lang['_native']
+                    : (isset($lang['_lang'])
+                        ? $lang['_lang']
+                        : $id);
+            }
+
+        $this->session['langs'] = $langs;
+        return $langs;
+    }
 }
 
 ?>

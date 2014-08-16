@@ -6,6 +6,8 @@
 
 $lang = array(
 
+    '_lang' => "Finnish",
+    '_native' => "Suomi",
     '_locale' => "fi_FI.UTF-8",  // UNIX localization code
     '_charset' => "utf-8",       // Browser charset
 

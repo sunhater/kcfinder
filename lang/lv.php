@@ -6,6 +6,8 @@
 
 $lang = array(
 
+    '_lang' => "Latvian",
+    '_native' => "Latviešu",
     '_locale' => "lv_LV.UTF-8",  // UNIX localization code
     '_charset' => "utf-8",       // Browser charset
 

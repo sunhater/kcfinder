@@ -6,6 +6,8 @@
 
 $lang = array(
 
+    '_lang' => "Bulgarian",
+    '_native' => "Български",
     '_locale' => "bg_BG.UTF-8",  // UNIX localization code
     '_charset' => "utf-8",       // Browser charset
 

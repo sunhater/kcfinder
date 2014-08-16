@@ -75,6 +75,10 @@
     </fieldset>
     </div>
 
+    <div>
+        <select id="lang"></select>
+    </div>
+
     </div>
 
     <div id="files">

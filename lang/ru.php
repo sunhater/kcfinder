@@ -7,6 +7,8 @@
 
 $lang = array(
 
+    '_lang' => "Russian",
+    '_native' => "Русский",
     '_locale' => "ru_RU.UTF-8",  // UNIX localization code
     '_charset' => "utf-8",       // Browser charset
 

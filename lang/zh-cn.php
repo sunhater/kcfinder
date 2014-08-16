@@ -9,6 +9,8 @@
 
 $lang = array(
 
+    '_lang' => "Chinese Simplified",
+    '_native' => "中国简体",
     '_locale' => "zh_CN.UTF-8",  // UNIX localization code
     '_charset' => "utf-8",       // Browser charset
 

@@ -13,6 +13,8 @@
   */
 
 $lang = array(
+    '_lang' => "English",
+    '_native' => "English",
     '_locale' => "en_US.UTF-8",
     '_charset' => "utf-8",
 

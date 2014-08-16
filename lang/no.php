@@ -7,6 +7,8 @@
 
 $lang = array(
 
+    '_lang' => "Norwegian",
+    '_native' => "Norsk",
     '_locale' => "nb_NO.UTF-8",  // UNIX localization code
     '_charset' => "utf-8",       // Browser charset
 

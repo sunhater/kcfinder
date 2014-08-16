@@ -6,6 +6,8 @@
 
 $lang = array(
 
+    '_lang' => "Indonesian",
+    '_native' => "Indonesia",
     '_locale' => "id_ID.UTF-8",  // UNIX localization code
     '_charset' => "utf-8",       // Browser charset
 

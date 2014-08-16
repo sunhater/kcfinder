@@ -424,6 +424,10 @@ a.denied:hover {
     background: #fff;
 }
 
+div.selector#uniform-lang {
+    margin: 8px 6px 6px 0;
+}
+
 /* FIX FIELDSET BORDER RADIUS BUG ON IE */
 body.msie fieldset,
 body.trident.rv fieldset {

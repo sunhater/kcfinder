@@ -6,6 +6,8 @@
 
 $lang = array(
 
+    '_lang' => "Spanish",
+    '_native' => "Español",
     '_locale' => "es_ES.UTF-8",  // UNIX localization code
     '_charset' => "utf-8",       // Browser charset
 

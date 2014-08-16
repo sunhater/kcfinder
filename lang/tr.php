@@ -6,6 +6,8 @@
 
 $lang = array(
 
+    '_lang' => "Turkish",
+    '_native' => "Türkçe",
     '_locale' => "en_US.UTF-8",  // UNIX localization code
     '_charset' => "utf-8",       // Browser charset
 

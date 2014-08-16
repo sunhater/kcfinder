@@ -77,8 +77,10 @@ _.humanSize = function(size) {
     return size;
 };
 
-_.getURL = function(act) {
-    var url = "browse.php?type=" + encodeURIComponent(_.type) + "&lng=" + encodeURIComponent(_.lang);
+_.getURL = function(act, lang) {
+    if (!lang)
+        lang = _.lang;
+    var url = "browse.php?type=" + encodeURIComponent(_.type) + "&lng=" + encodeURIComponent(lang);
     if (_.opener.name)
         url += "&opener=" + encodeURIComponent(_.opener.name);
     if (act)

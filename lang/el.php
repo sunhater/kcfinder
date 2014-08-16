@@ -6,6 +6,8 @@
 
 $lang = array(
 
+    '_lang' => "Greek",
+    '_native' => "Ελληνικά",
     '_locale' => "el_GR.UTF-8",  // UNIX localization code
     '_charset' => "utf-8",       // Browser charset
 

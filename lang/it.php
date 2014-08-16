@@ -6,6 +6,8 @@
 
 $lang = array(
 
+    '_lang' => "Italian",
+    '_native' => "Italiano",
     '_locale' => "it_IT.UTF-8",  // UNIX localization code
     '_charset' => "utf-8",       // Browser charset
 

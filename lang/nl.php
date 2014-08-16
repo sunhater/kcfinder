@@ -7,6 +7,8 @@
 
 $lang = array(
 
+    '_lang' => "Dutch",
+    '_native' => "Nederlands",
     '_locale' => "nl_NL.UTF-8",  // UNIX localization code
     '_charset' => "utf-8",       // Browser charset
 

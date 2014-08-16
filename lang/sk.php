@@ -6,6 +6,8 @@
 
 $lang = array(
 
+    '_lang' => "Slovak",
+    '_native' => "Slovenčina",
     '_locale' => "sk_SK.UTF-8",  // UNIX localization code
     '_charset' => "utf-8",       // Browser charset
 

@@ -55,7 +55,7 @@
 
                     $('<div></div>').addClass('ui-icon').css({
                         'float': "right",
-                        marginTop: - parseInt((height / 2) + 8),
+                        marginTop: - parseInt((height / 2) + 21),
                         marginRight: - parseInt((width - width2) / 2) - 7
                     }).appendTo(p);
                 }

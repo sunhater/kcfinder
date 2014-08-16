@@ -9,6 +9,8 @@
 
 $lang = array(
 
+    '_lang' => "Brazilian Portuguese",
+    '_native' => "Português do Brasil",
     '_locale' => "pt_BR.UTF-8",  // UNIX localization code
     '_charset' => "utf-8",       // Browser charset
 
