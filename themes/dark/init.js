@@ -5,5 +5,5 @@ $.each([
     "ui-icons_grey.png",
     "ui-icons_white.png"
 ], function(i, img) {
-    new Image().src = "themes/default/img/" + img;
+    new Image().src = "themes/dark/img/" + img;
 });
