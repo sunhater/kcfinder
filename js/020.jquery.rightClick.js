@@ -15,6 +15,7 @@
         var events = "contextmenu rightclick";
         $(this).each(function() {
             $(this).unbind(events).bind(events, function(e) {
+                $.globalBlur();
                 e.preventDefault();
                 $.clearSelection();
                 if ($.isFunction(func))

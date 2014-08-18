@@ -1,4 +1,4 @@
-/*!
+/*
  * jQuery shDropUpload v1.2
  * http://jquery.sunhater.com/shDropUpload
  * 2014-08-12

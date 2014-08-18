@@ -12,7 +12,6 @@
 
 _.initSettings = function() {
     $('#settings fieldset').disableTextSelect();
-    $('#settings fieldset, #settings input, #settings label').uniform();
 
     if (!_.shows.length)
         $('#show input[type="checkbox"]').each(function(i) {
@@ -83,7 +82,7 @@ _.initSettings = function() {
         _.fixFilesHeight();
         _.refresh();
     });
-
+    $('#settings fieldset, #settings input, #settings label').transForm();
     _.initLangs();
 };
 
@@ -96,7 +95,10 @@ _.initLangs = function() {
             opt.attr({selected: true});
         $('#lang').append(opt);
     });
-    $('#lang').uniform().change(function() {
-        window.location = _.getURL("browser", this.value);
+    $('#lang').change(function() {
+        window.location = _.getURL("browser", this.value) + "&theme=" + encodeURIComponent(_.theme);
     });
+    setTimeout(function() {
+        $('#lang').transForm();
+    }, 0);
 }

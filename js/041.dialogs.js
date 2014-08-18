@@ -178,7 +178,7 @@ _.fileNameDialog = function(post, inputName, inputValue, url, labels, callBack, 
 
         field = dlg.find('[type="text"]');
 
-    field.uniform().attr('value', inputValue).css('width', 310);
+    field.transForm().attr('value', inputValue).css('width', 310);
     dlg.find('form').submit(submit);
 
     if (!selectAll && /^(.+)\.[^\.]+$/ .test(inputValue))

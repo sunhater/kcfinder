@@ -196,3 +196,8 @@ span.brace.opened, span.brace.closed {
     opacity: 0;
     filter: alpha(opacity=0);
 }
+
+#lang {
+    opacity: 0;
+    filter: alpha(opacity=0);
+}

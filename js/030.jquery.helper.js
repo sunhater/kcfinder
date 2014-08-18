@@ -12,6 +12,31 @@
 
 (function($) {
 
+    $.fn.fixScrollbarRadius = function() {
+        $(this).each(function() {
+            var t = this,
+                dataID = 'fixRadius',
+                vScroll = (t.clientHeight < t.scrollHeight),
+                hScroll = (t.clientWidth < t.scrollWidth);
+
+            if (!$(t).data(dataID))
+                $(t).data(dataID, {
+                    tr: $(t).css('borderTopRightRadius'),
+                    br: $(t).css('borderBottomRightRadius'),
+                    bl: $(t).css('borderBottomLeftRadius')
+                });
+
+            var data = $(t).data(dataID);
+
+            $(t).css({
+                borderTopRightRadius: vScroll ? 0 : data.tr,
+                borderBottomRightRadius: (vScroll || hScroll) ? 0 : data.br,
+                borderBottomLeftRadius: hScroll ? 0 : data.bl
+            });
+        });
+        return $(this);
+    };
+
     $.fn.selection = function(start, end) {
         var field = this.get(0);
 
@@ -34,12 +59,9 @@
         return this.each(function() {
             if ($.agent.firefox) { // Firefox
                 $(this).css('MozUserSelect', "none");
-            } else if ($.agent.msie) { // IE
-                $(this).bind('selectstart', function() {
-                    return false;
-                });
             } else { //Opera, etc.
                 $(this).mousedown(function() {
+                    $.globalBlur();
                     return false;
                 });
             }
@@ -120,6 +142,10 @@
             $.exitFullscreen(doc);
         else
             $(this).fullscreen();
+    };
+
+    $.globalBlur = function() {
+        $('<input style="position:fixed;top:-200px;left:-200px" />').appendTo('body').trigger('focus').detach();
     };
 
     $.exitFullscreen = function(doc) {
