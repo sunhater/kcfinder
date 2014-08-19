@@ -98,7 +98,4 @@ _.initLangs = function() {
     $('#lang').change(function() {
         window.location = _.getURL("browser", this.value) + "&theme=" + encodeURIComponent(_.theme);
     });
-    setTimeout(function() {
-        $('#lang').transForm();
-    }, 0);
 }
