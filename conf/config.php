@@ -21,7 +21,7 @@ $_CONFIG = array(
 
 // GENERAL SETTINGS
 
-    'disabled' => false,
+    'disabled' => true,
     'uploadURL' => "upload",
     'uploadDir' => "",
     'theme' => "default",
@@ -119,8 +119,8 @@ $_CONFIG = array(
     //'_sessionDomain' => ".mysite.com",
     //'_sessionPath' => "/my/path",
 
-    '_cssMinCmd' => "java -jar D:/yuicompressor.jar --type css {file}",
-    '_jsMinCmd' => "java -jar D:/yuicompressor.jar --type js {file}",
+    //'_cssMinCmd' => "java -jar /path/to/yuicompressor.jar --type css {file}",
+    //'_jsMinCmd' => "java -jar /path/to/yuicompressor.jar --type js {file}",
 
 );
 
