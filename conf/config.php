@@ -108,7 +108,7 @@ $_CONFIG = array(
 
 // THE FOLLOWING SETTINGS CANNOT BE OVERRIDED WITH SESSION SETTINGS
 
-    '_normalizeFilenames' => false,
+    '_normalizeFilenames' => true,
     '_check4htaccess' => true,
     '_dropUploadMaxFilesize' => 10485760,
     //'_tinyMCEPath' => "/tiny_mce",
@@ -123,5 +123,3 @@ $_CONFIG = array(
     //'_jsMinCmd' => "java -jar /path/to/yuicompressor.jar --type js {file}",
 
 );
-
-?>
