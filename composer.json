@@ -1,9 +1,9 @@
 {
     "name": "sunhater/kcfinder",
     "description": "KCFinder web file manager",
-    "version" : "3.20",
+    "version": "3.20-test1",
     "type": "library",
-    "keywords" : [
+    "keywords": [
         "kcfinder",
         "finder",
         "file",
@@ -13,7 +13,7 @@
         "file explorer"
     ],
     "homepage": "http://kcfinder.sunhater.com",
-    "time": "2014-09-01",
+    "time": "2014-08-24",
     "license": [
         "GPL-3.0+",
         "LGPL-3.0+"

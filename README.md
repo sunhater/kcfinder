@@ -13,6 +13,7 @@ KCFinder is free open-source replacement of CKFinder web file manager. It can be
 * Ajax engine with JSON responses
 * Multiple files upload
 * Upload files using HTML5 drag and drop from local file manager
+* Drag and drop images from external HTML pages. Multiple images can be dropped using selection (Firefox only)
 * Download multiple files or a folder as single ZIP file
 * Select multiple files with the Ctrl/Command key
 * Clipboard for copying, moving and downloading multiple files
@@ -26,7 +27,7 @@ KCFinder is free open-source replacement of CKFinder web file manager. It can be
 * Multilanguage system
 * Preview images in full size
 
-##Compatibility
+## Compatibility
 * KCFinder is officialy tested on Apache 2 web server only, but probably it will work on other web servers.
 * PHP 5.3 or better is required. Safe mode should be off.
 * At least one of these PHP extensions is required: GD, ImageMagick or GraphicsMagick.
