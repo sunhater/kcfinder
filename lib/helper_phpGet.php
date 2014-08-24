@@ -156,5 +156,3 @@ class phpGet {
             function_exists('socket_close');
     }
 }
-
-?>

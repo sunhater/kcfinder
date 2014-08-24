@@ -23,5 +23,3 @@ $lang = array(
     '_dateTimeMid' => "%a %b %e %Y %I:%M %p",
     '_dateTimeSmall' => "%m/%d/%Y %I:%M %p",
 );
-
-?>

@@ -350,5 +350,3 @@ class image_gd extends image {
         return imageCopyResampled($this->image, $src, $dstX, $dstY, $srcX, $srcY, $dstW, $dstH, $srcW, $srcH);
     }
 }
-
-?>

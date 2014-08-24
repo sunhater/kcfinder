@@ -1,7 +1,7 @@
 {
     "name": "sunhater/kcfinder",
     "description": "KCFinder web file manager",
-    "version": "3.20-test1",
+    "version": "3.20-test2",
     "type": "library",
     "keywords": [
         "kcfinder",

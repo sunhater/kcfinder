@@ -125,5 +125,3 @@ $lang = array(
     "Uploading file {number} of {count}... {progress}" => "Laen üles faili {number} {count}-st... {progress}",
     "Failed to upload {filename}!" => "{filename} üleslaadimine ebaõnnestus!",
 );
-
-?>

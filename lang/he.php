@@ -125,5 +125,3 @@ $lang = array(
     "Uploading file {number} of {count}... {progress}" => "מעלה קובץ {number} מתוך {count}... {progress}",
     "Failed to upload {filename}!" => "העלאת הקובץ נכשלה!",
 );
-
-?>

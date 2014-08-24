@@ -265,5 +265,3 @@ $lang = array(
     "Failed to upload {filename}!"  => "! {filename} خطا در ارسال"
 
 );
-
-?>

@@ -109,5 +109,3 @@ function CheckAuthentication($drupal_path) {
 }
 
 CheckAuthentication(get_drupal_path());
-
-?>

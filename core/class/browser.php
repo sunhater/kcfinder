@@ -936,5 +936,3 @@ class browser extends uploader {
         return $langs;
     }
 }
-
-?>

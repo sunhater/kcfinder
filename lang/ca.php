@@ -126,5 +126,3 @@ $lang = array(
     "Uploading file {number} of {count}... {progress}" => "Carregant arxiu {number} de {count}... {progress}",
     "Failed to upload {filename}!" => "Error al carregar {filename}",
 );
-
-?>

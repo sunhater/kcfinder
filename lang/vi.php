@@ -128,6 +128,5 @@ $lang = array(
     "Previous" => "Trước",
     "Next" => "Sau",
     "Confirmation" => "Xác nhận",
-    "Warning" => "Cảnh báo",);
-
-?>
+    "Warning" => "Cảnh báo",
+);

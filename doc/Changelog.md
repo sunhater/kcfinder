@@ -1,3 +1,10 @@
+3.20-test2: 2014-08-24
+----------------------
+* jQuery adapter added
+* Session handling improvements. Now `_sessionVar` option could get arrays by reference
+* Session related ini options in `conf/config.php` are removed and no more supported
+* Removed redundant closing tags in PHP files
+
 3.20-test1: 2014-08-19
 ----------------------
 * "`DOCUMENT_ROOT` is symlink" bugfix

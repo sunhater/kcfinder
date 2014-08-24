@@ -276,5 +276,3 @@ $lang = array(
     "Uploaded {uploaded} of {total}" => "Качено {uploaded} от общо {total}",
     "Errors:" => "Грешки:"
 );
-
-?>

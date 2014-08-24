@@ -128,5 +128,3 @@ $lang = array(
     "Uploading file {number} of {count}... {progress}" => "正在上传文件{number} / {count}... {progress}",
     "Failed to upload {filename}!" => "上传失败{filename}！",
 );
-
-?>

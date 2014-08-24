@@ -125,5 +125,3 @@ $lang = array(
     "Uploading file {number} of {count}... {progress}" => "Augšupielādējot failu {number} no {count}... {progress}",
     "Failed to upload {filename}!" => "Neizdevās augšupielādēt {filename}!",
 );
-
-?>

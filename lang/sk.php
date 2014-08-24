@@ -125,5 +125,3 @@ $lang = array(
     "Uploading file {number} of {count}... {progress}" => "Nahrávam súbor {number} z {count}... {progress}",
     "Failed to upload {filename}!" => "Nepodarilo sa nahrať súbor {filename}!",
 );
-
-?>

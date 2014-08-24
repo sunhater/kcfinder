@@ -303,5 +303,3 @@ class image_imagick extends image {
     }
 
 }
-
-?>

@@ -21,14 +21,8 @@ spl_autoload_register(function($path) {
     list($ns, $class) = $path;
 
     if ($ns == "kcfinder") {
-
-        if ($class == "uploader")
-            require "core/class/uploader.php";
-        elseif ($class == "browser")
-            require "core/class/browser.php";
-        elseif ($class == "minifier")
-            require "core/class/minifier.php";
-
+        if (in_array($class, array("uploader", "browser", "minifier", "session")))
+            require "core/class/$class.php";
         elseif (file_exists("core/types/$class.php"))
             require "core/types/$class.php";
         elseif (file_exists("lib/class_$class.php"))
@@ -37,5 +31,3 @@ spl_autoload_register(function($path) {
             require "lib/helper_$class.php";
     }
 });
-
-?>
