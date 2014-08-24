@@ -124,4 +124,4 @@ $_CONFIG = array(
 
 );
 
-?>
+return $_CONFIG;
