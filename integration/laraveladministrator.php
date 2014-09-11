@@ -81,9 +81,8 @@ class LaravelAdministrator {
                 $iStartedTheSession = true;
             }
 
-            if (!isset($_SESSION['KCFINDER'])) {
-                $_SESSION['KCFINDER'] = array();
-            }
+            //clean and reset the session variable to read options correctly
+            $_SESSION['KCFINDER'] = array();
 
             //if this is a simple true value, user is logged in
             if ($hasPermission == true) {
@@ -111,9 +110,6 @@ class LaravelAdministrator {
                     self::$authenticated = !$_SESSION['KCFINDER']['disabled'];
 
                 }
-            }
-            else {
-                $_SESSION['KCFINDER']['disabled'] = true;
             }
 
             //close the session if I started it
