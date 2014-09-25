@@ -27,7 +27,7 @@ if (!preg_match('/^(\d+\.\d+)/', PHP_VERSION, $ver) || ($ver[1] < 5.3))
 
 
 // SAFE MODE CHECK
-if (ini_get("safe_mode"))
+if (ini_get("safe_mode") && strtolower(ini_get("safe_mode")) !== 'off')
     die("The \"safe_mode\" PHP ini setting is turned on! You cannot run KCFinder in safe mode.");
 
 
