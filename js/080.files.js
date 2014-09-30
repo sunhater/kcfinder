@@ -26,6 +26,12 @@ _.initFiles = function() {
     }).dblclick(function() {
         _.returnFile($(this));
     });
+    if ( 'ontouchstart' in window.document )
+    {
+        $('.file').click(function() {
+            _.returnFile($(this));
+        });
+    }
 
     if ($.mobile)
         $('.file').on('taphold', function() {
