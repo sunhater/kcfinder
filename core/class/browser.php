@@ -737,6 +737,7 @@ class browser extends uploader {
             $bigIcon = file_exists("themes/{$this->config['theme']}/img/files/big/$ext.png");
             $smallIcon = file_exists("themes/{$this->config['theme']}/img/files/small/$ext.png");
             $thumb = file_exists("$thumbDir/$name");
+            list($width, $height) = $img->getSize();
             $return[] = array(
                 'name' => stripcslashes($name),
                 'size' => $stat['size'],
@@ -747,7 +748,10 @@ class browser extends uploader {
                 'bigIcon' => $bigIcon,
                 'smallIcon' => $smallIcon,
                 'thumb' => $thumb,
-                'smallThumb' => $smallThumb
+                'smallThumb' => $smallThumb,
+                'width' => $width,
+                'height' => $height,
+                'type' => $type
             );
         }
         return $return;
