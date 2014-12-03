@@ -213,6 +213,9 @@ div.file .time {
 div.file .size {
     font-size: 10px;
 }
+div.file .dimensions {
+  font-size: 10px;
+}
 #files div.selected,
 #files div.selected:hover {
     border-color: #4685b3;

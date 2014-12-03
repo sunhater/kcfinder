@@ -51,6 +51,8 @@
         <td><label for="showName">&nbsp;<?php echo $this->label("Name") ?></label> &nbsp;</td>
         <th><input id="showSize" type="checkbox" name="size" /></th>
         <td><label for="showSize">&nbsp;<?php echo $this->label("Size") ?></label> &nbsp;</td>
+        <th><input id="showDimensions" type="checkbox" name="dimensions" /></th>
+        <td><label for="showDimensions">&nbsp;<?php echo $this->label("Dimensions") ?></label> &nbsp;</td>
         <th><input id="showTime" type="checkbox" name="time" /></th>
         <td><label for="showTime">&nbsp;<?php echo $this->label("Date") ?></label></td>
         </tr></table>

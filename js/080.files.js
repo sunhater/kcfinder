@@ -61,7 +61,7 @@ _.showFiles = function(callBack, selected) {
                     icon = ".";
                 icon = "themes/" + _.theme + "/img/files/small/" + icon + ".png";
 
-                f = $('<tr class="file"><td class="name thumb"></td><td class="time"></td><td class="size"></td></tr>');
+                f = $('<tr class="file"><td class="name thumb"></td><td class="time"></td><td class="size"></td><td class="dimensions"></td></tr>');
                 f.appendTo(c.find('table'));
 
             // Thumbnails
@@ -76,7 +76,7 @@ _.showFiles = function(callBack, selected) {
                     if (!icon.length) icon = ".";
                     icon = "themes/" + _.theme + "/img/files/big/" + icon + ".png";
                 }
-                f = $('<div class="file"><div class="thumb"></div><div class="name"></div><div class="time"></div><div class="size"></div></div>');
+                f = $('<div class="file"><div class="thumb"></div><div class="name"></div><div class="time"></div><div class="size"></div><div class="dimensions"></div></div>');
                 f.appendTo(c);
             }
 
@@ -84,6 +84,8 @@ _.showFiles = function(callBack, selected) {
             f.find('.name').text(file.name);
             f.find('.time').html(file.date);
             f.find('.size').html(_.humanSize(file.size));
+            if(file.type !== false)
+              f.find('.dimensions').html(file.width + 'x' + file.height + 'px');
             f.data(file);
 
             if ((file.name === selected) || $.$.inArray(file.name, selected))
