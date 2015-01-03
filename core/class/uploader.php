@@ -104,8 +104,12 @@ class uploader {
             $this->cms = $_GET['cms'];
 
 		// LINKING UPLOADED FILE
-        if (count($_FILES))
-            $this->file = &$_FILES[key($_FILES)];
+             if (count($_FILES)) { 
+           foreach($_FILES as $key => $value) { 
+             if($key) 
+               $this->file = &$_FILES[key($_FILES)]; 
+           } 
+         }
 
         // CONFIG & SESSION SETUP
         $session = new session("conf/config.php");
