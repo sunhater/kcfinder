@@ -253,7 +253,7 @@ class uploader {
             }
 
             // CHECK & CREATE UPLOAD FOLDER
-            if (!is_dir($this->typeDir)) {
+            if (!is_dir($this->typeDir) && !is_link($this->typeDir)) {
                 if (!mkdir($this->typeDir, $this->config['dirPerms']))
                     $this->backMsg("Cannot create {dir} folder.", array('dir' => $this->type));
             } elseif (!is_readable($this->typeDir))
