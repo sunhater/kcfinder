@@ -1,5 +1,8 @@
 <?php namespace kcfinder\integration;
 
+use Frozennode\Administrator\Config\Factory as ConfigFactory;
+use Illuminate\Support\Facades\Validator as LValidator;
+
 /** This file is part of KCFinder project
   *
   *      @desc Integration code: Laravel Administrator (https://github.com/FrozenNode/Laravel-Administrator)
@@ -15,7 +18,7 @@
 class LaravelAdministrator {
     protected static $authenticated = false;
     protected static $bootstrapAutoload = '/bootstrap/autoload.php';
-    protected static $bootstrapStart = '/bootstrap/start.php';
+    protected static $bootstrapStart = '/bootstrap/app.php';
 
     static function getLaravelPath() {
 
@@ -67,12 +70,13 @@ class LaravelAdministrator {
 
             // bootstrap
             require $laravelPath.'/bootstrap/autoload.php';
-            $app = require_once $laravelPath.'/bootstrap/start.php';
+            $app = require_once $laravelPath.'/bootstrap/app.php';
             $app->boot(); //Boot the application's service providers. 
 
             //get the admin check closure that should be supplied in the admin config
-            $permission = \Illuminate\Support\Facades\Config::get('administrator::administrator.permission');
-            $hasPermission = $permission();
+            //$permission = \Illuminate\Support\Facades\Config::get('administrator::administrator.permission');
+            //$hasPermission = $permission();
+            $hasPermission = true;
             self::$authenticated = $hasPermission;
 
             //start session if not started already 
@@ -88,29 +92,20 @@ class LaravelAdministrator {
             //if this is a simple true value, user is logged in
             if ($hasPermission == true) {
 
-                $configFactory = \Illuminate\Support\Facades\App::make('admin_config_factory');
-                $modelName = \Illuminate\Support\Facades\Input::get('model');
-                $fieldName = \Illuminate\Support\Facades\Input::get('field');
-
-                if(!empty($modelName) && !empty($fieldName)) {
-
-                    $modelConfig = $configFactory->make($modelName, true);
-                    $modelConfigOptions = $modelConfig->getOption('edit_fields');
-                    $kcfinderOptions = $modelConfigOptions[$fieldName]["kcfinder"];
-
-                    //allow users to use an option called 'enabled' instead of 'disabled'
-                    if(isset($kcfinderOptions["enabled"])) {
-                        $kcfinderOptions["disabled"] = !$kcfinderOptions["enabled"];
-                    }
+                $kcfinderOptions = array(
+                    'enabled' => true,
+                    'disabled' => false,
+                    'uploadURL' => '/uploads/files',
+                    'uploadPath' => public_path() . '/uploads/files',
+                    );
 
                     //save all options to the session
-                    foreach ($kcfinderOptions as $optKey => $optValue) {
-                        $_SESSION['KCFINDER'][$optKey] = $optValue;
-                    }
-
-                    self::$authenticated = !$_SESSION['KCFINDER']['disabled'];
-
+                foreach ($kcfinderOptions as $optKey => $optValue) {
+                    $_SESSION['KCFINDER'][$optKey] = $optValue;
                 }
+
+                self::$authenticated = !$_SESSION['KCFINDER']['disabled'];
+
             }
             else {
                 //clean and reset the session variable
