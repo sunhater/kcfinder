@@ -124,4 +124,9 @@ $lang = array(
     "You cannot rename the extension of files!" => "¡Usted no puede renombrar la extensión de los archivos!",
     "Uploading file {number} of {count}... {progress}" => "Cargando archivo {number} de {count}... {progress}",
     "Failed to upload {filename}!" => "¡No se pudo cargar el archivo {filename}!",
+    "Close" => "Cerrar",
+    "Previous" => "Anterior",
+    "Next" => "Siguiente",
+    "Confirmation" => "Confirmación",
+    "Warning" => "Alerta",
 );
