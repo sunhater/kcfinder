@@ -3,8 +3,8 @@
 <head>
 <title>KCFinder: /<?php echo $this->session['dir'] ?></title>
 <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
-<?php INCLUDE "tpl/tpl_css.php" ?>
-<?php INCLUDE "tpl/tpl_javascript.php" ?>
+<?php INCLUDE dirname(__FILE__) . "/tpl_css.php" ?>
+<?php INCLUDE dirname(__FILE__) . "/tpl_javascript.php" ?>
 </head>
 <body>
 <div id="resizer"></div>

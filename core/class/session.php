@@ -20,13 +20,13 @@ class session {
     public $values;
     protected $config;
 
-    public function __construct($configFile) {
+    public function __construct($configFile, $config) {
 
         // Start session if it is not already started
         if (!session_id())
             session_start();
 
-        $config = require($configFile);
+        $config = $config + require($configFile);
 
         // _sessionVar option is set
         if (isset($config[self::SESSION_VAR])) {
