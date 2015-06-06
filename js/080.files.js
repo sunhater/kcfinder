@@ -56,9 +56,9 @@ _.showFiles = function(callBack, selected) {
 
                 icon = $.$.getFileExtension(file.name);
                 if (file.thumb)
-                    icon = ".image";
+                    icon = "_image";
                 else if (!icon.length || !file.smallIcon)
-                    icon = ".";
+                    icon = "_";
                 icon = "themes/" + _.theme + "/img/files/small/" + icon + ".png";
 
                 f = $('<tr class="file"><td class="name thumb"></td><td class="time"></td><td class="size"></td></tr>');
@@ -72,7 +72,7 @@ _.showFiles = function(callBack, selected) {
                     icon = _.uploadURL + "/" + _.dir + "/" + encodeURIComponent(file.name);
                     icon = $.$.escapeDirs(icon).replace(/\'/g, "%27");
                 } else {
-                    icon = file.bigIcon ? $.$.getFileExtension(file.name) : ".";
+                    icon = file.bigIcon ? $.$.getFileExtension(file.name) : "_";
                     if (!icon.length) icon = ".";
                     icon = "themes/" + _.theme + "/img/files/big/" + icon + ".png";
                 }

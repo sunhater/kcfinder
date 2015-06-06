@@ -500,9 +500,9 @@ _.openClipboard = function() {
         $.each(_.clipboard, function(i, val) {
             var icon = $.$.getFileExtension(val.name);
             if (val.thumb)
-                icon = ".image";
+                icon = "_image";
             else if (!val.smallIcon || !icon.length)
-                icon = ".";
+                icon = "_";
             icon = "themes/" + _.theme + "/img/files/small/" + icon + ".png";
             html += '<a title="' + _.label("Click to remove from the Clipboard") + '" onclick="_.removeFromClipboard(' + i + ')"' + ((i == 0) ? ' class="first"' : "") + '><span style="background-image:url(' + $.$.escapeDirs(icon) + ')">' + $.$.htmlData($.$.basename(val.name)) + '</span></a>';
         });
