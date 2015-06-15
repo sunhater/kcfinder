@@ -94,7 +94,7 @@ class uploader {
         return property_exists($this, $property) ? $this->$property : null;
     }
 
-    public function __construct() {
+    public function __construct($config = array()) {
 
         // SET CMS INTEGRATION PROPERTY
         if (isset($_GET['cms']) &&
@@ -103,12 +103,12 @@ class uploader {
         )
             $this->cms = $_GET['cms'];
 
-		// LINKING UPLOADED FILE
+        // LINKING UPLOADED FILE
         if (count($_FILES))
             $this->file = &$_FILES[key($_FILES)];
 
         // CONFIG & SESSION SETUP
-        $session = new session("conf/config.php");
+        $session = new session(dirname(__FILE__) . "/../../conf/config.php", $config);
         $this->config = $session->getConfig();
         $this->session = &$session->values;
 
@@ -221,7 +221,7 @@ class uploader {
         foreach ($this->langInputNames as $key)
             if (isset($_GET[$key]) &&
                 preg_match('/^[a-z][a-z\._\-]*$/i', $_GET[$key]) &&
-                file_exists("lang/" . strtolower($_GET[$key]) . ".php")
+                file_exists(dirname(__FILE__) . "/../../lang/" . strtolower($_GET[$key]) . ".php")
             ) {
                 $this->lang = $_GET[$key];
                 break;
@@ -655,7 +655,7 @@ class uploader {
     }
 
     protected function localize($langCode) {
-        require "lang/{$langCode}.php";
+        require dirname(__FILE__) . "/../../lang/{$langCode}.php";
         setlocale(LC_ALL, $lang['_locale']);
         $this->charset = $lang['_charset'];
         $this->dateTimeFull = $lang['_dateTimeFull'];
@@ -761,6 +761,6 @@ if (window.opener) window.close();
     }
 
     protected function get_htaccess() {
-        return file_get_contents("conf/upload.htaccess");
+        return file_get_contents(dirname(__FILE__) . "/../../conf/upload.htaccess");
     }
 }

@@ -21,13 +21,15 @@ spl_autoload_register(function($path) {
     list($ns, $class) = $path;
 
     if ($ns == "kcfinder") {
+        $dir = dirname(__FILE__);
+
         if (in_array($class, array("uploader", "browser", "minifier", "session")))
-            require "core/class/$class.php";
-        elseif (file_exists("core/types/$class.php"))
-            require "core/types/$class.php";
-        elseif (file_exists("lib/class_$class.php"))
-            require "lib/class_$class.php";
-        elseif (file_exists("lib/helper_$class.php"))
-            require "lib/helper_$class.php";
+            require $dir . "/../core/class/$class.php";
+        elseif (file_exists($dir . "/../core/types/$class.php"))
+            require $dir . "/../core/types/$class.php";
+        elseif (file_exists($dir . "/../lib/class_$class.php"))
+            require $dir . "/../lib/class_$class.php";
+        elseif (file_exists($dir . "/../lib/helper_$class.php"))
+            require $dir . "/../lib/helper_$class.php";
     }
 });

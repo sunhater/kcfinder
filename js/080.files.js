@@ -59,7 +59,7 @@ _.showFiles = function(callBack, selected) {
                     icon = ".image";
                 else if (!icon.length || !file.smallIcon)
                     icon = ".";
-                icon = "themes/" + _.theme + "/img/files/small/" + icon + ".png";
+                icon = _.baseUrl + "themes/" + _.theme + "/img/files/small/" + icon + ".png";
 
                 f = $('<tr class="file"><td class="name thumb"></td><td class="time"></td><td class="size"></td></tr>');
                 f.appendTo(c.find('table'));
@@ -74,7 +74,7 @@ _.showFiles = function(callBack, selected) {
                 } else {
                     icon = file.bigIcon ? $.$.getFileExtension(file.name) : ".";
                     if (!icon.length) icon = ".";
-                    icon = "themes/" + _.theme + "/img/files/big/" + icon + ".png";
+                    icon = _.baseUrl + "themes/" + _.theme + "/img/files/big/" + icon + ".png";
                 }
                 f = $('<div class="file"><div class="thumb"></div><div class="name"></div><div class="time"></div><div class="size"></div></div>');
                 f.appendTo(c);

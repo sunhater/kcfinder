@@ -19,8 +19,8 @@ class browser extends uploader {
     protected $thumbsDir;
     protected $thumbsTypeDir;
 
-    public function __construct() {
-        parent::__construct();
+    public function __construct($config = array()) {
+        parent::__construct($config);
 
         // SECURITY CHECK INPUT DIRECTORY
         if (isset($_POST['dir'])) {
@@ -691,10 +691,10 @@ class browser extends uploader {
     protected function sendDefaultThumb($file=null) {
         if ($file !== null) {
             $ext = file::getExtension($file);
-            $thumb = "themes/{$this->config['theme']}/img/files/big/$ext.png";
+            $thumb = dirname(__FILE__) . "/../../themes/{$this->config['theme']}/img/files/big/$ext.png";
         }
         if (!isset($thumb) || !file_exists($thumb))
-            $thumb = "themes/{$this->config['theme']}/img/files/big/..png";
+            $thumb = dirname(__FILE__) . "/../../themes/{$this->config['theme']}/img/files/big/..png";
         header("Content-Type: image/png");
         readfile($thumb);
         die;
@@ -734,8 +734,8 @@ class browser extends uploader {
             if ($stat === false) continue;
             $name = basename($file);
             $ext = file::getExtension($file);
-            $bigIcon = file_exists("themes/{$this->config['theme']}/img/files/big/$ext.png");
-            $smallIcon = file_exists("themes/{$this->config['theme']}/img/files/small/$ext.png");
+            $bigIcon = file_exists(dirname(__FILE__) . "/../../themes/{$this->config['theme']}/img/files/big/$ext.png");
+            $smallIcon = file_exists(dirname(__FILE__) . "/../../themes/{$this->config['theme']}/img/files/small/$ext.png");
             $thumb = file_exists("$thumbDir/$name");
             $return[] = array(
                 'name' => stripcslashes($name),
@@ -857,14 +857,14 @@ class browser extends uploader {
         if ($template === null)
             $template = $this->action;
 
-        if (file_exists("tpl/tpl_$template.php")) {
+        if (file_exists(dirname(__FILE__) . "/../../tpl/tpl_$template.php")) {
             ob_start();
             $eval = "unset(\$data);unset(\$template);unset(\$eval);";
             $_ = $data;
             foreach (array_keys($data) as $key)
                 if (preg_match('/^[a-z\d_]+$/i', $key))
                     $eval .= "\$$key=\$_['$key'];";
-            $eval .= "unset(\$_);require \"tpl/tpl_$template.php\";";
+            $eval .= "unset(\$_);require dirname(__FILE__) . \"/../../tpl/tpl_$template.php\";";
             eval($eval);
             return ob_get_clean();
         }
@@ -915,7 +915,7 @@ class browser extends uploader {
         if (isset($this->session['langs']))
             return $this->session['langs'];
 
-        $files = dir::content("lang", array(
+        $files = dir::content(dirname(__FILE__) . "/../../lang", array(
             'pattern' => '/^[a-z]{2,3}(\-[a-z]{2})?\.php$/',
             'types' => "file"
         ));
