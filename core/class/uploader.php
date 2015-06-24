@@ -233,7 +233,7 @@ class uploader {
 
             // TRY TO CREATE UPLOAD DIRECTORY IF NOT EXISTS
             if (!$this->config['disabled'] && !is_dir($this->config['uploadDir']))
-                @mkdir($this->config['uploadDir'], $this->config['dirPerms']);
+                @mkdir($this->config['uploadDir'], $this->config['dirPerms'], $this->config['allowRecursiveDirCreate']);
 
             // CHECK & MAKE DEFAULT .htaccess
             if (isset($this->config['_check4htaccess']) &&

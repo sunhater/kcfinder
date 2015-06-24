@@ -66,6 +66,7 @@ return array(
 
     'dirPerms' => 0755,
     'filePerms' => 0644,
+    'allowRecursiveDirCreate' => false,
 
     'access' => array(
 
