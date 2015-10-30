@@ -149,7 +149,7 @@ class uploader {
         }
 
         // COOKIES INIT
-        $ip = '(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)';
+        $ip = '(25[0-5]|2[0-4][0-9]|[1]?[0-9][0-9]?)';
         $ip = '/^' . implode('\.', array($ip, $ip, $ip, $ip)) . '$/';
         if (preg_match($ip, $_SERVER['HTTP_HOST']) ||
             preg_match('/^[^\.]+$/', $_SERVER['HTTP_HOST'])
