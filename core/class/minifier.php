@@ -25,12 +25,13 @@ class minifier {
     );
 
     public function __construct($type=null) {
-        $this->config = require("conf/config.php");
+        require "conf/config.php";
+        $this->config = $_CONFIG;
         $type = strtolower($type);
         if (isset($this->mime[$type]))
             $this->type = $type;
-        if (isset($this->config["_{$this->type}MinCmd"]))
-            $this->minCmd = $this->config["_{$this->type}MinCmd"];
+        if (isset($_CONFIG["_{$this->type}MinCmd"]))
+            $this->minCmd = $_CONFIG["_{$this->type}MinCmd"];
     }
 
     public function minify($cacheFile=null, $dir=null) {
@@ -109,3 +110,5 @@ class minifier {
 
     }
 }
+
+?>
