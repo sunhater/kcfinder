@@ -263,8 +263,18 @@ class image_gd extends image {
         $file = isset($options['file']) ? $options['file'] : null;
         $quality = isset($options['quality']) ? $options['quality'] : null;
         $filters = isset($options['filters']) ? $options['filters'] : null;
-        if (($file === null) && !headers_sent())
-            header("Content-Type: image/png");
+		
+        if (($file === null) && !headers_sent()) {
+			header("Content-Type: image/png");
+		}
+		
+		// Compression must be between 0-9 - 2/02/2016
+		if($quality && is_numeric($quality)) {
+			$quality = $quality < 100 ? round(($quality / 100) * 10) : null; 
+		} else {
+			$quality = null;
+		}
+		
         return imagepng($this->image, $file, $quality, $filters);
     }
 
@@ -350,3 +360,5 @@ class image_gd extends image {
         return imageCopyResampled($this->image, $src, $dstX, $dstY, $srcX, $srcY, $dstW, $dstH, $srcW, $srcH);
     }
 }
+
+?>

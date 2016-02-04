@@ -6,8 +6,6 @@
 
 $lang = array(
 
-    '_lang' => "Bulgarian",
-    '_native' => "Български",
     '_locale' => "bg_BG.UTF-8",  // UNIX localization code
     '_charset' => "utf-8",       // Browser charset
 
@@ -262,17 +260,11 @@ $lang = array(
     "Failed to upload {filename}!" => "Несполучливо качване на {filename}!",
 
     // SINCE 3.0
-
     "Close" => "Затвори",
     "Previous" => "Предишно",
     "Next" => "Следващо",
     "Confirmation" => "Потвърждение",
-    "Warning" => "Внимание",
-
-    // SINCE 3.20
-
-    "Uploading files" => "Качване на файлове",
-    "Uploading file {current} of {count}" => "Качване на файл {current} от общо {count}",
-    "Uploaded {uploaded} of {total}" => "Качено {uploaded} от общо {total}",
-    "Errors:" => "Грешки:"
+    "Warning" => "Внимание"
 );
+
+?>

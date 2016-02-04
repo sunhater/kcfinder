@@ -13,8 +13,6 @@
   */
 
 $lang = array(
-    '_lang' => "Persian",
-    '_native' => "فارسى",
     '_locale' => "fa_IR.UTF-8",
     '_charset' => "utf-8",
 
@@ -265,3 +263,5 @@ $lang = array(
     "Failed to upload {filename}!"  => "! {filename} خطا در ارسال"
 
 );
+
+?>

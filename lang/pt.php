@@ -8,8 +8,6 @@
 
 $lang = array(
 
-    '_lang' => "Portuguese",
-    '_native' => "Português",
     '_locale' => "pt_PT.UTF-8",  // UNIX localization code
     '_charset' => "utf-8",       // Browser charset
 
@@ -241,3 +239,5 @@ $lang = array(
     "Select Thumbnails" => "Seleccionar miniaturas",
     "Download files" => "Sacar ficheiros",
 );
+
+?>

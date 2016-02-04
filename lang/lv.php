@@ -6,8 +6,6 @@
 
 $lang = array(
 
-    '_lang' => "Latvian",
-    '_native' => "Latviešu",
     '_locale' => "lv_LV.UTF-8",  // UNIX localization code
     '_charset' => "utf-8",       // Browser charset
 
@@ -125,3 +123,5 @@ $lang = array(
     "Uploading file {number} of {count}... {progress}" => "Augšupielādējot failu {number} no {count}... {progress}",
     "Failed to upload {filename}!" => "Neizdevās augšupielādēt {filename}!",
 );
+
+?>

@@ -6,8 +6,6 @@
 
 $lang = array(
 
-    '_lang' => "Hungarian",
-    '_native' => "Magyar",
     '_locale' => "hu_HU.UTF-8",  // UNIX localization code
     '_charset' => "utf-8",       // Browser charset
 
@@ -130,3 +128,5 @@ $lang = array(
     "Confirmation" => "Megerősítés",
     "Warning" => "Figyelem"
 );
+
+?>

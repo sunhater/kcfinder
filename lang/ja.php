@@ -1,7 +1,7 @@
 <?php
 
 /** This file is part of KCFinder project
-  *
+  * 
   * @desc Japanese localization
   * @package KCFinder
   * @version 2.54
@@ -12,8 +12,6 @@
 
 $lang = array(
 
-    '_lang' => "Japanese",
-    '_native' => "日本語",
     '_locale' => "ja_JP.UTF-8",  // UNIX localization code
     '_charset' => "utf-8",       // Browser charset
 
@@ -131,3 +129,5 @@ $lang = array(
     "Uploading file {number} of {count}... {progress}" => "ファイルをアップロード中（{number}/{count}）... {progress}",
     "Failed to upload {filename}!" => "{filename}のアップロードに失敗しました",
 );
+
+?>

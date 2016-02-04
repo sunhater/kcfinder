@@ -23,7 +23,6 @@ fieldset td {
 span.current,
 span.regular:hover,
 span.context,
-a.drag > span.folder,
 #clipboard div:hover,
 div.file:hover,
 #files div.selected,
@@ -77,6 +76,7 @@ tr.selected:hover > td,
     display: block;
     float: left;
     border-radius: 4px;
+    transition: .3s;
     padding:0;
 }
 #toolbar a > span {
@@ -96,6 +96,7 @@ tr.selected:hover > td,
     background: -o-linear-gradient(top, #4685b3, #184977);
     background: linear-gradient(to bottom, #4685b3, #184977);
     box-shadow: inset 0 0 3px #88b9da;
+    transition: .3s;
 }
 #toolbar a[href="kcact:upload"] span {
     background-image: url(img/icons/upload.png);
@@ -165,7 +166,7 @@ span.regular {
     background-image: url(img/tree/folder.png);
     background-color: transparent;
 }
-span.regular:hover, span.context, a.drag > span.folder, #clipboard div:hover {
+span.regular:hover, span.context, #clipboard div:hover {
     transition: .3s;
     background-color: #333;
     border-color: #777;
@@ -387,40 +388,15 @@ a.denied:hover {
 
 /* IMAGE VIEWER */
 
-.kcfImageViewer .ui-dialog-content {
+.ui-dialog-content.kcfImageViewer {
     background: #000;
     cursor: pointer;
 }
 .kcfImageViewer .img {
     background: url(img/bg_transparent.png);
 }
-.ui-dialog-titlebar.loading {
-    background:  url(img/loading.gif);
-    box-shadow:  inset 0 0 3px #000, inset 0 0 6px #000;
-    border-color: #425064;
-}
-
-.ui-dialog-titlebar.loading .ui-dialog-title {
-    color: #aaa;
-    font-weight: normal;
-}
-
-.ui-dialog-titlebar.loading .ui-dialog-titlebar-close .ui-button-icon-primary.ui-icon.ui-icon-closethick {
-    background-image: url(img/ui-icons_grey.png);
-}
 
 /* MISC */
-#settings .tf-select {
-    margin: 3px 5px 6px 0;
-}
-#settings .tf-selected {
-    padding-top: 10px;
-    padding-bottom: 11px;
-}
-#settings .tf-select .tf-button {
-    padding-top: 7px;
-    padding-bottom: 8px;
-}
 
 #loading {
     margin-right: 5px;
@@ -433,10 +409,6 @@ a.denied:hover {
 }
 #resizer {
     background: #fff;
-}
-
-div.selector#uniform-lang {
-    margin: 8px 6px 6px 0;
 }
 
 /* FIX FIELDSET BORDER RADIUS BUG ON IE */

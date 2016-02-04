@@ -27,14 +27,14 @@ _.initFolders = function() {
     }).rightClick(function(el, e) {
         _.menuDir($(el).parent(), e);
     });
-    if ($.mobile)
+    if ($.mobile) {
         $('div.folder > a > span.folder').on('taphold', function() {
             _.menuDir($(this).parent(), {
                 pageX: $(this).offset().left + 1,
                 pageY: $(this).offset().top + $(this).outerHeight()
             });
         });
-
+    }
 };
 
 _.setTreeData = function(data, path) {
@@ -84,14 +84,11 @@ _.expandDir = function(dir) {
         dir.parent().children('.folders').hide(500, function() {
             if (path == _.dir.substr(0, path.length))
                 _.changeDir(dir);
-            _.fixScrollRadius();
         });
         dir.children('.brace').removeClass('opened').addClass('closed');
     } else {
         if (dir.parent().children('.folders').get(0)) {
-            dir.parent().children('.folders').show(500, function() {
-                _.fixScrollRadius();
-            });
+            dir.parent().children('.folders').show(500);
             dir.children('.brace').removeClass('closed').addClass('opened');
         } else if (!$('#loadingDirs').get(0)) {
             dir.parent().append('<div id="loadingDirs">' + _.label("Loading folders...") + '</div>');
@@ -117,9 +114,7 @@ _.expandDir = function(dir) {
                             dir.parent().append('<div class="folders">' + html + '</div>');
                             var folders = $(dir.parent().children('.folders').first());
                             folders.hide();
-                            $(folders).show(500, function() {
-                                _.fixScrollRadius();
-                            });
+                            $(folders).show(500);
                             $.each(data.dirs, function(i, cdir) {
                                 _.setTreeData(cdir, path);
                             });
@@ -130,15 +125,12 @@ _.expandDir = function(dir) {
                             dir.children('.brace').removeClass('opened closed');
                         _.initFolders();
                         _.initDropUpload();
-                        _.fixScrollRadius();
                     },
                     error: function() {
                         $('#loadingDirs').detach();
                         _.alert(_.label("Unknown error."));
-                        _.fixScrollRadius();
                     }
                 });
-                _.fixScrollRadius();
             });
         }
     }
@@ -164,7 +156,6 @@ _.changeDir = function(dir) {
                 _.dirWritable = data.dirWritable;
                 _.setTitle("KCFinder: /" + _.dir);
                 _.statusDir();
-                _.initDropUpload();
             },
             error: function() {
                 $('#files').html(_.label("Unknown error."));

@@ -15,16 +15,16 @@ _.viewImage = function(data) {
     var ts = new Date().getTime(),
         dlg = false,
         images = [],
-        min_h = 100,
-        w = $(window),
-        min_w, dd, dv, dh,
 
     showImage = function(data) {
         _.lock = true;
+        $('#loading').html(_.label("Loading image...")).show();
 
         var url = $.$.escapeDirs(_.uploadURL + "/" + _.dir + "/" + data.name) + "?ts=" + ts,
             img = new Image(),
             i = $(img),
+            w = $(window),
+            d = $(document);
 
         onImgLoad = function() {
             _.lock = false;
@@ -38,53 +38,49 @@ _.viewImage = function(data) {
 
             i.hide().appendTo('body');
 
-            var w_w = w.width(),
-                w_h = w.height(),
-                o_w = i.width(),
+            var o_w = i.width(),
                 o_h = i.height(),
                 i_w = o_w,
                 i_h = o_h,
-                openDlg = false,
-                t = $('<div class="img"></div>'),
 
-            goTo = function(i) {
-                if (!_.lock) {
-                    var nimg = images[i];
-                    _.currImg = i;
-                    showImage(nimg);
-                }
-            },
-
-            nextFunc = function() {
-                goTo((_.currImg >= images.length - 1) ? 0 : (_.currImg + 1));
-            },
-
-            prevFunc = function() {
-                goTo((_.currImg ? _.currImg : images.length) - 1);
-            },
-
-            selectFunc = function(e) {
-                if (_.ssImage)
-                    _.selectFile($(_.ssImage), e);
-                dlg.dialog('destroy').detach();
-            };
-
-            i.detach().appendTo(t);
-
-            if (!dlg) {
-                openDlg = true;
-
-                var closeFunc = function() {
-                    dlg.dialog('destroy').detach();
+                goTo = function(i) {
+                    if (!_.lock) {
+                        var nimg = images[i];
+                        _.currImg = i;
+                        showImage(nimg);
+                    }
                 },
 
-                focusFunc = function() {
-                    setTimeout(function() {
-                        dlg.find('input').get(0).focus();
-                    }, 100);
+                nextFunc = function() {
+                    goTo((_.currImg >= images.length - 1) ? 0 : (_.currImg + 1));
+                },
+
+                prevFunc = function() {
+                    goTo((_.currImg ? _.currImg : images.length) - 1);
+                },
+
+                t = $('<div></div>');
+
+            i.detach().appendTo(t);
+            t.addClass("img");
+
+            if (!dlg) {
+
+                var ww = w.width() - 60,
+
+                closeFunc = function() {
+                    d.unbind('keydown').keydown(function(e) {
+                        return !_.selectAll(e);
+                    });
+                    dlg.dialog('destroy').detach();
                 };
 
-                dlg = _.dialog(".", "", {
+                if ((ww % 2)) ww++;
+
+                dlg = _.dialog($.$.htmlData(data.name), t.get(0), {
+                    width: ww,
+                    height: w.height() - 36,
+                    position: [30, 30],
                     draggable: false,
                     nopadding: true,
                     close: closeFunc,
@@ -104,7 +100,15 @@ _.viewImage = function(data) {
                         }, {
                             text: _.label("Select"),
                             icons: {primary: "ui-icon-check"},
-                            click: selectFunc
+                            click: function(e) {
+                                d.unbind('keydown').keydown(function(e) {
+                                    return !_.selectAll(e);
+                                });
+                                if (_.ssImage) {
+                                    _.selectFile($(_.ssImage), e);
+                                }
+                                dlg.dialog('destroy').detach();
+                            }
 
                         }, {
                             text: _.label("Close"),
@@ -114,87 +118,49 @@ _.viewImage = function(data) {
                     ]
                 });
 
-                dlg.click(nextFunc).css({overflow: "hidden"}).parent().css({width: "auto", height: "auto"});
+                dlg.addClass('kcfImageViewer').css('overflow', "hidden").parent().find('.ui-dialog-buttonpane button').get(2).focus();
 
-                dd = dlg.parent().click(focusFunc).rightClick(focusFunc).disableTextSelect().addClass('kcfImageViewer');
-                dv = dd.find('.ui-dialog-titlebar').outerHeight() + dd.find('.ui-dialog-buttonpane').outerHeight() + dd.outerVSpace('b');
-                dh = dd.outerHSpace('b');
-                min_w = dd.outerWidth() - dh;
+            } else {
+                dlg.prev().find('.ui-dialog-title').html($.$.htmlData(data.name));
+                dlg.html(t.get(0));
             }
 
-            var max_w = w_w - dh,
-                max_h = w_h - dv + 1,
-                top = 0,
-                left = 0,
-                width = o_w,
-                height = o_h;
+            dlg.unbind('click').click(nextFunc).disableTextSelect();
 
-            // Too big
-            if ((o_w > max_w) || (o_h > max_h)) {
+            var d_w = dlg.innerWidth(),
+                d_h = dlg.innerHeight();
 
-                if ((max_h / max_w) < (o_h / o_w)) {
-                    height = max_h;
-                    width = (o_w * height) / o_h;
-
-                } else {
-                    width = max_w;
-                    height = (o_h * width) / o_w;
-                }
-
-                i_w = width;
-                i_h = height;
-
-            // Too small
-            } else if ((o_w < min_w) || (o_h < min_h)) {
-                width = (o_w < min_w) ? min_w : o_w;
-                height = (o_h < min_h) ? min_h : o_h;
-                left = (o_w < min_w) ? (min_w - o_w) / 2 : 0;
-                top = (o_h < min_h) ? (min_h - o_h) / 2 : 0;
+            if ((o_w > d_w) || (o_h > d_h)) {
+                i_w = d_w;
+                i_h = d_h;
+                if ((d_w / d_h) > (o_w / o_h))
+                    i_w = parseInt((o_w * d_h) / o_h);
+                else if ((d_w / d_h) < (o_w / o_h))
+                    i_h = parseInt((o_h * d_w) / o_w);
             }
 
-            var show = function() {
-                dlg.animate({width: width, height: height}, 150);
-                dlg.parent().animate({top: (w_h - height - dv) / 2, left: (w_w - width - dh) / 2}, 150, function() {
-                    dlg.html(t.get(0)).append('<input style="width:1px;height:1px;position:fixed;top:-1000px;left:-1000px" type="text" />');
-                    dlg.find('input').keydown(function(e) {
-                        if (!_.lock) {
-                            if (e.metaKey || e.ctrlKey || e.altKey || e.shiftKey)
-                                return;
-                            var kc = e.keyCode;
-                            if ((kc == 37)) prevFunc();
-                            if ((kc == 39)) nextFunc();
-                            if ((kc == 13) || (kc == 32)) selectFunc(e);
-                        }
-                    }).get(0).focus();
-                    i.css({padding: top + "px 0 0 " + left + "px", width: i_w, height: i_h}).show();
-                    dlg.children().first().css({width: width, height: height, display: "none"}).fadeIn(150, function() {
-                        loadingStop();
-                        var title = data.name + " (" + o_w + " x " + o_h + ")";
-                        dlg.prev().find('.ui-dialog-title').css({width:width - dlg.prev().find('.ui-dialog-titlebar-close').outerWidth() - 20}).text(title).attr({title: title}).css({cursor: "default"});
-                    });
-                });
-            }
+            i.css({
+                width: i_w,
+                height: i_h
+            }).show().parent().css({
+                display: "block",
+                margin: "0 auto",
+                width: i_w,
+                height: i_h,
+                marginTop: parseInt((d_h - i_h) / 2)
+            });
 
-            if (openDlg)
-                show();
-            else
-                dlg.children().first().fadeOut(150, show);
-        },
-
-        loadingStart = function() {
-            if (dlg)
-                dlg.prev().addClass("loading").find('.ui-dialog-title').text(_.label("Loading image...")).css({width: "auto"});
-            else
-                $('#loading').text(_.label("Loading image...")).show();
-        },
-
-        loadingStop = function() {
-            if (dlg)
-                dlg.prev().removeClass("loading");
             $('#loading').hide();
+
+            d.unbind('keydown').keydown(function(e) {
+                if (!_.lock) {
+                    var kc = e.keyCode;
+                    if ((kc == 37)) prevFunc();
+                    if ((kc == 39)) nextFunc();
+                }
+            });
         };
 
-        loadingStart();
         img.src = url;
 
         if (img.complete)
@@ -203,15 +169,18 @@ _.viewImage = function(data) {
             img.onload = onImgLoad;
             img.onerror = function() {
                 _.lock = false;
-                loadingStop();
+                $('#loading').hide();
                 _.alert(_.label("Unknown error."));
+                d.unbind('keydown').keydown(function(e) {
+                    return !_.selectAll(e);
+                });
                 _.refresh();
             };
         }
     };
 
     $.each(_.files, function(i, file) {
-        i = images.length;
+        var i = images.length;
         if (file.thumb || file.smallThumb)
             images[i] = file;
         if (file.name == data.name)

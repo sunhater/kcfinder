@@ -154,3 +154,5 @@ class dir {
         return ($a < $b) ? -1 : 1;
     }
 }
+
+?>

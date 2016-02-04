@@ -44,3 +44,5 @@ foreach ($lang as $english => $native) {
 }
 
 echo "}";
+
+?>

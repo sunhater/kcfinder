@@ -29,3 +29,5 @@ class type_img {
         return true;
     }
 }
+
+?>

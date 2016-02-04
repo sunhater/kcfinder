@@ -17,7 +17,7 @@ namespace kcfinder;
 class uploader {
 
 /** Release version */
-    const VERSION = "3.20-test2";
+    const VERSION = "3.12";
 
 /** Config session-overrided settings
   * @var array */
@@ -101,16 +101,67 @@ class uploader {
             $this->checkFilename($_GET['cms']) &&
             is_file("integration/{$_GET['cms']}.php")
         )
-            $this->cms = $_GET['cms'];
+		
+		$this->cms = $_GET['cms'];
 
 		// LINKING UPLOADED FILE
-        if (count($_FILES))
-            $this->file = &$_FILES[key($_FILES)];
+        if (count($_FILES)) {
+			$this->file = &$_FILES[key($_FILES)];
+		}
 
-        // CONFIG & SESSION SETUP
-        $session = new session("conf/config.php");
-        $this->config = $session->getConfig();
-        $this->session = &$session->values;
+        // LOAD DEFAULT CONFIGURATION
+        require "conf/config.php";
+
+        // SETTING UP SESSION
+        if (!session_id()) {
+            if (isset($_CONFIG['_sessionLifetime']))
+                ini_set('session.gc_maxlifetime', $_CONFIG['_sessionLifetime'] * 60);
+            if (isset($_CONFIG['_sessionDir']))
+                ini_set('session.save_path', $_CONFIG['_sessionDir']);
+            if (isset($_CONFIG['_sessionDomain']))
+                ini_set('session.cookie_domain', $_CONFIG['_sessionDomain']);
+            session_start();
+        }
+
+        // LOAD SESSION CONFIGURATION IF EXISTS
+        $this->config = $_CONFIG;
+        $sessVar = "_sessionVar";
+        if (isset($_CONFIG[$sessVar])) {
+
+            $sessVar = $_CONFIG[$sessVar];
+
+            if (!isset($_SESSION[$sessVar]))
+                $_SESSION[$sessVar] = array();
+
+            $sessVar = &$_SESSION[$sessVar];
+
+            if (!is_array($sessVar))
+                $sessVar = array();
+
+            foreach ($sessVar as $key => $val)
+                if ((substr($key, 0, 1) != "_") && isset($_CONFIG[$key]))
+                    $this->config[$key] = $val;
+
+            if (!isset($sessVar['self']))
+                $sessVar['self'] = array();
+
+            $this->session = &$sessVar['self'];
+
+        } else
+            $this->session = &$_SESSION;
+
+        // SECURING THE SESSION
+        $stamp = array(
+            'ip' => $_SERVER['REMOTE_ADDR'],
+            'agent' => md5($_SERVER['HTTP_USER_AGENT'])
+        );
+        if (!isset($this->session['stamp']))
+            $this->session['stamp'] = $stamp;
+        elseif (!is_array($this->session['stamp']) || ($this->session['stamp'] !== $stamp)) {
+            if ($this->session['stamp']['ip'] === $stamp['ip'])
+                session_destroy();
+            die;
+        }
 
         // IMAGE DRIVER INIT
         if (isset($this->config['imageDriversPriority'])) {
@@ -123,7 +174,7 @@ class uploader {
         if ((!isset($driver) || ($driver === false)) &&
             (image::getDriver(array($this->imageDriver)) === false)
         )
-            $this->backMsg("Cannot find any of the supported PHP image extensions!");
+            die("Cannot find any of the supported PHP image extensions!");
 
         // WATERMARK INIT
         if (isset($this->config['watermark']) && is_string($this->config['watermark']))
@@ -179,7 +230,7 @@ class uploader {
         } elseif ($this->config['uploadURL'] == "/") {
             $this->config['uploadDir'] = strlen($this->config['uploadDir'])
                 ? path::normalize($this->config['uploadDir'])
-                : path::normalize(realpath($_SERVER['DOCUMENT_ROOT']));
+                : path::normalize($_SERVER['DOCUMENT_ROOT']);
             $this->typeDir = "{$this->config['uploadDir']}/{$this->type}";
             $this->typeURL = "/{$this->type}";
 
@@ -302,6 +353,8 @@ class uploader {
                 else {
                     if (function_exists('chmod'))
                         @chmod($target, $this->config['filePerms']);
+					
+					$target = $this->checkUploadedFileMime($target); // fix the target ...
                     $this->makeThumb($target);
                     $url = $this->typeURL;
                     if (isset($udir)) $url .= "/$udir";
@@ -356,6 +409,9 @@ class uploader {
 
     protected function checkFilePath($file) {
         $rPath = realpath($file);
+		if(is_link($rPath) || is_link($file)) {
+			return true;
+		}
         if (strtoupper(substr(PHP_OS, 0, 3)) == "WIN")
             $rPath = str_replace("\\", "/", $rPath);
         return (substr($rPath, 0, strlen($this->typeDir)) === $this->typeDir);
@@ -374,24 +430,99 @@ class uploader {
 
         return true;
     }
+	
+	private $shortHandJpgExtensions = true;
+	
+	protected function checkUploadedFileMime($targetFile) {
+		
+		$targetFileResult = false;
+		
+		if(!$targetFile || !file_exists($targetFile)) {
+			return false;
+		}
+		
+		$targetFileResult = $targetFile;
+		if($target_imagesize = @getimagesize($targetFile)) {
+			
+			if(!function_exists('image_type_to_extension')) {
+				return false;
+			}
+			
+			$renameResult = FALSE;
+			$targetFilePathInfo = pathinfo($targetFile);
+			
+			// Get the EXPECTED EXTENSION from this MIME
+			$targetMimeInteger = $target_imagesize[2];
+			$expectedExtension = @image_type_to_extension($targetMimeInteger);
+			
+			// get the existing MIME + MIME from the EXTENSION on this FILE ...
+			$targetMimeString = $target_imagesize['mime'];
+			$currentTargetMime = file::getMimeType($targetFile);
+			
+			if($expectedExtension && $currentTargetMime != $targetMimeString) {
+				
+				// Ensure we use SHORTHAND JPG extensions ....
+				if($expectedExtension == ".jpeg" && $this->shortHandJpgExtensions) {
+					$expectedExtension = ".jpg";
+				}
+				
+				// Rename the extension from whatever it was previously to a new extension ...
+				$exptectedFileName = str_replace(".{$targetFilePathInfo['extension']}", $expectedExtension, $targetFile);
+				
+				$expectedFileResult = array(
+					'target' => basename($targetFile),
+					'destination' => basename($exptectedFileName),
+				);
+				
+				// Testing this code ...
+				// echo "<pre style='font-size:10px;'>";
+				// print_r($expectedFileResult);
+				// echo "</pre>";
+				// die();
+				
+				$renameResult = @rename($targetFile, $exptectedFileName);
+			}
+			
+			if($renameResult) {
+				$targetFileResult = $exptectedFileName;
+			}
+			
+		}
+		
+		return $targetFile;
+		
+	}
+	
 
     protected function checkUploadedFile(array $aFile=null) {
+		
         $config = &$this->config;
         $file = ($aFile === null) ? $this->file : $aFile;
 
-        if (!is_array($file) || !isset($file['name']))
-            return $this->label("Unknown error");
+		// check this file for any service issues ...
+        if (!is_array($file) || !isset($file['name'])) {
+			return $this->label("Unknown error"); 
+		}
 
+		// Check if we are dealing with more than a single file
         if (is_array($file['name'])) {
+			// Loop over sub files within file.name
             foreach ($file['name'] as $i => $name) {
-                $return = $this->checkUploadedFile(array(
+				
+				$new_file_details = array(
                     'name' => $name,
                     'tmp_name' => $file['tmp_name'][$i],
                     'error' => $file['error'][$i]
-                ));
-                if ($return !== true)
-                    return "$name: $return";
+                );
+				
+                $return = $this->checkUploadedFile($new_file_details);
+				
+                if ($return !== true) {
+					return "$name: $return";
+				}
+				
             }
+			// Done
             return true;
         }
 
@@ -399,9 +530,9 @@ class uploader {
         $typePatt = strtolower(text::clearWhitespaces($this->types[$this->type]));
 
         // CHECK FOR UPLOAD ERRORS
-        if ($file['error'])
-            return
-                ($file['error'] == UPLOAD_ERR_INI_SIZE) ?
+        if ($file['error']) {
+
+			$file_error_issue = ($file['error'] == UPLOAD_ERR_INI_SIZE) ?
                     $this->label("The uploaded file exceeds {size} bytes.",
                         array('size' => ini_get('upload_max_filesize'))) : (
                 ($file['error'] == UPLOAD_ERR_FORM_SIZE) ?
@@ -418,17 +549,20 @@ class uploader {
                     $this->label("Unknown error.")
             )))));
 
+			return $file_error_issue;
+			
+		}
         // HIDDEN FILENAMES CHECK
-        elseif (substr($file['name'], 0, 1) == ".")
-            return $this->label("File name shouldn't begins with '.'");
-
+        elseif (substr($file['name'], 0, 1) == ".") {
+			return $this->label("File name shouldn't begins with '.'");
+		}
         // EXTENSION CHECK
         elseif (
             (substr($file['name'], -1) == ".") ||
             !$this->validateExtension($extension, $this->type)
-        )
-            return $this->label("Denied file extension.");
-
+        ) {
+			return $this->label("Denied file extension.");
+		}
         // SPECIAL DIRECTORY TYPES CHECK (e.g. *img)
         elseif (preg_match('/^\*([^ ]+)(.*)?$/s', $typePatt, $patt)) {
             list($typePatt, $type, $params) = $patt;
@@ -437,21 +571,28 @@ class uploader {
                 $type = new $class();
                 $cfg = $config;
                 $cfg['filename'] = $file['name'];
-                if (strlen($params))
-                    $cfg['params'] = trim($params);
+                if (strlen($params)) {
+					 $cfg['params'] = trim($params);
+				}
                 $response = $type->checkFile($file['tmp_name'], $cfg);
-                if ($response !== true)
-                    return $this->label($response);
-            } else
-                return $this->label("Non-existing directory type.");
+                if ($response !== true) {
+					return $this->label($response);
+				}
+            } else {
+				return $this->label("Non-existing directory type.");
+			}
         }
 
         // IMAGE RESIZE
         $img = image::factory($this->imageDriver, $file['tmp_name']);
-        if (!$img->initError && !$this->imageResize($img, $file['tmp_name']))
-            return $this->label("The image is too big and/or cannot be resized.");
+		
+		// imageResize is the issue with PNG images turning to JPEG images - 04/02/2016
+        if (!$img->initError && !$this->imageResize($img, $file['tmp_name'])) {
+			return $this->label("The image is too big and/or cannot be resized.");
+		}
 
         return true;
+		
     }
 
     protected function checkInputDir($dir, $inclType=true, $existing=true) {
@@ -521,10 +662,12 @@ class uploader {
             $img = image::factory($this->imageDriver, $image);
             if ($img->initError) return false;
             $file = $image;
-        } elseif ($file === null)
-            return false;
-        else
-            $img = $image;
+        } elseif ($file === null) {
+			 return false;
+		}
+        else {
+			$img = $image;
+		}
 
         $orientation = 1;
         if (function_exists("exif_read_data")) {
@@ -601,12 +744,29 @@ class uploader {
                 ? $this->config['watermark']['top'] : false;
             $img->watermark($this->config['watermark']['file'], $left, $top);
         }
+		
+		// Check the EXTENSION OF THIS FILE
+		if($file && is_string($file) && file_exists($file)) {
+			$file_imgsize = @getimagesize($file);
+			// Get the EXPECTED EXTENSION from this MIME
+			if($file_imgsize && !empty($file_imgsize)) {
+				$fileMimeInteger = $file_imgsize[2];
+				$outputFileExtension = @image_type_to_extension($fileMimeInteger);
+				$outputFileExtension = str_replace('.', '', $outputFileExtension);
+			}
+		}
+		
+		// Force Jpeg
+		if(!$outputFileExtension) {
+			$outputFileExtension = "jpeg";
+		}
 
         // WRITE TO FILE
-        return $img->output("jpeg", array(
+        return $img->output($outputFileExtension, array(
             'file' => $file,
             'quality' => $this->config['jpegQuality']
         ));
+		
     }
 
     protected function makeThumb($file, $overwrite=true) {
@@ -764,3 +924,5 @@ if (window.opener) window.close();
         return file_get_contents("conf/upload.htaccess");
     }
 }
+
+?>

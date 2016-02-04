@@ -12,7 +12,10 @@
   *      @link http://kcfinder.sunhater.com
   */
 
+define('IGNORE_SITE', true); //mysql debugger hack
 require "core/bootstrap.php";
 $browser = "kcfinder\\browser"; // To execute core/bootstrap.php on older
 $browser = new $browser();      // PHP versions (even PHP 4)
 $browser->action();
+
+?>

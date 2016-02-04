@@ -6,8 +6,6 @@
 
 $lang = array(
 
-    '_lang' => "Czech",
-    '_native' => "Čeština",
     '_locale' => "cs_CZ.UTF-8",  // UNIX localization code
     '_charset' => "utf-8",       // Browser charset
 
@@ -130,3 +128,5 @@ $lang = array(
     "Confirmation" => "Potvrzení",
     "Warning" => "Varování",
 );
+
+?>
