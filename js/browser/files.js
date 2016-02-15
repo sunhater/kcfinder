@@ -83,6 +83,8 @@ browser.showFiles = function(callBack, selected) {
                     if (!icon.length) icon = '.';
                     icon = 'themes/' + browser.theme + '/img/files/big/' + icon + '.png';
                 }
+                // The icon URL will fail if the file or folder contains single quotes, so we'll escape them here
+                icon = icon.replace(/'/g, "\\'");
                 html += '<div class="file">' +
                     '<div class="thumb" style="background-image:url(\'' + icon + '\')" ></div>' +
                     '<div class="name">' + _.htmlData(file.name) + '</div>' +
