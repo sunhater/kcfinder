@@ -172,7 +172,7 @@ class uploader {
             $this->config['uploadDir'] = strlen($this->config['uploadDir'])
                 ? path::normalize($this->config['uploadDir'])
                 : path::url2fullPath("/$path");
-            $this->typeDir = "{$this->config['uploadDir']}/{$this->type}";
+            $this->typeDir = realpath("{$this->config['uploadDir']}/{$this->type}");
             $this->typeURL = "{$this->config['uploadURL']}/{$this->type}";
 
         // SITE ROOT
@@ -180,7 +180,7 @@ class uploader {
             $this->config['uploadDir'] = strlen($this->config['uploadDir'])
                 ? path::normalize($this->config['uploadDir'])
                 : path::normalize(realpath($_SERVER['DOCUMENT_ROOT']));
-            $this->typeDir = "{$this->config['uploadDir']}/{$this->type}";
+            $this->typeDir = realpath("{$this->config['uploadDir']}/{$this->type}");
             $this->typeURL = "/{$this->type}";
 
         // ABSOLUTE & RELATIVE
@@ -191,7 +191,7 @@ class uploader {
             $this->config['uploadDir'] = strlen($this->config['uploadDir'])
                 ? path::normalize($this->config['uploadDir'])
                 : path::url2fullPath($this->config['uploadURL']);
-            $this->typeDir = "{$this->config['uploadDir']}/{$this->type}";
+            $this->typeDir = realpath("{$this->config['uploadDir']}/{$this->type}");
             $this->typeURL = "{$this->config['uploadURL']}/{$this->type}";
         }
 
@@ -253,7 +253,7 @@ class uploader {
             }
 
             // CHECK & CREATE UPLOAD FOLDER
-            if (!is_dir($this->typeDir)) {
+            if (!is_dir($this->typeDir) && !is_link($this->typeDir)) {
                 if (!mkdir($this->typeDir, $this->config['dirPerms']))
                     $this->backMsg("Cannot create {dir} folder.", array('dir' => $this->type));
             } elseif (!is_readable($this->typeDir))
