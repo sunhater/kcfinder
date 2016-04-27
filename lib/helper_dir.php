@@ -95,7 +95,7 @@ class dir {
             'types' => "all",   // Allowed: "all" or possible return values
                                 // of filetype(), or an array with them
             'addPath' => true,  // Whether to add directory path to filenames
-            'pattern' => '/./', // Regular expression pattern for filename
+            'pattern' => '/^[^\.].+/', // Regular expression pattern for filename -- by default don't show hidden files
             'followLinks' => true
         );
 
