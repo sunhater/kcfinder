@@ -112,6 +112,7 @@ return array(
     '_check4htaccess' => true,
     '_normalizeFilenames' => false,
     '_dropUploadMaxFilesize' => 10485760,
+    '_appendUniqueSuffixOnOverwrite' => true,	// If it is set to true files will not be overwritten and instead (upon coflict) a numeric suffix will be appended to uploaded file name.
     //'_tinyMCEPath' => "/tiny_mce",
     //'_cssMinCmd' => "java -jar /path/to/yuicompressor.jar --type css {file}",
     //'_jsMinCmd' => "java -jar /path/to/yuicompressor.jar --type js {file}",
