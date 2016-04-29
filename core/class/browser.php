@@ -673,7 +673,10 @@ class browser extends uploader {
         }
 
         $filename = $this->normalizeFilename($file['name']);
-        $target = "$dir/" . file::getInexistantFilename($filename, $dir);
+        if (isset($this->config['_appendUniqueSuffixOnOverwrite']) && $this->config['_appendUniqueSuffixOnOverwrite']) {
+            $filename = file::getInexistantFilename($filename, $dir);
+        }
+        $target = "$dir/$filename";
 
         if (!@move_uploaded_file($file['tmp_name'], $target) &&
             !@rename($file['tmp_name'], $target) &&

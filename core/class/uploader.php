@@ -103,7 +103,7 @@ class uploader {
         )
             $this->cms = $_GET['cms'];
 
-		// LINKING UPLOADED FILE
+        // LINKING UPLOADED FILE
         if (count($_FILES))
             $this->file = &$_FILES[key($_FILES)];
 
@@ -358,7 +358,9 @@ class uploader {
         $rPath = realpath($file);
         if (strtoupper(substr(PHP_OS, 0, 3)) == "WIN")
             $rPath = str_replace("\\", "/", $rPath);
-        return (substr($rPath, 0, strlen($this->typeDir)) === $this->typeDir);
+        $rPath = rtrim($rPath, '/') . '/';
+        $baseDir = rtrim($this->typeDir, '/') . '/';
+        return (substr($rPath, 0, strlen($baseDir)) === $baseDir);
     }
 
     protected function checkFilename($file) {
@@ -367,7 +369,7 @@ class uploader {
             (
                 isset($this->config['_normalizeFilenames']) &&
                 $this->config['_normalizeFilenames'] &&
-                preg_match('/[^0-9a-z\.\- _]/si', $file)
+                preg_match('/[^0-9a-z\.\- _\(\)]/si', $file)	// note `(1)` is added to file name when preventing overwrite
             )
         )
             return false;
