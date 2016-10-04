@@ -6,8 +6,6 @@
 
 $lang = array(
 
-    '_lang' => "Slovak",
-    '_native' => "Slovenčina",
     '_locale' => "sk_SK.UTF-8",  // UNIX localization code
     '_charset' => "utf-8",       // Browser charset
 
@@ -125,3 +123,5 @@ $lang = array(
     "Uploading file {number} of {count}... {progress}" => "Nahrávam súbor {number} z {count}... {progress}",
     "Failed to upload {filename}!" => "Nepodarilo sa nahrať súbor {filename}!",
 );
+
+?>

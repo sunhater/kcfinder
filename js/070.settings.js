@@ -11,7 +11,8 @@
   */
 
 _.initSettings = function() {
-    $('#settings fieldset').disableTextSelect();
+    $('#settings').disableTextSelect();
+    $('#settings fieldset, #settings input, #settings label').uniform();
 
     if (!_.shows.length)
         $('#show input[type="checkbox"]').each(function(i) {
@@ -82,20 +83,4 @@ _.initSettings = function() {
         _.fixFilesHeight();
         _.refresh();
     });
-    $('#settings fieldset, #settings input, #settings label').transForm();
-    _.initLangs();
 };
-
-
-_.initLangs = function() {
-    $.each(_.langs, function(id, lng) {
-        var opt = $('<option></option>');
-        opt.val(id).text(lng);
-        if (id == _.lang)
-            opt.attr({selected: true});
-        $('#lang').append(opt);
-    });
-    $('#lang').change(function() {
-        window.location = _.getURL("browser", this.value) + "&theme=" + encodeURIComponent(_.theme);
-    });
-}

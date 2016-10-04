@@ -6,8 +6,6 @@
 
 $lang = array(
 
-    '_lang' => "German",
-    '_native' => "Deutsch",
     '_locale' => "de_DE.UTF-8",  // UNIX localization code
     '_charset' => "utf-8",       // Browser charset
 
@@ -130,3 +128,5 @@ $lang = array(
     "Confirmation" => "Bestätigung",
     "Warning" => "Warnung"
 );
+
+?>

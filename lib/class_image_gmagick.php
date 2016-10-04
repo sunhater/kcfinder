@@ -300,3 +300,5 @@ class image_gmagick extends image {
     }
 
 }
+
+?>

@@ -23,17 +23,28 @@ class browser extends uploader {
         parent::__construct();
 
         // SECURITY CHECK INPUT DIRECTORY
-        if (isset($_POST['dir'])) {
-            $dir = $this->checkInputDir($_POST['dir'], true, false);
-            if ($dir === false) unset($_POST['dir']);
-            $_POST['dir'] = $dir;
-        }
+        if (isset($_REQUEST['dir'])) {
+			
+            $dir = $this->checkInputDir($_REQUEST['dir'], true, false);
+            if ($dir === false) unset($_REQUEST['dir']);
 
-        if (isset($_GET['dir'])) {
-            $dir = $this->checkInputDir($_GET['dir'], true, false);
-            if ($dir === false) unset($_GET['dir']);
-            $_GET['dir'] = $dir;
+			// Support the POST.dir
+			if(isset($_POST['dir'])) {
+				$_POST['dir'] = $dir;
+			}
+			
+			// Support the GET.dir
+			if(isset($_GET['dir'])) {
+				$_GET['dir'] = $dir;
+			}
+			
+			// Support the REQUEST.dir
+			if(isset($_REQUEST['dir'])) {
+				$_REQUEST['dir'] = $dir;
+			}
+
         }
+		
 
         $thumbsDir = $this->config['uploadDir'] . "/" . $this->config['thumbsDir'];
         if (!$this->config['disabled'] &&
@@ -195,13 +206,16 @@ class browser extends uploader {
     }
 
     protected function act_chDir() {
+		
         $this->postDir(); // Just for existing check
         $this->session['dir'] = "{$this->type}/{$_POST['dir']}";
         $dirWritable = dir::isWritable("{$this->config['uploadDir']}/{$this->session['dir']}");
+		
         return json_encode(array(
             'files' => $this->getFiles($this->session['dir']),
             'dirWritable' => $dirWritable
         ));
+		
     }
 
     protected function act_newDir() {
@@ -276,11 +290,11 @@ class browser extends uploader {
         header("Content-Type: text/plain; charset={$this->charset}");
 
         if (!$this->config['access']['files']['upload'] ||
-            (!isset($_POST['dir']) && !isset($_GET['dir']))
+            !isset($_POST['dir'])
         )
             $this->errorMsg("Unknown error.");
 
-        $dir = isset($_GET['dir']) ? $this->getDir() : $this->postDir();
+        $dir = $this->postDir();
 
         if (!dir::isWritable($dir))
             $this->errorMsg("Cannot access or write to upload folder.");
@@ -297,28 +311,6 @@ class browser extends uploader {
             return implode("\n", $return);
         } else
             return $this->moveUploadFile($this->file, $dir);
-    }
-
-    protected function act_dragUrl() {
-        if (!$this->config['access']['files']['upload'] ||
-            !isset($_GET['dir']) ||
-            !isset($_POST['url']) ||
-            !isset($_POST['type'])
-        )
-            $this->errorMsg("Unknown error.");
-
-        $dir = $this->getDir();
-
-        if (!dir::isWritable($dir))
-            $this->errorMsg("Cannot access or write to upload folder.");
-
-        if (is_array($_POST['url']))
-            foreach ($_POST['url'] as $url)
-                $this->downloadURL($url, $dir);
-        else
-            $this->downloadURL($_POST['url'], $dir);
-
-        return true;
     }
 
     protected function act_download() {
@@ -653,9 +645,62 @@ class browser extends uploader {
         )
             return json_encode(array('version' => $this->session['checkVersion']));
 
-        $ver = phpGet::get("http://kcfinder.sunhater.com/checkVersion.php");
+        $protocol = "http";
+        $host = "kcfinder.sunhater.com";
+        $port = 80;
+        $path = "/checkVersion.php";
 
-        if (isset($ver) && preg_match('/^\d+\.\d+$/', $ver)) {
+        $url = "$protocol://$host:$port$path";
+        $pattern = '/^\d+\.\d+$/';
+        $responsePattern = '/^[A-Z]+\/\d+\.\d+\s+\d+\s+OK\s*([a-zA-Z0-9\-]+\:\s*[^\n]*\n)*\s*(.*)\s*$/';
+
+        // file_get_contents()
+        if (ini_get("allow_url_fopen") &&
+            (false !== ($ver = file_get_contents($url))) &&
+            preg_match($pattern, $ver)
+
+        // HTTP extension
+        ) {} elseif (
+            function_exists("http_get") &&
+            (false !== ($ver = @http_get($url))) &&
+            (
+                (
+                    preg_match($responsePattern, $ver, $match) &&
+                    false !== ($ver = $match[2])
+                ) || true
+            ) &&
+            preg_match($pattern, $ver)
+
+        // Curl extension
+        ) {} elseif (
+            function_exists("curl_init") &&
+            (false !== (   $curl = @curl_init($url)                                    )) &&
+            (              @ob_start()                 ||  (@curl_close($curl) && false)) &&
+            (              @curl_exec($curl)           ||  (@curl_close($curl) && false)) &&
+            ((false !== (  $ver = @ob_get_clean()   )) ||  (@curl_close($curl) && false)) &&
+            (              @curl_close($curl)          ||  true                         ) &&
+            preg_match($pattern, $ver)
+
+        // Socket extension
+        ) {} elseif (function_exists('socket_create')) {
+            $cmd =
+                "GET $path " . strtoupper($protocol) . "/1.1\r\n" .
+                "Host: $host\r\n" .
+                "Connection: Close\r\n\r\n";
+
+            if ((false !== (  $socket = @socket_create(AF_INET, SOCK_STREAM, SOL_TCP)  )) &&
+                (false !==    @socket_connect($socket, $host, $port)                    ) &&
+                (false !==    @socket_write($socket, $cmd, strlen($cmd))                ) &&
+                (false !== (  $ver = @socket_read($socket, 2048)                       )) &&
+                preg_match($responsePattern, $ver, $match)
+            )
+                $ver = $match[2];
+
+            if (isset($socket) && is_resource($socket))
+                @socket_close($socket);
+        }
+
+        if (isset($ver) && preg_match($pattern, $ver)) {
             $this->session['checkVersion'] = $ver;
             $this->session['checkVersionTime'] = time();
             return json_encode(array('version' => $ver));
@@ -684,6 +729,9 @@ class browser extends uploader {
         } elseif (function_exists('chmod'))
             chmod($target, $this->config['filePerms']);
 
+		$target = $this->checkUploadedFileMime($target);
+		// $target = basename($uploadedFilePath);
+			
         $this->makeThumb($target);
         return "/" . basename($target);
     }
@@ -886,53 +934,6 @@ class browser extends uploader {
     protected function htmlData($str) {
         return htmlentities($str, null, strtoupper($this->charset));
     }
-
-    protected function downloadURL($url, $dir) {
-
-        if (!preg_match(phpGet::$urlExpr, $url, $match))
-            return;
-
-        if ((isset($match[7]) && strlen($match[7])))
-            $furl = explode("&", $match[7]);
-
-        $filename = isset($furl)
-            ? basename($furl[0])
-            : "web_image.jpg";
-
-        $file = tempnam(sys_get_temp_dir(), $filename);
-
-        if (phpGet::get($url, $file))
-            $this->moveUploadFile(array(
-                'name' => $filename,
-                'tmp_name' => $file,
-                'error' => UPLOAD_ERR_OK
-            ), $dir);
-        else
-            @unlink($file);
-    }
-
-    protected function getLangs() {
-        if (isset($this->session['langs']))
-            return $this->session['langs'];
-
-        $files = dir::content("lang", array(
-            'pattern' => '/^[a-z]{2,3}(\-[a-z]{2})?\.php$/',
-            'types' => "file"
-        ));
-
-        $langs = array();
-        if (is_array($files))
-            foreach ($files as $file) {
-                include $file;
-                $id = substr(basename($file), 0, -4);
-                $langs[$id] = isset($lang['_native'])
-                    ? $lang['_native']
-                    : (isset($lang['_lang'])
-                        ? $lang['_lang']
-                        : $id);
-            }
-
-        $this->session['langs'] = $langs;
-        return $langs;
-    }
 }
+
+?>

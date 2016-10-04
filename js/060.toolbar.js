@@ -23,7 +23,6 @@ _.initToolbar = function() {
         $('#toolbar a[href="kcact:settings"]').addClass('selected');
         $('#settings').show();
         _.resize();
-        $('#lang').transForm();
     }
 
     $('#toolbar a[href="kcact:settings"]').click(function () {
@@ -33,8 +32,6 @@ _.initToolbar = function() {
             $.$.kuki.set('displaySettings', "on");
             jSettings.show();
             _.fixFilesHeight();
-            if (!jSettings.find('.tf-select #lang').get(0))
-                $('#lang').transForm();
         } else {
             $(this).removeClass('selected');
             $.$.kuki.set('displaySettings', "off");

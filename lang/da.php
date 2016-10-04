@@ -6,8 +6,6 @@
 
 $lang = array(
 
-    '_lang' => "Danish",
-    '_native' => "Dansk",
     '_locale' => "da_DK.UTF-8",  // UNIX localization code
     '_charset' => "utf-8",       // Browser charset
 
@@ -125,3 +123,5 @@ $lang = array(
     "Uploading file {number} of {count}... {progress}" => "Uploader fil {number} af {count} ... {progress}",
     "Failed to upload {filename}!" => "Kunne ikke uploade {filename}!",
 );
+
+?>

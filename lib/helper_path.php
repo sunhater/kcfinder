@@ -29,7 +29,7 @@ class path {
             return false;
 
         $dir = self::normalize($dir);
-        $doc_root = self::normalize(realpath($_SERVER['DOCUMENT_ROOT']));
+        $doc_root = self::normalize($_SERVER['DOCUMENT_ROOT']);
 
         if (substr($dir, 0, strlen($doc_root)) != $doc_root)
             return false;
@@ -62,7 +62,7 @@ class path {
         }
 
         if (isset($_SERVER['DOCUMENT_ROOT'])) {
-            return self::normalize(realpath($_SERVER['DOCUMENT_ROOT']) . "/$url");
+            return self::normalize($_SERVER['DOCUMENT_ROOT'] . "/$url");
 
         } else {
             if ($uri === false) return false;
@@ -145,3 +145,5 @@ class path {
     }
 
 }
+
+?>

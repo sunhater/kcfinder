@@ -5,8 +5,6 @@
 
 $lang = array(
 
-    '_lang' => "Romanian",
-    '_native' => "Română",
     '_locale' => "ro_RO.UTF-8",  // UNIX localization code
     '_charset' => "utf-8",       // Browser charset
 
@@ -124,3 +122,5 @@ $lang = array(
     "Uploading file {number} of {count}... {progress}" => "Încărcare fișier {number} din {count}... {progress}",
     "Failed to upload {filename}!" => "Încărcare {filename} eșuată!",
 );
+
+?>
