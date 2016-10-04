@@ -408,13 +408,19 @@ class uploader {
     }
 
     protected function checkFilePath($file) {
+		
         $rPath = realpath($file);
-		if(is_link($rPath) || is_link($file)) {
+		
+		if(is_dir($rPath) || is_link($file)) {
 			return true;
 		}
-        if (strtoupper(substr(PHP_OS, 0, 3)) == "WIN")
-            $rPath = str_replace("\\", "/", $rPath);
+		
+        if (strtoupper(substr(PHP_OS, 0, 3)) == "WIN") {
+			$rPath = str_replace("\\", "/", $rPath);
+		}
+            
         return (substr($rPath, 0, strlen($this->typeDir)) === $this->typeDir);
+		
     }
 
     protected function checkFilename($file) {
@@ -596,29 +602,62 @@ class uploader {
     }
 
     protected function checkInputDir($dir, $inclType=true, $existing=true) {
+		
         $dir = path::normalize($dir);
-        if (substr($dir, 0, 1) == "/")
-            $dir = substr($dir, 1);
-
-        if ((substr($dir, 0, 1) == ".") || (substr(basename($dir), 0, 1) == "."))
-            return false;
-
+		
+        if (substr($dir, 0, 1) == "/") {
+			$dir = substr($dir, 1);
+		}
+		
+		// Ensure we have a directory ....
+		if(!$dir) {
+			return false;
+		}
+		
+		// Check for position of "." on dir
+		$dir_substr_pos = substr($dir, 0, 1);
+		$dir_substr_pos_result = ($dir_substr_pos == ".");
+		
+		// Check for position of "." within basename of Dir
+		$basename_substr_pos = substr(basename($dir), 0, 1);
+		$basename_substr_pos_result = ($basename_substr_pos == ".");
+		
+		// Check the positon of "." within $dir, and basename of $dir
+        if ($dir_substr_pos_result || $basename_substr_pos_result) {
+			 return false;
+		}
+		
+		// Work out the Include TYpe
         if ($inclType) {
             $first = explode("/", $dir);
             $first = $first[0];
-            if ($first != $this->type)
-                return false;
+            if ($first != $this->type) {
+				return false;
+			}
             $return = $this->removeTypeFromPath($dir);
         } else {
             $return = $dir;
             $dir = "{$this->type}/$dir";
         }
 
-        if (!$existing)
-            return $return;
+		$path = "{$this->config['uploadDir']}/$dir"; // Grab expected PATH
+		
+		//if(is_link($path)) {
+		// $return = realpath($path);
+		//}
+		
+        if (!$existing) {
+			return $return;
+		}
 
         $path = "{$this->config['uploadDir']}/$dir";
-        return (is_dir($path) && is_readable($path)) ? $return : false;
+		$return_path = false; // Setup variable to store what we want to return
+		
+		if((is_dir($path) && is_readable($path)) || is_link($path)) {
+			$return_path = $return;
+		}
+		
+        return $return_path;
     }
 
     protected function validateExtension($ext, $type) {

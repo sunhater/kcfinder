@@ -23,17 +23,28 @@ class browser extends uploader {
         parent::__construct();
 
         // SECURITY CHECK INPUT DIRECTORY
-        if (isset($_POST['dir'])) {
-            $dir = $this->checkInputDir($_POST['dir'], true, false);
-            if ($dir === false) unset($_POST['dir']);
-            $_POST['dir'] = $dir;
-        }
+        if (isset($_REQUEST['dir'])) {
+			
+            $dir = $this->checkInputDir($_REQUEST['dir'], true, false);
+            if ($dir === false) unset($_REQUEST['dir']);
 
-        if (isset($_GET['dir'])) {
-            $dir = $this->checkInputDir($_GET['dir'], true, false);
-            if ($dir === false) unset($_GET['dir']);
-            $_GET['dir'] = $dir;
+			// Support the POST.dir
+			if(isset($_POST['dir'])) {
+				$_POST['dir'] = $dir;
+			}
+			
+			// Support the GET.dir
+			if(isset($_GET['dir'])) {
+				$_GET['dir'] = $dir;
+			}
+			
+			// Support the REQUEST.dir
+			if(isset($_REQUEST['dir'])) {
+				$_REQUEST['dir'] = $dir;
+			}
+
         }
+		
 
         $thumbsDir = $this->config['uploadDir'] . "/" . $this->config['thumbsDir'];
         if (!$this->config['disabled'] &&
@@ -195,13 +206,16 @@ class browser extends uploader {
     }
 
     protected function act_chDir() {
+		
         $this->postDir(); // Just for existing check
         $this->session['dir'] = "{$this->type}/{$_POST['dir']}";
         $dirWritable = dir::isWritable("{$this->config['uploadDir']}/{$this->session['dir']}");
+		
         return json_encode(array(
             'files' => $this->getFiles($this->session['dir']),
             'dirWritable' => $dirWritable
         ));
+		
     }
 
     protected function act_newDir() {
