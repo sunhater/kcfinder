@@ -6,6 +6,7 @@
   *   @package KCFinder
   *   @version 2.2
   *    @author Hamid Kamalpour <djhamidfatal@gmail.com><http://www.ssfmusic.com>
+  *    @author Nabi KaramAliZadeh <nabikaz@gmail.com> <www.nabi.ir>
   * @copyright 2010 KCFinder Project
   *   @license http://opensource.org/licenses/GPL-3.0 GPLv3
   *   @license http://opensource.org/licenses/LGPL-3.0 LGPLv3
@@ -262,6 +263,13 @@ $lang = array(
 
     "You cannot rename the extension of files!" => "!شما نمی توانید پسوند فایلها را تغییر دهید",
     "Uploading file {number} of {count}... {progress}" => "{progress} ...ارسال شد {count} فایل از {number}",
-    "Failed to upload {filename}!"  => "! {filename} خطا در ارسال"
+    "Failed to upload {filename}!"  => "! {filename} خطا در ارسال",
 
+    // SINCE 3.10
+ 
+    "Close" => "بستن",
+    "Previous" => "قبلی",
+    "Next" => "بعدی",
+    "Confirmation" => "تائیدیه",
+    "Warning" => "اخطار"
 );
