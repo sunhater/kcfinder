@@ -198,7 +198,7 @@ class uploader {
         // HOST APPLICATIONS INIT
         if (isset($_GET['CKEditorFuncNum'])) {
             $this->opener['name'] = "ckeditor";
-            $malicious = array("(", ")", ";", "=", "-", "*", "/", "+", "!", "@", "#", "%", "^", "&", "`");
+            $malicious = array("(", ")", ";", "=", "-", "*", "/", "+", "!", "@", "#", "%", "^", "&", "`", "'", "\"");
             $this->opener['CKEditor'] = array('funcNum' => htmlentities(str_replace($malicious, '', $_GET['CKEditorFuncNum']), ENT_QUOTES, 'UTF-8'));
 
         } elseif (isset($_GET['opener'])) {
